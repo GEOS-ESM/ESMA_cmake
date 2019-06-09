@@ -5,7 +5,7 @@ set (acg_flags -v)
 macro (new_esma_generate_automatic_code
     target registry headers rcs headers_destination rcs_destination flags)
 
-  set (generator ${CMAKE_SOURCE_DIR}/GMAO_Shared/MAPL_Base/mapl_acg.pl)
+  set (generator ${esma_include}/MAPL_Base/mapl_acg.pl)
   set (generated_files "${headers};${rcs}")
 
   add_custom_command (

@@ -52,11 +52,6 @@ macro (esma_add_library this)
     esma_add
     )
 
-#  if (NOT TARGET ${this})
-#    add_library (${this} "")
-#  endif ()
-
-#  target_sources(${this} PRIVATE ${ARGS_SRCS})
   set_target_properties(${this} PROPERTIES EXCLUDE_FROM_ALL ${ARGS_EXCLUDE_FROM_ALL})
   set_target_properties (${this} PROPERTIES Fortran_MODULE_DIRECTORY ${esma_include}/${this})
   # Export target  include directories for other targets
