@@ -27,15 +27,23 @@ macro (esma_add_library this)
   # unfortunate.)
   set (non_stubbed)
   foreach (subdir ${ARGS_SUBCOMPONENTS})
-    if (NOT rename_${subdir}) # usual case
-      set (module_name ${subdir})
+
+    string (SUBSTRING ${subdir} 0 1 leading_character)
+    if (leading_character STREQUAL "@")
+      string (SUBSTRING ${subdir} 1 -1 mod_name) # strip leading "@"
     else ()
-      set(module_name ${rename_${subdir}})
+      set (mod_name ${subdir})
+    endif()
+
+    if (NOT rename_${subdir}) # usual case
+      set (module_name ${mod_name})
+    else ()
+      set(module_name ${rename_${mod_name}})
     endif ()
 
     if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${subdir})
       add_subdirectory (${subdir})
-      list (APPEND non_stubbed ${subdir})
+      list (APPEND non_stubbed ${mod_name})
     else () # make stub and append to srcs (in ARGS_SRCS)
       if (CMAKE_DEBUG)
 	message (STATUS  "  ... Creating stub component ${module_name}")
