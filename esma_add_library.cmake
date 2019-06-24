@@ -62,11 +62,16 @@ macro (esma_add_library this)
 
   set_target_properties(${this} PROPERTIES EXCLUDE_FROM_ALL ${ARGS_EXCLUDE_FROM_ALL})
   set_target_properties (${this} PROPERTIES Fortran_MODULE_DIRECTORY ${esma_include}/${this})
+
+  set (install_dir include/${this})
   # Export target  include directories for other targets
   target_include_directories(${this} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR} # stubs
-    ${esma_include}/${this}) # modules and copied *.h, *.inc
+# modules and copied *.h, *.inc    
+    $<BUILD_INTERFACE:${esma_include}/${this}>
+    $<INSTALL_INTERFACE:${install_dir}>
+    ) 
 
   # This library depends on all DEPENDENCIES and _non-stubbed_ subcomponents.
   foreach (dependency ${ARGS_DEPENDENCIES} ${non_stubbed})
@@ -76,5 +81,7 @@ macro (esma_add_library this)
   if (ARGS_INCLUDES)
     target_include_directories(${this} PUBLIC ${ARGS_INCLUDES})
   endif ()
+
+  install (DIRECTORY  ${esma_include}/${this}/ DESTINATION include/${this})
 
 endmacro ()
