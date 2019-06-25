@@ -74,10 +74,11 @@ macro (esma_add_library this)
     ) 
 
   # This library depends on all DEPENDENCIES and _non-stubbed_ subcomponents.
-  foreach (dependency ${ARGS_DEPENDENCIES} ${non_stubbed})
-    target_link_libraries(${this} PUBLIC ${dependency})
-  endforeach()
-
+  set (all_dependencies ${ARGS_DEPENDENCIES} ${non_stubbed})
+  if (all_dependencies)
+    target_link_libraries(${this} PUBLIC ${all_dependencies})
+  endif ()
+  
   if (ARGS_INCLUDES)
     target_include_directories(${this} PUBLIC ${ARGS_INCLUDES})
   endif ()

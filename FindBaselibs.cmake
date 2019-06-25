@@ -24,12 +24,16 @@ execute_process (
   )
 
 string(REGEX MATCHALL " -l[^ ]*" _full_libs "${LIB_NETCDF}")
-set (NETCDF_LIBRARIES)
+set (NETCDF_LIBRARIES_OLD)
 foreach (lib ${_full_libs})
   string (REPLACE "-l" "" _tmp ${lib})
   string (STRIP ${_tmp} _tmp)
-  list (APPEND NETCDF_LIBRARIES ${_tmp})
+  list (APPEND NETCDF_LIBRARIES_OLD ${_tmp})
 endforeach()
+
+list (REVERSE NETCDF_LIBRARIES_OLD)
+list (REMOVE_DUPLICATES NETCDF_LIBRARIES_OLD)
+list (REVERSE NETCDF_LIBRARIES_OLD)
 
 add_definitions(-DHAS_NETCDF4)
 add_definitions(-DHAS_NETCDF3)
@@ -39,7 +43,8 @@ add_definitions(-DHAS_NETCDF3)
 #------------------------------------------------------------------
 
 set (INC_HDF5 ${BASEDIR}/include/hdf5)
-set (INC_NETCDF ${BASEDIR}/include/netcdf)
+#set (INC_NETCDF ${BASEDIR}/include/netcdf)
+set (INC_NETCDF ${NETCDF_INCLUDE_DIRS})
 set (INC_HDF ${BASEDIR}/include/hdf)
 set (INC_ESMF ${BASEDIR}/include/esmf)
 
@@ -78,7 +83,11 @@ if (APPLE)
 else ()
    set (ESMF_LIBRARY esmf_fullylinked)
 endif ()
-set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
+
+#find_package (NetCDF REQUIRED COMPONENTS Fortran)
+#set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
+set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
+set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES_OLD} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
 
 
 if (PFUNIT)
