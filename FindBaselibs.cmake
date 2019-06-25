@@ -43,8 +43,7 @@ add_definitions(-DHAS_NETCDF3)
 #------------------------------------------------------------------
 
 set (INC_HDF5 ${BASEDIR}/include/hdf5)
-#set (INC_NETCDF ${BASEDIR}/include/netcdf)
-set (INC_NETCDF ${NETCDF_INCLUDE_DIRS})
+set (INC_NETCDF ${BASEDIR}/include/netcdf)
 set (INC_HDF ${BASEDIR}/include/hdf)
 set (INC_ESMF ${BASEDIR}/include/esmf)
 
@@ -86,6 +85,7 @@ endif ()
 
 #find_package (NetCDF REQUIRED COMPONENTS Fortran)
 #set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
+#set (INC_NETCDF ${NETCDF_INCLUDE_DIRS})
 set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
 set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES_OLD} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
 
