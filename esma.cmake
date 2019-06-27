@@ -36,3 +36,33 @@ find_package(Threads REQUIRED)
 # Position independent code
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+
+# MPI Support - only invoked from Fortran sources in GEOS-5.
+# But some BASEDIR packages use MPI from C/C++.
+find_package (MPI REQUIRED)
+
+if (APPLE)
+  if (DEFINED ENV{MKLROOT})
+    set (MKL_Fortran)
+    find_package (MKL REQUIRED)
+  else ()
+    if ("${CMAKE_Fortran_COMPILER_ID}" MATCHES "GNU")
+      #USE FRAMEWORK
+      message(STATUS "Found macOS and gfortran, using framework Accelerate")
+      link_libraries("-framework Accelerate")
+    endif ()
+  endif ()
+else ()
+  find_package (MKL REQUIRED)
+endif ()
+
+# Unit testing
+set (PFUNIT OFF CACHE BOOL "Activate pfunit based tests")
+if (PFUNIT)
+   add_custom_target(tests COMMAND ${CMAKE_CTEST_COMMAND})
+endif ()
+
+# Baselibs ...
+include (FindBaselibs)
+
+
