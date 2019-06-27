@@ -66,3 +66,4 @@ endif ()
 include (FindBaselibs)
 
 
+set (CMAKE_INSTALL_MESSAGE LAZY)
