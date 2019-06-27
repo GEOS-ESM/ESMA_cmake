@@ -57,7 +57,6 @@ macro (esma_add_library this)
     SOURCES ${ARGS_SRCS}
     LIBS ${ARGS_DEPENDENCIES}
     INCLUDES ${ARGS_INCLUDES}
-    esma_add
     )
 
   set_target_properties(${this} PROPERTIES EXCLUDE_FROM_ALL ${ARGS_EXCLUDE_FROM_ALL})
