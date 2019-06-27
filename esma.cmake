@@ -1,4 +1,5 @@
 # Bring in ecbuild
+
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/@ecbuild/cmake")
 include (ecbuild_system NO_POLICY_SCOPE)
 
@@ -19,11 +20,9 @@ set (protex_flags -g -b -f)
 set (LATEX_COMPILER pdflatex)
 include (UseLatex)
 
-
 if (APPLE)
   include(osx_extras)
 endif ()
-
 
 # OpenMP support
 find_package (OpenMP)
@@ -65,5 +64,5 @@ endif ()
 # Baselibs ...
 include (FindBaselibs)
 
-
+enable_testing()
 set (CMAKE_INSTALL_MESSAGE LAZY)
