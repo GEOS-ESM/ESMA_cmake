@@ -24,6 +24,7 @@ set (FINT8 "-fdefault-integer-8")
 set (PP    "-cpp")
 set (MISMATCH "")
 #set (BIG_ENDIAN "-fconvert=swap") # This doesn't seem to work at the moment
+#set (LITTLE_ENDIAN "") # Not sure
 set (EXTENDED_SOURCE "-ffixed-line-length-132")
 set (FIXED_SOURCE "-ffixed-form")
 set (DISABLE_FIELD_WIDTH_WARNING "")
