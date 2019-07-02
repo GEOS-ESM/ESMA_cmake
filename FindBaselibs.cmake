@@ -97,3 +97,10 @@ if (PFUNIT)
   set (PFUNIT_INCLUDE_DIRS ${PFUNIT_PATH}/mod ${PFUNIT_PATH}/include)
 endif ()
 
+# BASEDIR.rc file does not have the arch
+string(REPLACE "/${CMAKE_SYSTEM_NAME}" "" BASEDIR_WITHOUT_ARCH ${BASEDIR})
+set(BASEDIR_WITHOUT_ARCH ${BASEDIR_WITHOUT_ARCH} CACHE STRING "BASEDIR without arch")
+mark_as_advanced(BASEDIR_WITHOUT_ARCH)
+
+# Set the site variable
+include(DetermineSite)
