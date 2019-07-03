@@ -65,8 +65,8 @@ macro (esma_add_library this)
   set (install_dir include/${this})
   # Export target  include directories for other targets
   target_include_directories(${this} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR} # stubs
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}> # stubs
 # modules and copied *.h, *.inc    
     $<BUILD_INTERFACE:${esma_include}/${this}>
     $<INSTALL_INTERFACE:${install_dir}>
@@ -79,9 +79,10 @@ macro (esma_add_library this)
   endif ()
   
   if (ARGS_INCLUDES)
-    target_include_directories(${this} PUBLIC ${ARGS_INCLUDES})
+    target_include_directories(${this} PUBLIC $<BUILD_INTERFACE:${ARGS_INCLUDES}>)
   endif ()
 
+  # The following possibly duplicates logic that is already in the ecbuild layer
   install (DIRECTORY  ${esma_include}/${this}/ DESTINATION include/${this})
 
 endmacro ()

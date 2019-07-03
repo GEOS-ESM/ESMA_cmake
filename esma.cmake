@@ -10,7 +10,10 @@ endif()
 
 # Bring in ecbuild
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/@ecbuild/cmake")
+set (BUILD_SHARED_LIBS OFF)
+set (ECBUILD_2_COMPAT_VALUE OFF)
 include (ecbuild_system NO_POLICY_SCOPE)
+
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/check_compiler_support")
 include ("${CMAKE_Fortran_COMPILER_ID}")
