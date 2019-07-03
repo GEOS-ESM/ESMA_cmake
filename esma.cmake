@@ -78,3 +78,8 @@ include (FindBaselibs)
 
 enable_testing()
 set (CMAKE_INSTALL_MESSAGE LAZY)
+
+# This is a "stub" macro to detect building within an ESMA project (for MAPL standalone)
+macro (esma)
+
+endmacro ()
