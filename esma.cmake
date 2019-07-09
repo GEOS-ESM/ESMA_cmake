@@ -83,3 +83,5 @@ set (CMAKE_INSTALL_MESSAGE LAZY)
 macro (esma)
 
 endmacro ()
+
+find_package(GitInfo)
