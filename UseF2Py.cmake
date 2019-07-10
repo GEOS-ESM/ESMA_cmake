@@ -47,7 +47,7 @@ find_program(F2PY_EXECUTABLE NAMES "f2py${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION
 macro (add_f2py_module _name)
 
   # Parse arguments.
-  set (options)
+  set (options USE_MPI)
   set (oneValueArgs DESTINATION)
   set (multiValueArgs SOURCES ONLY LIBRARIES INCLUDEDIRS)
   cmake_parse_arguments(add_f2py_module "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
@@ -125,6 +125,17 @@ macro (add_f2py_module _name)
     list(APPEND _lib_opts "-l${_lib}")
   endforeach(_lib)
 
+  if ( ${add_f2py_module_USE_MPI})
+     foreach (lib ${MPI_Fortran_LIBRARIES})
+        get_filename_component(lib_dir ${lib} DIRECTORY)
+        list(APPEND _lib_opts "-L${lib_dir}")
+
+        get_filename_component(lib_name ${lib} NAME)
+        string(REGEX MATCH "lib(.*)\.so" BOBO ${lib_name})
+        set(short_lib_name "${CMAKE_MATCH_1}")
+        list(APPEND _lib_opts "-l${short_lib_name}")
+     endforeach ()
+  endif ()
 
   # Define the command to generate the Fortran to Python interface module. The
   # output will be a shared library that can be imported by python.
