@@ -166,7 +166,7 @@ macro (add_f2py_module _name)
 
   if(NOT (add_f2py_module_DESTINATION MATCHES "^$" OR add_f2py_module_DESTINATION MATCHES ";"))
     # Install the python module
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_name}${F2PY_SUFFIX}"
+    install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/${_name}${F2PY_SUFFIX}"
             DESTINATION ${add_f2py_module_DESTINATION})
   endif(NOT (add_f2py_module_DESTINATION MATCHES "^$" OR add_f2py_module_DESTINATION MATCHES ";"))
 
