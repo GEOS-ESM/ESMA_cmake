@@ -1,9 +1,9 @@
 # Most users of this software do not (should not?) have permissions to
 # install in the cmake default of /usr/local (or equiv on other os's).
-# Below, the default is changed to a directory within the build tree
+# Below, the default is changed to a directory parallel to the build tree
 # unless the user explicitly sets CMAKE_INSTALL_PREFIX in the cache.
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "default install path" FORCE )
+    set (CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "default install path" FORCE )
     message(STATUS "*** Setting default install prefix to ${CMAKE_INSTALL_PREFIX}.")
     message(STATUS "*** Override with -DCMAKE_INSTALL_PREFIX=<path>.")
 endif()
