@@ -131,7 +131,7 @@ macro (add_f2py_module _name)
         list(APPEND _lib_opts "-L${lib_dir}")
 
         get_filename_component(lib_name ${lib} NAME)
-        string(REGEX MATCH "lib(.*)\.so" BOBO ${lib_name})
+        string(REGEX MATCH "lib(.*)(${CMAKE_SHARED_LIBRARY_SUFFIX}|${CMAKE_STATIC_LIBRARY_SUFFIX})" BOBO ${lib_name})
         set(short_lib_name "${CMAKE_MATCH_1}")
         list(APPEND _lib_opts "-l${short_lib_name}")
      endforeach ()
