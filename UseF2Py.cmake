@@ -122,7 +122,14 @@ macro (add_f2py_module _name)
 
   set(_libs_opts)
   foreach(_lib ${add_f2py_module_LIBRARIES})
-    list(APPEND _lib_opts "-l${_lib}")
+     # MAT This is hacky, but so is this whole code
+     #     On darwin, esmf is a full path libesmf.a and
+     #     not esmf_fullylinked. For now, if libesmf.a
+     #     is passed down, replace with esmf
+     if (_lib MATCHES "esmf\.a")
+        set (_lib esmf)
+     endif ()
+     list(APPEND _lib_opts "-l${_lib}")
   endforeach(_lib)
 
   if ( ${add_f2py_module_USE_MPI})
@@ -131,7 +138,7 @@ macro (add_f2py_module _name)
         list(APPEND _lib_opts "-L${lib_dir}")
 
         get_filename_component(lib_name ${lib} NAME)
-        string(REGEX MATCH "lib(.*)\.so" BOBO ${lib_name})
+        string(REGEX MATCH "lib(.*)(${CMAKE_SHARED_LIBRARY_SUFFIX}|${CMAKE_STATIC_LIBRARY_SUFFIX})" BOBO ${lib_name})
         set(short_lib_name "${CMAKE_MATCH_1}")
         list(APPEND _lib_opts "-l${short_lib_name}")
      endforeach ()
