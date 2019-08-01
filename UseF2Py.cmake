@@ -47,7 +47,7 @@ find_program(F2PY_EXECUTABLE NAMES "f2py${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION
 macro (add_f2py_module _name)
 
   # Parse arguments.
-  set (options)
+  set (options USE_MPI)
   set (oneValueArgs DESTINATION)
   set (multiValueArgs SOURCES ONLY LIBRARIES INCLUDEDIRS)
   cmake_parse_arguments(add_f2py_module "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
@@ -122,9 +122,27 @@ macro (add_f2py_module _name)
 
   set(_libs_opts)
   foreach(_lib ${add_f2py_module_LIBRARIES})
-    list(APPEND _lib_opts "-l${_lib}")
+     # MAT This is hacky, but so is this whole code
+     #     On darwin, esmf is a full path libesmf.a and
+     #     not esmf_fullylinked. For now, if libesmf.a
+     #     is passed down, replace with esmf
+     if (_lib MATCHES "esmf\.a")
+        set (_lib esmf)
+     endif ()
+     list(APPEND _lib_opts "-l${_lib}")
   endforeach(_lib)
 
+  if ( ${add_f2py_module_USE_MPI})
+     foreach (lib ${MPI_Fortran_LIBRARIES})
+        get_filename_component(lib_dir ${lib} DIRECTORY)
+        list(APPEND _lib_opts "-L${lib_dir}")
+
+        get_filename_component(lib_name ${lib} NAME)
+        string(REGEX MATCH "lib(.*)(${CMAKE_SHARED_LIBRARY_SUFFIX}|${CMAKE_STATIC_LIBRARY_SUFFIX})" BOBO ${lib_name})
+        set(short_lib_name "${CMAKE_MATCH_1}")
+        list(APPEND _lib_opts "-l${short_lib_name}")
+     endforeach ()
+  endif ()
 
   # Define the command to generate the Fortran to Python interface module. The
   # output will be a shared library that can be imported by python.
@@ -155,7 +173,7 @@ macro (add_f2py_module _name)
 
   if(NOT (add_f2py_module_DESTINATION MATCHES "^$" OR add_f2py_module_DESTINATION MATCHES ";"))
     # Install the python module
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_name}${F2PY_SUFFIX}"
+    install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/${_name}${F2PY_SUFFIX}"
             DESTINATION ${add_f2py_module_DESTINATION})
   endif(NOT (add_f2py_module_DESTINATION MATCHES "^$" OR add_f2py_module_DESTINATION MATCHES ";"))
 

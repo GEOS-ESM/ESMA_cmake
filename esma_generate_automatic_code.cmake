@@ -21,6 +21,7 @@ macro (new_esma_generate_automatic_code
     )
   add_custom_target (phony_${target} DEPENDS ${generated_files})
   add_dependencies (${target} phony_${target})
+  install(FILES ${rcs_destination}/${rcs} DESTINATION etc)
 
 endmacro ()
 

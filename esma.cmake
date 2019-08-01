@@ -26,11 +26,22 @@ include (esma_generate_automatic_code)
 include (esma_create_stub_component)
 include (esma_fortran_generator_list)
 
-include (UseProTeX)
-set (protex_flags -g -b -f)
+find_package(LATEX)
+# These are all the bits of LaTeX that UseLatex needs. As it's confusing how LATEX_FOUND from
+# find_package(LATEX) is set, we test all the bits that UseLatex requires
+if (LATEX_FOUND AND LATEX_PDFLATEX_FOUND AND LATEX_BIBTEX_FOUND AND LATEX_MAKEINDEX_FOUND)
+   # If they are all found, set LATEX_FOUND to TRUE...
+   set (LATEX_FOUND TRUE)
 
-set (LATEX_COMPILER pdflatex)
-include (UseLatex)
+   # ...and then set up for protex and UseLatex
+   include (UseProTeX)
+   set (protex_flags -g -b -f)
+
+   set (LATEX_COMPILER pdflatex)
+   include (UseLatex)
+else ()
+   set (LATEX_FOUND FALSE)
+endif ()
 
 if (APPLE)
   include(osx_extras)
@@ -83,3 +94,5 @@ set (CMAKE_INSTALL_MESSAGE LAZY)
 macro (esma)
 
 endmacro ()
+
+find_package(GitInfo)
