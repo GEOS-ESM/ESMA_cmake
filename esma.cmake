@@ -79,7 +79,7 @@ else ()
 endif ()
 
 # Unit testing
-set (PFUNIT OFF CACHE BOOL "Activate pfunit based tests")
+option (PFUNIT "Activate pfunit based tests" OFF)
 if (PFUNIT)
    add_custom_target(tests COMMAND ${CMAKE_CTEST_COMMAND})
 endif ()

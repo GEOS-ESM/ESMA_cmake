@@ -12,7 +12,7 @@
 macro (esma_check_if_debug)
 
   get_filename_component(this_dir ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-  set (DEBUG_${this_dir} OFF CACHE BOOL "Set to ON to debug this directory and its subdirectories.")
+  option (DEBUG_${this_dir} "Activate debugging flags in this directory and its subdirs." OFF)
 
   if (NOT (CMAKE_BUILD_TYPE MATCHES Debug))
     if (DEBUG_${this_dir})
