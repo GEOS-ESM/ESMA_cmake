@@ -25,18 +25,6 @@ function(file_glob_directories VAR)
 	set(${VAR} ${MATCHED_LIST} PARENT_SCOPE)
 endfunction()
 
-find_path(ESMF_INCLUDES_DIR
-	ESMF_ErrReturnCodes.inc
-	HINTS 
-		$ENV{ESMF_ROOT}
-		$ENV{ESMF_ROOT}/DEFAULTINSTALLDIR
-	DOC "The path to the directory containing \"ESMF_ErrReturnCodes.inc\"."
-	PATH_SUFFIXES
-		"include" 
-		"mod"
-		"src/include" 
-		"src/mod"
-)
 
 find_path(ESMF_HEADERS_DIR
 	ESMC.h
@@ -87,10 +75,6 @@ find_library(ESMF_LIBRARY
 )
 
 set(ESMF_ERRMSG "\nCounldn't find one or more of ESMF's files! The following files/directories weren't found:")
-if(NOT ESMF_INCLUDES_DIR)
-	set(ESMF_ERRMSG "${ESMF_ERRMSG}
-    ESMF_INCLUDES_DIR: Directory with ESMF's \".inc\" files (e.g. \"ESMF_ErrReturnCodes.inc\")")
-endif()
 if(NOT ESMF_HEADERS_DIR)
 	set(ESMF_ERRMSG "${ESMF_ERRMSG}
     ESMF_HEADERS_DIR:  Directory with ESMF's \".h\" files   (e.g. \"ESMC.h\")")
@@ -105,15 +89,31 @@ if(NOT ESMF_LIBRARY)
 endif()
 set(ESMF_ERRMSG "${ESMF_ERRMSG}\nFind the directories/files that are listed above. Specify the directories you want CMake to search with the CMAKE_PREFIX_PATH variable (or the ESMF_ROOT environment variable).\n")
 
+if(EXISTS ${ESMF_HEADERS_DIR}/ESMC_Macros.h)
+	file(READ ${ESMF_HEADERS_DIR}/ESMC_Macros.h ESMC_MACROS)
+	if("${ESMC_MACROS}" MATCHES "#define[ \t\r\n]+ESMF_VERSION_MAJOR[ \t\r\n]+([0-9]+)")
+		set(ESMF_VERSION_MAJOR "${CMAKE_MATCH_1}")
+	endif()
+	if("${ESMC_MACROS}" MATCHES "#define[ \t\r\n]+ESMF_VERSION_MINOR[ \t\r\n]+([0-9]+)")
+		set(ESMF_VERSION_MINOR "${CMAKE_MATCH_1}")
+	endif()
+	if("${ESMC_MACROS}" MATCHES "#define[ \t\r\n]+ESMF_VERSION_REVISION[ \t\r\n]+([0-9]+)")
+		set(ESMF_VERSION_REVISION "${CMAKE_MATCH_1}")
+	endif()
+	set(ESMF_VERSION "${ESMF_VERSION_MAJOR}.${ESMF_VERSION_MINOR}.${ESMF_VERSION_REVISION}")
+else()
+	set(ESMF_VERSION "NOTFOUND")
+endif()
 
 find_package_handle_standard_args(ESMF 
 	REQUIRED_VARS 
-		ESMF_INCLUDES_DIR 
 		ESMF_HEADERS_DIR 
 		ESMF_MOD_DIR 
 		ESMF_LIBRARY
+	VERSION_VAR ESMF_VERSION
 	FAIL_MESSAGE "${ESMF_ERRMSG}"
 )
+
 
 # Specify the other libraries that need to be linked for ESMF
 find_package(NetCDF REQUIRED)
