@@ -1,106 +1,106 @@
+
+# Set BASEDIR to non-existant path if it is not already set
 set (BASEDIR /does-not-exist CACHE PATH "Path to installed baselibs _including_ OS subdirectory (Linux or Darwin).")
 
-if (NOT EXISTS ${BASEDIR})
+# If BASEDIR evaluates to TRUE but it isn't a valid path throw an error
+# This lets BASEDIR be skipped if BASEDIR is set to a false value (e.g. setting BASEDIR to IGNORE)
+if (BASEDIR AND NOT EXISTS ${BASEDIR})
   message (FATAL_ERROR "ERROR: Must specify a value for BASEDIR with cmake ... -DBASEDIR=<path>.")
+elseif(EXISTS ${BASEDIR})
+  # Add path to GFE packages
+  list (APPEND CMAKE_PREFIX_PATH ${BASEDIR})
+
+  # Append BASEDIR paths to CMAKE_PREFIX_PATH which is used by find_package calls 
+  list(APPEND CMAKE_PREFIX_PATH ${BASEDIR})
 endif ()
 if (ESMA_SDF)
   message (FATAL_ERROR "ERROR: -hdf option was thought to be obsolete when CMake was crafted.")
 endif ()
 
-link_directories (${BASEDIR}/lib)
-
-# Add path to GFE packages
-list (APPEND CMAKE_PREFIX_PATH ${BASEDIR})
-
-#------------------------------------------------------------------
-# netcdf
-# The following command provides the list of libraries that netcdf
-# uses.  Unfortunately it also includes the library path and "-l"
-# prefixes, which CMake handles in a different manner. So we need so
-# strip off that item from the list
-execute_process (
-  COMMAND ${BASEDIR}/bin/nf-config --flibs
-  OUTPUT_VARIABLE LIB_NETCDF
-  )
-
-string(REGEX MATCHALL " -l[^ ]*" _full_libs "${LIB_NETCDF}")
-set (NETCDF_LIBRARIES_OLD)
-foreach (lib ${_full_libs})
-  string (REPLACE "-l" "" _tmp ${lib})
-  string (STRIP ${_tmp} _tmp)
-  list (APPEND NETCDF_LIBRARIES_OLD ${_tmp})
-endforeach()
-
-list (REVERSE NETCDF_LIBRARIES_OLD)
-list (REMOVE_DUPLICATES NETCDF_LIBRARIES_OLD)
-list (REVERSE NETCDF_LIBRARIES_OLD)
-
+# Find NetCDF
+find_package(NetCDF REQUIRED COMPONENTS C Fortran)
+# Set expected definitions
 add_definitions(-DHAS_NETCDF4)
 add_definitions(-DHAS_NETCDF3)
 add_definitions(-DH5_HAVE_PARALLEL)
 add_definitions(-DNETCDF_NEED_NF_MPIIO)
 add_definitions(-DHAS_NETCDF3)
-#------------------------------------------------------------------
+# Set non-standard expected variables
+set(INC_NETCDF ${NETCDF_INCLUDE_DIRS})
 
-set (INC_HDF5 ${BASEDIR}/include/hdf5)
-set (INC_NETCDF ${BASEDIR}/include/netcdf)
-set (INC_HDF ${BASEDIR}/include/hdf)
-set (INC_ESMF ${BASEDIR}/include/esmf)
+# If BASEDIR exists, set the expected HDF and HDF5 variables
+if(EXISTS ${BASEDIR}/include/hdf5)
+  set (INC_HDF5 ${BASEDIR}/include/hdf5)
+endif()
+if(EXISTS ${BASEDIR}/include/hdf)
+  set (INC_HDF ${BASEDIR}/include/hdf)
+endif()
 
+# Find GFTL 
 find_package(GFTL REQUIRED)
-find_package(GFTL_SHARED)
-find_package(FARGPARSE)
 
-set (INC_FLAP ${BASEDIR}/include/FLAP)
-set (LIB_FLAP ${BASEDIR}/lib/libflap.a)
-if (NOT EXISTS ${INC_FLAP})
-  message (FATAL_ERROR  "FLAP directory, ${INC_FLAP} does not exist.")
-endif ()
+# Find GFTL_SHARED
+set(GFTL_SHARED_IS_REQUIRED "" CACHE STRING "Argument in GFTL_SHARED's find_package call")
+mark_as_advanced(GFTL_SHARED_IS_REQUIRED)
+find_package(GFTL_SHARED ${GFTL_SHARED_IS_REQUIRED} CONFIG)
 
-if (APPLE)
-  if (NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-    execute_process (COMMAND ${CMAKE_C_COMPILER} --print-file-name=libgcc.a OUTPUT_VARIABLE libgcc OUTPUT_STRIP_TRAILING_WHITESPACE)
-  endif ()
-  execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.dylib OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
-else ()
-  execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.so OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
-endif ()
+# Find FARGPARSE
+set(FARGPARSE_IS_REQUIRED "" CACHE STRING "Argument in FARGPARSE's find_package call")
+mark_as_advanced(FARGPARSE_IS_REQUIRED)
+find_package(FARGPARSE CONFIG)
 
-# For OS X - use the gcc stdc++ library - not clang
-#find_library (STDCxx
-#  stdc++
-#  HINTS "/opt/local/lib/gcc5"
-#  )
+# Find FLAP
+set(FLAP_IS_REQUIRED "REQUIRED" CACHE STRING "Argument in FLAP's find_package call")
+mark_as_advanced(FLAP_IS_REQUIRED)
+find_package(FLAP ${FLAP_IS_REQUIRED})
+# Set non-standard expected variables
+set (INC_FLAP ${FLAP_INCLUDE_DIRS})
+set (LIB_FLAP ${FLAP_LIBRARIES})
 
-# We must statically link ESMF on Apple due mainly to an issue with how Baselibs is built.
-# Namely, the esmf dylib libraries end up with the full *build* path on Darwin (which is in 
-# src/esmf/lib/libO...) But we copy the dylib to $BASEDIR/lib. Thus, DYLD_LIBRARY_PATH gets
-# hosed. yay.
+# Find ESMF
+find_package(ESMF REQUIRED)
+# Set non-standard expected variables
+set(INC_ESMF ${ESMF_INCLUDE_DIRS})
 
-if (APPLE)
-   set (ESMF_LIBRARY ${BASEDIR}/lib/libesmf.a)
-else ()
-   set (ESMF_LIBRARY esmf_fullylinked)
-endif ()
+# Find MPI
+find_package(MPI REQUIRED COMPONENTS C CXX Fortran)
 
-#find_package (NetCDF REQUIRED COMPONENTS Fortran)
-#set (INC_NETCDF ${NETCDF_INCLUDE_DIRS})
-
-set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
-set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
-
-
+# Conditionally find PFUNIT
 if (PFUNIT)
-  set (PFUNIT_PATH ${BASEDIR}/pFUnit/pFUnit-mpi)
-  set (PFUNIT_LIBRARY_DIRS ${PFUNIT_PATH}/lib)
-  set (PFUNIT_LIBRARIES ${PFUNIT_PATH}/lib/libpfunit.a)
-  set (PFUNIT_INCLUDE_DIRS ${PFUNIT_PATH}/mod ${PFUNIT_PATH}/include)
-endif ()
+  find_package(PFUNIT REQUIRED CONFIG)
+endif()
 
-# BASEDIR.rc file does not have the arch
-string(REPLACE "/${CMAKE_SYSTEM_NAME}" "" BASEDIR_WITHOUT_ARCH ${BASEDIR})
-set(BASEDIR_WITHOUT_ARCH ${BASEDIR_WITHOUT_ARCH} CACHE STRING "BASEDIR without arch")
-mark_as_advanced(BASEDIR_WITHOUT_ARCH)
+if(BASEDIR)
+  # BASEDIR.rc file does not have the arch
+  string(REPLACE "/${CMAKE_SYSTEM_NAME}" "" BASEDIR_WITHOUT_ARCH ${BASEDIR})
+  set(BASEDIR_WITHOUT_ARCH ${BASEDIR_WITHOUT_ARCH} CACHE STRING "BASEDIR without arch")
+  mark_as_advanced(BASEDIR_WITHOUT_ARCH)
+endif()
 
 # Set the site variable
 include(DetermineSite)
+
+
+# Make Baselibs target
+add_library(Baselibs INTERFACE)
+message(">>>>>>>>> ${NETCDF_INCLUDE_DIRS}")
+target_include_directories(Baselibs INTERFACE ${NETCDF_INCLUDE_DIRS})
+target_link_libraries(Baselibs 
+  INTERFACE 
+    gftl ESMF
+    MPI::MPI_C MPI::MPI_CXX MPI::MPI_Fortran
+    ${OpenMP_Fortran_LIBRARIES}
+)
+if(TARGET gftl-shared)
+  target_link_libraries(Baselibs INTERFACE gftl-shared)
+endif()
+if(TARGET fargparse)
+  target_link_libraries(Baselibs INTERFACE fargparse)
+endif()
+if(TARGET FLAP)
+  target_link_libraries(Baselibs INTERFACE FLAP)
+endif()
+if(TARGET pfunit)
+  target_link_libraries(Baselibs INTERFACE pfunit)
+endif()
+install(TARGETS Baselibs EXPORT MAPL-targets)

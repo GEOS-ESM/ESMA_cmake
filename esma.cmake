@@ -63,10 +63,12 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # But some BASEDIR packages use MPI from C/C++.
 find_package (MPI REQUIRED)
 
+set(MKL_IS_REQUIRED "REQUIRED" CACHE STRING "Argument in MKL's find_package call")
+mark_as_advanced(MKL_IS_REQUIRED)
 if (APPLE)
   if (DEFINED ENV{MKLROOT})
     set (MKL_Fortran)
-    find_package (MKL REQUIRED)
+    find_package (MKL ${MKL_IS_REQUIRED})
   else ()
     if ("${CMAKE_Fortran_COMPILER_ID}" MATCHES "GNU")
       #USE FRAMEWORK
@@ -75,7 +77,7 @@ if (APPLE)
     endif ()
   endif ()
 else ()
-  find_package (MKL REQUIRED)
+  find_package (MKL ${MKL_IS_REQUIRED})
 endif ()
 
 # Unit testing

@@ -1,22 +1,23 @@
+#[[ FindGFTL.cmake
 
-find_path(GFTL_INCLUDE_DIR
-types/key_deferredLengthString.inc
-HINTS
-    $ENV{GFTL_ROOT}
-    $ENV{gFTL_ROOT}
-PATH_SUFFIXES "include"
+    This module finds where gFTL is installed. It sets the following 
+    variables:
+        GFTL_INCLUDE_DIRS - gFTL's include directory
+        
+]]
+
+find_path(GFTL_INCLUDE_DIRS
+    types/key_deferredLengthString.inc
+    PATH_SUFFIXES "include"
 )
-
-set(GFTL_ERRMSG "\nCounldn't find one or more of GFTL's files! The following files/directories weren't found:")
-if(NOT GFTL_INCLUDE_DIR)
-set(GFTL_ERRMSG "${GFTL_ERRMSG}
-GFTL_INCLUDE_DIR: Path to gFTL's \"include/\" directory")
-endif()
-set(GFTL_ERRMSG "${GFTL_ERRMSG}\nFind the directories/files that are listed above. Specify the directories you want CMake to search with the CMAKE_PREFIX_PATH variable (or the GFTL_ROOT environment variable).\n")
 
 find_package_handle_standard_args(GFTL
-REQUIRED_VARS GFTL_INCLUDE_DIR
-FAIL_MESSAGE "${GFTL_ERRMSG}"
+    REQUIRED_VARS GFTL_INCLUDE_DIRS
 )
 
-mark_as_advanced(GFTL_INSTALL)
+# Make an imported target for GFTL
+if(NOT TARGET gftl)
+	add_library(gftl INTERFACE)
+    target_include_directories(gftl INTERFACE ${GFTL_INCLUDE_DIRS})
+    install(TARGETS gftl EXPORT MAPL-targets)
+endif()
