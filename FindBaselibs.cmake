@@ -24,12 +24,6 @@ endif ()
 
 # Find NetCDF
 find_package(NetCDF REQUIRED COMPONENTS C Fortran)
-# Set expected definitions
-add_definitions(-DHAS_NETCDF4)
-add_definitions(-DHAS_NETCDF3)
-add_definitions(-DH5_HAVE_PARALLEL)
-add_definitions(-DNETCDF_NEED_NF_MPIIO)
-add_definitions(-DHAS_NETCDF3)
 # Set non-standard expected variables
 set(INC_NETCDF ${NETCDF_INCLUDE_DIRS})
 set(LIB_NETCDF ${NETCDF_LIBRARIES})
@@ -85,3 +79,32 @@ endif()
 
 # Set the site variable
 include(DetermineSite)
+
+
+# Make Baselibs target
+add_library(Baselibs INTERFACE)
+target_include_directories(Baselibs INTERFACE ${NETCDF_INCLUDE_DIRS})
+target_link_libraries(Baselibs INTERFACE 
+    $<$<TARGET_EXISTS:gftl-shared>:gftl-shared>
+    $<$<TARGET_EXISTS:fargparse>:fargparse>
+    $<$<TARGET_EXISTS:FLAP>:FLAP>
+    $<$<TARGET_EXISTS:pfunit>:pfunit>
+    gftl ESMF
+    MPI::MPI_C MPI::MPI_CXX MPI::MPI_Fortran
+    OpenMP::OpenMP_Fortran
+  )
+target_compile_options(Baselibs INTERFACE
+	$<$<COMPILE_LANGUAGE:Fortran>:
+		$<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>,$<CONFIG:MinSizeRel>>:${GEOS_Fortran_FLAGS_RELEASE}>
+  		$<$<CONFIG:Debug>:${GEOS_Fortran_FLAGS_DEBUG}>
+	>
+	""
+  )
+target_compile_definitions(Baselibs INTERFACE
+  HAS_NETCDF4
+  HAS_NETCDF3
+  H5_HAVE_PARALLEL
+  NETCDF_NEED_NF_MPIIO
+  HAS_NETCDF3
+  )
+install(TARGETS Baselibs EXPORT MAPL-targets)
