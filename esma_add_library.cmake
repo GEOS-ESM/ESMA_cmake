@@ -13,14 +13,41 @@ macro (esma_add_library this)
     message (STATUS "Generating build instructions for component: ${this}")
   endif ()
 
-  set (options OPTIONAL EXCLUDE_FROM_ALL)
-  set (multiValueArgs SRCS SUBCOMPONENTS SUBDIRS DEPENDENCIES INCLUDES NEVER_STUB)
+  set (options EXCLUDE_FROM_ALL)
+  set (multiValueArgs
+    # esma unique
+    SUBCOMPONENTS SUBDIRS NEVER_STUB PRIVATE_DEFINITIONS PUBLIC_DEFINITIONS
+    # shared with ecbuild (and not deprecated)
+    SOURCES DEPENDS PUBLIC_LIBS
+    # deprecated in esma (produces explicit warnings)
+    SRCS INCLUDES DEPENDENCIES 
+    # deprecated in ecbuild
+    PUBLIC_INCLUDES DEPENDS
+    )
   cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+  if (ARGS_UNPARSED_ARGUMENTS)
+    ecbuild_warn ("Unrecognized keyword arguments passed to esma_add_library: ${ARGS_UNPARSED_ARGUMENTS}")
+  endif ()
 
   # Subdirs must exist and should be configured prior to subcomponents.
   foreach (subdir ${ARGS_SUBDIRS})
     add_subdirectory(${subdir})
   endforeach()
+
+  # Handle deprecated
+  if (ARGS_SRCS)
+    ecbuild_warn("SRCS is a deprecated option for esma_add_library(); use SOURCES instead")
+    set (ARGS_SOURCES ${ARGS_SRCS})
+  endif ()
+  if (ARGS_INCLUDES)
+    ecbuild_warn("SRCS is a deprecated option for esma_add_library(); use target_include_directories instead")
+    set (ARGS_PUBLIC_INCLUDES ${ARGS_INCLUDES})
+  endif ()
+  if (ARGS_DEPENDENCIES)
+    ecbuild_warn("DEPENDENCIES is a deprecated option for esma_add_library(); use PUBLIC_LIBS instead")
+    set (ARGS_PUBLIC_LIBS ${ARGS_DEPENDS})
+  endif ()
 
   # Configure subcomponents.  These can be stubbed and may have a
   # different name than the directory they reside in.  (Most
@@ -44,19 +71,21 @@ macro (esma_add_library this)
     if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${subdir})
       add_subdirectory (${subdir})
       list (APPEND non_stubbed ${mod_name})
-    else () # make stub and append to srcs (in ARGS_SRCS)
+    else () # make stub and append to sources (in ARGS_SOURCES)
       if (CMAKE_DEBUG)
 	message (STATUS  "  ... Creating stub component ${module_name}")
       endif()
-      esma_create_stub_component (ARGS_SRCS ${module_name})
+      esma_create_stub_component (ARGS_SOURCES ${module_name})
     endif ()
 
   endforeach ()
 
+  # This library depends on all DEPENDENCIES and _non-stubbed_ subcomponents.
+  set (all_dependencies ${ARGS_PUBLIC_LIBS} ${non_stubbed})
   ecbuild_add_library (TARGET ${this}
-    SOURCES ${ARGS_SRCS}
-    LIBS ${ARGS_DEPENDENCIES}
-    INCLUDES ${ARGS_INCLUDES}
+    SOURCES ${ARGS_SOURCES}
+    PUBLIC_LIBS ${all_dependencies}
+    PUBLIC_INCLUDES ${ARGS_PUBLIC_INCLUDES}
     )
 
   set_target_properties(${this} PROPERTIES EXCLUDE_FROM_ALL ${ARGS_EXCLUDE_FROM_ALL})
@@ -72,16 +101,16 @@ macro (esma_add_library this)
     $<INSTALL_INTERFACE:${install_dir}>
     ) 
 
-  # This library depends on all DEPENDENCIES and _non-stubbed_ subcomponents.
-  set (all_dependencies ${ARGS_DEPENDENCIES} ${non_stubbed})
-  if (all_dependencies)
-    target_link_libraries(${this} PUBLIC ${all_dependencies})
-  endif ()
-  
-  if (ARGS_INCLUDES)
-    target_include_directories(${this} PUBLIC $<BUILD_INTERFACE:${ARGS_INCLUDES}>)
+  if (ARGS_PUBLIC_INCLUDES)
+    target_include_directories(${this} PUBLIC $<BUILD_INTERFACE:${ARGS_PUBLIC_INCLUDES}>)
   endif ()
 
+  if (ARGS_PRIVATE_DEFINITIONS)
+    target_compile_definitions(${this} PRIVATE ${ARGS_PRIVATE_DEFINITIONS})
+  endif ()
+  if (ARGS_PUBLIC_DEFINITIONS)
+    target_compile_definitions(${this} PRIVATE ${ARGS_PRIVATE_DEFINITIONS})
+  endif ()
   # The following possibly duplicates logic that is already in the ecbuild layer
   install (DIRECTORY  ${esma_include}/${this}/ DESTINATION include/${this})
 
