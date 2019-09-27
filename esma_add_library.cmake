@@ -22,12 +22,12 @@ macro (esma_add_library this)
     # deprecated in esma (produces explicit warnings)
     SRCS INCLUDES DEPENDENCIES 
     # deprecated in ecbuild
-    PUBLIC_INCLUDES DEPENDS
+    PUBLIC_INCLUDES
     )
   cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   if (ARGS_UNPARSED_ARGUMENTS)
-    ecbuild_warn ("Unrecognized keyword arguments passed to esma_add_library: ${ARGS_UNPARSED_ARGUMENTS}")
+      ecbuild_warn ("Unrecognized keyword arguments passed to esma_add_library: ${ARGS_UNPARSED_ARGUMENTS}")
   endif ()
 
   # Subdirs must exist and should be configured prior to subcomponents.
@@ -37,15 +37,21 @@ macro (esma_add_library this)
 
   # Handle deprecated
   if (ARGS_SRCS)
-    ecbuild_warn("SRCS is a deprecated option for esma_add_library(); use SOURCES instead")
+    if (NOT ESMA_ALLOW_DEPRECATED)
+      ecbuild_warn("SRCS is a deprecated option for esma_add_library(); use SOURCES instead")
+      endif ()
     set (ARGS_SOURCES ${ARGS_SRCS})
   endif ()
   if (ARGS_INCLUDES)
-    ecbuild_warn("SRCS is a deprecated option for esma_add_library(); use target_include_directories instead")
+    if (NOT ESMA_ALLOW_DEPRECATED)
+      ecbuild_warn("SRCS is a deprecated option for esma_add_library(); use target_include_directories instead")
+    endif ()
     set (ARGS_PUBLIC_INCLUDES ${ARGS_INCLUDES})
   endif ()
   if (ARGS_DEPENDENCIES)
-    ecbuild_warn("DEPENDENCIES is a deprecated option for esma_add_library(); use PUBLIC_LIBS instead")
+    if (NOT ESMA_ALLOW_DEPRECATED)
+      ecbuild_warn("DEPENDENCIES is a deprecated option for esma_add_library(); use PUBLIC_LIBS instead")
+    endif ()
     set (ARGS_PUBLIC_LIBS ${ARGS_DEPENDS})
   endif ()
 

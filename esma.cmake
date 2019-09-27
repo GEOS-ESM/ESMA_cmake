@@ -78,6 +78,8 @@ else ()
   find_package (MKL REQUIRED)
 endif ()
 
+option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
+
 # Unit testing
 option (PFUNIT "Activate pfunit based tests" OFF)
 if (PFUNIT)
