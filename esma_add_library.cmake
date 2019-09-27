@@ -115,8 +115,9 @@ macro (esma_add_library this)
     target_compile_definitions(${this} PRIVATE ${ARGS_PRIVATE_DEFINITIONS})
   endif ()
   if (ARGS_PUBLIC_DEFINITIONS)
-    target_compile_definitions(${this} PRIVATE ${ARGS_PRIVATE_DEFINITIONS})
+    target_compile_definitions(${this} PUBLIC ${ARGS_PUBLIC_DEFINITIONS})
   endif ()
+
   # The following possibly duplicates logic that is already in the ecbuild layer
   install (DIRECTORY  ${esma_include}/${this}/ DESTINATION include/${this})
 
