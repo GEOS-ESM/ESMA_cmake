@@ -52,7 +52,7 @@ macro (esma_add_library this)
     if (NOT ESMA_ALLOW_DEPRECATED)
       ecbuild_warn("DEPENDENCIES is a deprecated option for esma_add_library(); use PUBLIC_LIBS instead")
     endif ()
-    set (ARGS_PUBLIC_LIBS ${ARGS_DEPENDS})
+    set (ARGS_PUBLIC_LIBS ${ARGS_DEPENDENCIES})
   endif ()
 
   # Configure subcomponents.  These can be stubbed and may have a
