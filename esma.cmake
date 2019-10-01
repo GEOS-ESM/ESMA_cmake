@@ -78,8 +78,10 @@ else ()
   find_package (MKL REQUIRED)
 endif ()
 
+option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
+
 # Unit testing
-set (PFUNIT OFF CACHE BOOL "Activate pfunit based tests")
+option (PFUNIT "Activate pfunit based tests" OFF)
 if (PFUNIT)
    add_custom_target(tests COMMAND ${CMAKE_CTEST_COMMAND})
 endif ()
