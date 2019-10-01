@@ -11,7 +11,13 @@
 
 macro (esma_check_if_debug)
 
-  get_filename_component(this_dir ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+  get_filename_component(this_dir_raw ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+  string (SUBSTRING ${this_dir_raw} 0 1 leading_character)
+  if (leading_character STREQUAL "@")
+    string (SUBSTRING ${this_dir_raw} 1 -1 this_dir) # strip leading "@"
+  else ()
+    set (this_dir ${this_dir_raw})
+  endif()
   option (DEBUG_${this_dir} "Activate debugging flags in this directory and its subdirs." OFF)
 
   if (NOT (CMAKE_BUILD_TYPE MATCHES Debug))
