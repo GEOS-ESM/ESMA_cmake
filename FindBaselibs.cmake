@@ -48,8 +48,8 @@ set (INC_HDF ${BASEDIR}/include/hdf)
 set (INC_ESMF ${BASEDIR}/include/esmf)
 
 find_package(GFTL REQUIRED)
-find_package(GFTL_SHARED)
-find_package(FARGPARSE)
+find_package(GFTL_SHARED QUIET)
+find_package(FARGPARSE QUIET)
 
 set (INC_FLAP ${BASEDIR}/include/FLAP)
 set (LIB_FLAP ${BASEDIR}/lib/libflap.a)
