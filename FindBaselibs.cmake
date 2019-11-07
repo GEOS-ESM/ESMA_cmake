@@ -52,7 +52,6 @@ find_package(GFTL_SHARED QUIET)
 find_package(FARGPARSE QUIET)
 
 find_package(FLAP REQUIRED)
-message("FLAP_INCLUDE_DIRS: ${FLAP_INCLUDE_DIRS}")
 
 if (APPLE)
   if (NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
