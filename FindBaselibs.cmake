@@ -51,11 +51,8 @@ find_package(GFTL REQUIRED)
 find_package(GFTL_SHARED QUIET)
 find_package(FARGPARSE QUIET)
 
-set (INC_FLAP ${BASEDIR}/include/FLAP)
-set (LIB_FLAP ${BASEDIR}/lib/libflap.a)
-if (NOT EXISTS ${INC_FLAP})
-  message (FATAL_ERROR  "FLAP directory, ${INC_FLAP} does not exist.")
-endif ()
+find_package(FLAP REQUIRED)
+message("FLAP_INCLUDE_DIRS: ${FLAP_INCLUDE_DIRS}")
 
 if (APPLE)
   if (NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
