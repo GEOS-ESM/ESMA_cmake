@@ -108,12 +108,19 @@ set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
 message(STATUS "MATMAT NETCDF_LIBRARIES: ${NETCDF_LIBRARIES}")
 set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
 
-
+# Unit testing
+option (PFUNIT "Activate pfunit based tests" OFF)
 if (PFUNIT)
-  set (PFUNIT_PATH ${BASEDIR}/PFUNIT-4.0)
-  set (PFUNIT_LIBRARY_DIRS ${PFUNIT_PATH}/lib)
-  set (PFUNIT_LIBRARIES ${PFUNIT_PATH}/lib/libpfunit.a)
-  set (PFUNIT_INCLUDE_DIRS ${PFUNIT_PATH}/include)
+   find_package(PFUNIT QUIET)
+   if (PFUNIT_FOUND)
+      set (PFUNIT_PATH ${BASEDIR}/PFUNIT-4.0)
+      set (PFUNIT_LIBRARY_DIRS ${PFUNIT_PATH}/lib)
+      set (PFUNIT_LIBRARIES ${PFUNIT_PATH}/lib/libpfunit.a)
+      set (PFUNIT_INCLUDE_DIRS ${PFUNIT_PATH}/include)
+      add_custom_target(tests COMMAND ${CMAKE_CTEST_COMMAND})
+   else ()
+      message(WARNING "PFUNIT is on but the pacakge is not found")
+   endif ()
 endif ()
 
 # BASEDIR.rc file does not have the arch
