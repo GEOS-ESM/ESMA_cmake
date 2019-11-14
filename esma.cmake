@@ -83,8 +83,12 @@ option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
 # Unit testing
 option (PFUNIT "Activate pfunit based tests" OFF)
 if (PFUNIT)
-   find_package(PFUNIT REQUIRED)
-   add_custom_target(tests COMMAND ${CMAKE_CTEST_COMMAND})
+   find_package(PFUNIT QUIET)
+   if (PFUNIT_FOUND)
+      add_custom_target(tests COMMAND ${CMAKE_CTEST_COMMAND})
+   else ()
+      message(WARNING "PFUNIT is on but the pacakge is not found")
+   endif ()
 endif ()
 
 # Baselibs ...
