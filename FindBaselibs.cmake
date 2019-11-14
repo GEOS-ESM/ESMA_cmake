@@ -110,10 +110,10 @@ set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES}
 
 
 if (PFUNIT)
-  set (PFUNIT_PATH ${BASEDIR}/pFUnit/pFUnit-mpi)
+  set (PFUNIT_PATH ${BASEDIR}/PFUNIT-4.0)
   set (PFUNIT_LIBRARY_DIRS ${PFUNIT_PATH}/lib)
   set (PFUNIT_LIBRARIES ${PFUNIT_PATH}/lib/libpfunit.a)
-  set (PFUNIT_INCLUDE_DIRS ${PFUNIT_PATH}/mod ${PFUNIT_PATH}/include)
+  set (PFUNIT_INCLUDE_DIRS ${PFUNIT_PATH}/include)
 endif ()
 
 # BASEDIR.rc file does not have the arch
