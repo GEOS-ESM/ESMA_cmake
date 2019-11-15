@@ -80,12 +80,6 @@ endif ()
 
 option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
 
-# Unit testing
-option (PFUNIT "Activate pfunit based tests" OFF)
-if (PFUNIT)
-   add_custom_target(tests COMMAND ${CMAKE_CTEST_COMMAND})
-endif ()
-
 # Baselibs ...
 include (FindBaselibs)
 
