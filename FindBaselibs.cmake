@@ -51,29 +51,7 @@ find_package(GFTL REQUIRED)
 find_package(GFTL_SHARED QUIET)
 find_package(FARGPARSE QUIET)
 
-#[[ --------------------------------------------
-MAT find_package() for FLAP is currently broken
 find_package(FLAP REQUIRED)
-For now, use knowledge to get the include files
-and the libraries
-]]
-
-set (FLAP_INCLUDE_DIR ${BASEDIR}/include/FLAP)
-if (NOT EXISTS ${FLAP_INCLUDE_DIR})
-   message (FATAL_ERROR  "FLAP directory, ${FLAP_INCLUDE_DIR} does not exist.")
-endif ()
-
-if (APPLE)
-   set (FLAP_INSTALL_LIBDIR lib)
-else ()
-   set (FLAP_INSTALL_LIBDIR lib64)
-endif ()
-
-set (LIB_FLAP ${BASEDIR}/${FLAP_INSTALL_LIBDIR}/libFLAP.a)
-set (LIB_FACE ${BASEDIR}/${FLAP_INSTALL_LIBDIR}/libFACE.a)
-set (LIB_PENF ${BASEDIR}/${FLAP_INSTALL_LIBDIR}/libPENF.a)
-
-set (FLAP_LIBRARIES ${LIB_FLAP} ${LIB_FACE} ${LIB_PENF})
 
 if (APPLE)
   if (NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
