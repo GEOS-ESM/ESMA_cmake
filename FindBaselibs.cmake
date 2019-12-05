@@ -51,11 +51,7 @@ find_package(GFTL REQUIRED)
 find_package(GFTL_SHARED QUIET)
 find_package(FARGPARSE QUIET)
 
-set (INC_FLAP ${BASEDIR}/include/FLAP)
-set (LIB_FLAP ${BASEDIR}/lib/libflap.a)
-if (NOT EXISTS ${INC_FLAP})
-  message (FATAL_ERROR  "FLAP directory, ${INC_FLAP} does not exist.")
-endif ()
+find_package(FLAP REQUIRED)
 
 if (APPLE)
   if (NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
@@ -89,12 +85,11 @@ endif ()
 set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
 set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
 
-
-if (PFUNIT)
-  set (PFUNIT_PATH ${BASEDIR}/pFUnit/pFUnit-mpi)
-  set (PFUNIT_LIBRARY_DIRS ${PFUNIT_PATH}/lib)
-  set (PFUNIT_LIBRARIES ${PFUNIT_PATH}/lib/libpfunit.a)
-  set (PFUNIT_INCLUDE_DIRS ${PFUNIT_PATH}/mod ${PFUNIT_PATH}/include)
+# Unit testing
+# option (PFUNIT "Activate pfunit based tests" OFF)
+find_package(PFUNIT QUIET)
+if (PFUNIT_FOUND)
+  add_custom_target(tests COMMAND ${CMAKE_CTEST_COMMAND})
 endif ()
 
 # BASEDIR.rc file does not have the arch
