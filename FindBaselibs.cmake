@@ -37,7 +37,7 @@ if(EXISTS ${BASEDIR}/include/hdf)
 endif()
 
 # Find GFTL 
-find_package(GFTL REQUIRED)
+# find_package(GFTL REQUIRED)
 
 # Find GFTL_SHARED
 set(GFTL_SHARED_IS_REQUIRED "" CACHE STRING "Argument in GFTL_SHARED's find_package call")
