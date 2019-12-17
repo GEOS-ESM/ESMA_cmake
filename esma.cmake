@@ -10,7 +10,8 @@ endif()
 
 # Bring in ecbuild
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/@ecbuild/cmake")
-set (BUILD_SHARED_LIBS OFF)
+#set (BUILD_SHARED_LIBS OFF)
+option(BUILD_SHARED_LIBS "Build the shared library" OFF)
 set (ECBUILD_2_COMPAT_VALUE OFF)
 include (ecbuild_system NO_POLICY_SCOPE)
 
@@ -80,11 +81,7 @@ else ()
   find_package (MKL ${MKL_IS_REQUIRED})
 endif ()
 
-# Unit testing
-set (PFUNIT OFF CACHE BOOL "Activate pfunit based tests")
-if (PFUNIT)
-   add_custom_target(tests COMMAND ${CMAKE_CTEST_COMMAND})
-endif ()
+option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
 
 # Baselibs ...
 include (FindBaselibs)

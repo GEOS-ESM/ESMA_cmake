@@ -2,8 +2,12 @@
 # Set BASEDIR to non-existant path if it is not already set
 set (BASEDIR /does-not-exist CACHE PATH "Path to installed baselibs _including_ OS subdirectory (Linux or Darwin).")
 
+if (NOT EXISTS ${BASEDIR})
+   message (FATAL_ERROR "ERROR: Must specify a value for BASEDIR with cmake ... -DBASEDIR=<path>.")
+
 # If BASEDIR evaluates to TRUE but it isn't a valid path throw an error
 # This lets BASEDIR be skipped if BASEDIR is set to a false value (e.g. setting BASEDIR to IGNORE)
+#if (NOT EXISTS ${BASEDIR})
 if (BASEDIR AND NOT EXISTS ${BASEDIR})
   message (FATAL_ERROR "ERROR: Must specify a value for BASEDIR with cmake ... -DBASEDIR=<path>.")
 elseif(EXISTS ${BASEDIR})
@@ -19,12 +23,14 @@ endif ()
 
 # Find NetCDF
 find_package(NetCDF REQUIRED COMPONENTS C Fortran)
+
 # Set expected definitions
 add_definitions(-DHAS_NETCDF4)
 add_definitions(-DHAS_NETCDF3)
 add_definitions(-DH5_HAVE_PARALLEL)
 add_definitions(-DNETCDF_NEED_NF_MPIIO)
 add_definitions(-DHAS_NETCDF3)
+
 # Set non-standard expected variables
 set(INC_NETCDF ${NETCDF_INCLUDE_DIRS})
 
