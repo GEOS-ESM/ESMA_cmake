@@ -24,12 +24,15 @@ find_package(PythonInterp REQUIRED)
 if (NOT F2PY_SUFFIX)
   execute_process(COMMAND "${PYTHON_EXECUTABLE}" -c "import sysconfig; print(sysconfig.get_config_var('EXT_SUFFIX') or sysconfig.get_config_var('SO'))"
                   OUTPUT_VARIABLE PYTHON_EXT_SUFFIX
-                  RESULT_VARIABLE FOUND_PYTHON_EXT_SUFFIX)
-  if (NOT FOUND_PYTHON_EXTENSION EQUAL 0)
+                  RESULT_VARIABLE FOUND_PYTHON_EXT_SUFFIX
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+  if (NOT FOUND_PYTHON_EXT_SUFFIX EQUAL 0)
     set (F2PY_SUFFIX "" CACHE STRING "Suffix added by F2Py to the module name to get the output file name." )
     message(FATAL_ERROR "Unable to determine file extension of compiled Python modules - specify it with F2PY_SUFFIX")
-  endif (NOT FOUND_PYTHON_EXTENSION EQUAL 0)
-  set (F2PY_SUFFIX "${PYTHON_EXT_SUFFIX}" CACHE INTERNAL)
+  endif (NOT FOUND_PYTHON_EXT_SUFFIX EQUAL 0)
+
+  set (F2PY_SUFFIX "${PYTHON_EXT_SUFFIX}" CACHE INTERNAL "f2py suffix")
+  message(STATUS "Setting F2PY_SUFFIX to ${F2PY_SUFFIX}")
 endif (NOT F2PY_SUFFIX)
 
 ## Path to the f2py executable
