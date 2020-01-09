@@ -49,7 +49,7 @@ if (APPLE)
 endif ()
 
 # OpenMP support
-find_package (OpenMP)
+find_package (OpenMP REQUIRED COMPONENTS Fortran)
 
 # Threading support
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
@@ -65,10 +65,12 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
 find_package (MPI REQUIRED)
 
+set(MKL_IS_REQUIRED_ARG "REQUIRED" CACHE STRING "Argument in MKL's find_package call")
+mark_as_advanced(MKL_IS_REQUIRED_ARG)
 if (APPLE)
   if (DEFINED ENV{MKLROOT})
     set (MKL_Fortran)
-    find_package (MKL REQUIRED)
+    find_package (MKL ${MKL_IS_REQUIRED_ARG})
   else ()
     if ("${CMAKE_Fortran_COMPILER_ID}" MATCHES "GNU")
       #USE FRAMEWORK
@@ -77,7 +79,7 @@ if (APPLE)
     endif ()
   endif ()
 else ()
-  find_package (MKL REQUIRED)
+  find_package (MKL ${MKL_IS_REQUIRED_ARG})
 endif ()
 
 option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
