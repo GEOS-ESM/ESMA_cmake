@@ -88,6 +88,7 @@ execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.so OU
 execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libgcc.a OUTPUT_VARIABLE libgcc OUTPUT_STRIP_TRAILING_WHITESPACE)
 set(ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} rt ${stdcxx} ${libgcc})
 set(ESMF_INCLUDE_DIRS ${ESMF_HEADERS_DIR} ${ESMF_MOD_DIR})
+list(REMOVE_DUPLICATES ESMF_INCLUDE_DIRS)
 
 # Make an imported target for ESMF
 if(NOT TARGET ESMF)
