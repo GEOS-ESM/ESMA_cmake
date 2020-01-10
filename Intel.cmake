@@ -21,6 +21,11 @@ set (OPTREPORT5 "-qopt-report5")
 set (FREAL8 "-r8")
 set (FINT8 "-i8")
 
+# [lrb,2020-01-10] 
+# Use SHELL: prefix and quotes around multi-word arguments to 
+# prevent de-duplication from breaking things. See
+# https://cmake.org/cmake/help/latest/command/target_compile_options.html
+
 set (PP    "-fpp")
 set (MISMATCH "")
 set (BIG_ENDIAN "-convert big_endian")
@@ -31,14 +36,14 @@ set (DISABLE_FIELD_WIDTH_WARNING "-diag-disable 8291")
 set (CRAY_POINTER "")
 set (MCMODEL "-mcmodel medium -shared-intel")
 set (HEAPARRAYS "-heap-arrays 32")
-set (BYTERECLEN "-assume byterecl")
-set (ALIGNCOM "-align dcommons")
+set (BYTERECLEN "\"SHELL:-assume byterecl\"")
+set (ALIGNCOM "\"SHELL:-align dcommons\"")
 set (TRACEBACK "-traceback")
-set (NOOLD_MAXMINLOC "-assume noold_maxminloc")
-set (REALLOC_LHS "-assume realloc_lhs")
+set (NOOLD_MAXMINLOC "\"SHELL:-assume noold_maxminloc\"")
+set (REALLOC_LHS "\"SHELL:-assume realloc_lhs\"")
 set (ARCH_CONSISTENCY "-fimf-arch-consistency=true")
 set (FTZ "-ftz")
-set (ALIGN_ALL "-align all")
+set (ALIGN_ALL "\"SHELL:-align all\"")
 set (NO_ALIAS "-fno-alias")
 
 set (NO_RANGE_CHECK "")
