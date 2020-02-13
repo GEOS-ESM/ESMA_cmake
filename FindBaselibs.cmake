@@ -55,9 +55,6 @@ find_package(FARGPARSE ${FARGPARSE_IS_REQUIRED_ARG} CONFIG)
 set(FLAP_IS_REQUIRED_ARG "REQUIRED" CACHE STRING "Argument in FLAP's find_package call")
 mark_as_advanced(FLAP_IS_REQUIRED_ARG)
 find_package(FLAP ${FLAP_IS_REQUIRED_ARG} CONFIG)
-# Set non-standard expected variables
-set (INC_FLAP ${FLAP_INCLUDE_DIRS})
-set (LIB_FLAP ${FLAP_LIBRARIES})
 
 # Find ESMF
 find_package(ESMF REQUIRED)
