@@ -87,6 +87,24 @@ option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
 # Baselibs ...
 include (FindBaselibs)
 
+# Create an interface target for GEOS build properties
+add_library(GEOS_BuildProperties INTERFACE)
+target_compile_options(GEOS_BuildProperties INTERFACE
+	$<$<COMPILE_LANGUAGE:Fortran>:
+		$<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>,$<CONFIG:MinSizeRel>>:${GEOS_Fortran_FLAGS_RELEASE}>
+  		$<$<CONFIG:Debug>:${GEOS_Fortran_FLAGS_DEBUG}>
+	>
+	""
+  )
+target_compile_definitions(GEOS_BuildProperties INTERFACE
+  HAS_NETCDF4
+  HAS_NETCDF3
+  H5_HAVE_PARALLEL
+  NETCDF_NEED_NF_MPIIO
+  HAS_NETCDF3
+  )
+install(TARGETS GEOS_BuildProperties EXPORT MAPL-targets)
+
 enable_testing()
 set (CMAKE_INSTALL_MESSAGE LAZY)
 
