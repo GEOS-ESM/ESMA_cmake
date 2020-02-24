@@ -84,9 +84,21 @@ find_package_handle_standard_args(ESMF
 # Specify the other libraries that need to be linked for ESMF
 find_package(NetCDF REQUIRED)
 find_package(MPI REQUIRED)
-execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.so OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libgcc.a OUTPUT_VARIABLE libgcc OUTPUT_STRIP_TRAILING_WHITESPACE)
-set(ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} rt ${stdcxx} ${libgcc})
+
+set(ESMF_REQUIRED_CPP_STD_LIBRARIES "")
+if (APPLE)
+  execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.dylib OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
+  list(APPEND ESMF_REQUIRED_CPP_STD_LIBRARIES ${stdcxx})
+  if (NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+	execute_process (COMMAND ${CMAKE_C_COMPILER} --print-file-name=libgcc.a OUTPUT_VARIABLE libgcc OUTPUT_STRIP_TRAILING_WHITESPACE)
+    list(APPEND ESMF_REQUIRED_CPP_STD_LIBRARIES ${libgcc})
+  endif ()
+else ()
+  execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.so OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
+  list(APPEND ESMF_REQUIRED_CPP_STD_LIBRARIES ${stdcxx})
+endif ()
+
+set(ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} MPI::MPI_Fortran MPI::MPI_CXX rt ${ESMF_REQUIRED_CPP_STD_LIBRARIES})
 set(ESMF_INCLUDE_DIRS ${ESMF_HEADERS_DIR} ${ESMF_MOD_DIR})
 
 # Make an imported target for ESMF
@@ -98,8 +110,7 @@ if(NOT TARGET ESMF)
 	target_link_libraries(ESMF 
 		INTERFACE 
 			${NETCDF_LIBRARIES} 
-			${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} 
-			rt ${stdcxx} ${libgcc}
+			MPI::MPI_Fortran MPI::MPI_CXX rt ${ESMF_REQUIRED_CPP_STD_LIBRARIES}
 	)
 	target_include_directories(ESMF INTERFACE ${ESMF_INCLUDE_DIRS})
 endif()
