@@ -48,9 +48,10 @@ find_path(ESMF_MOD_DIR
 	PATH_SUFFIXES "mod" "include"
 )
 
+set(FIND_ESMF_LIBRARY_SEARCH_NAMES "esmf;esmf_fullylinked" CACHE STRING "ESMF library names that are searched for.")
 find_library(ESMF_LIBRARY
-	libesmf.a
-	DOC "The path to the directory containing \"libesmf.a\"."
+	NAMES ${FIND_ESMF_LIBRARY_SEARCH_NAMES}
+	DOC "The path to the ESMF library."
 	PATH_SUFFIXES "lib"
 )
 
