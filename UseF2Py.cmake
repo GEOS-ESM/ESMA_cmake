@@ -19,10 +19,9 @@
 # |   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 |
 # +-----------------------------------------------------------------------------+
 
-find_package(PythonInterp REQUIRED)
-
 if (NOT F2PY_SUFFIX)
-  execute_process(COMMAND "${PYTHON_EXECUTABLE}" -c "import sysconfig; print(sysconfig.get_config_var('EXT_SUFFIX') or sysconfig.get_config_var('SO'))"
+  message(STATUS "Python2_EXECUTABLE: ${Python2_EXECUTABLE}")
+  execute_process(COMMAND "${Python2_EXECUTABLE}" -c "import sysconfig; print(sysconfig.get_config_var('EXT_SUFFIX') or sysconfig.get_config_var('SO'))"
                   OUTPUT_VARIABLE PYTHON_EXT_SUFFIX
                   RESULT_VARIABLE FOUND_PYTHON_EXT_SUFFIX
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -34,13 +33,6 @@ if (NOT F2PY_SUFFIX)
   set (F2PY_SUFFIX "${PYTHON_EXT_SUFFIX}" CACHE INTERNAL "f2py suffix")
   message(STATUS "Setting F2PY_SUFFIX to ${F2PY_SUFFIX}")
 endif (NOT F2PY_SUFFIX)
-
-## Path to the f2py executable
-find_program(F2PY_EXECUTABLE NAMES "f2py${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}"
-                                   "f2py-${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}"
-                                   "f2py${PYTHON_VERSION_MAJOR}"
-                                   "f2py"
-                             REQUIRED)
 
 ## -----------------------------------------------------------------------------
 ## Macro to generate a Python interface module from one or more Fortran sources
