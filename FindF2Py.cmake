@@ -30,35 +30,45 @@
 #   By default, the module finds the F2PY program associated with the installed NumPy package.
 #
 
-find_package(Python2 COMPONENTS Interpreter)
 # Path to the f2py executable
-find_program(F2PY_EXECUTABLE NAMES "f2py${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}"
-                                   "f2py-${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}"
-                                   "f2py${Python2_VERSION_MAJOR}"
+find_package(Python COMPONENTS Interpreter)
+
+find_program(F2PY_EXECUTABLE NAMES "f2py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
+                                   "f2py-${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
+                                   "f2py${Python_VERSION_MAJOR}"
                                    "f2py"
                                    )
 
 if(F2PY_EXECUTABLE)
-  # extract the version string
-  execute_process(COMMAND "${F2PY_EXECUTABLE}" -v
-                  OUTPUT_VARIABLE F2PY_VERSION_STRING
-                  OUTPUT_STRIP_TRAILING_WHITESPACE)
-  if("${F2PY_VERSION_STRING}" MATCHES "^([0-9]+)(.([0-9+]))?(.([0-9+]))?$")
-    set(F2PY_VERSION_MAJOR "${CMAKE_MATCH_1}")
-    set(F2PY_VERSION_MINOR "${CMAKE_MATCH_3}")
-    set(F2PY_VERSION_PATCH "${CMAKE_MATCH_5}")
-  endif()
-endif()
+   # extract the version string
+   execute_process(COMMAND "${F2PY_EXECUTABLE}" -v
+                     OUTPUT_VARIABLE F2PY_VERSION_STRING
+                     OUTPUT_STRIP_TRAILING_WHITESPACE)
+   if("${F2PY_VERSION_STRING}" MATCHES "^([0-9]+)(.([0-9+]))?(.([0-9+]))?$")
+      set(F2PY_VERSION_MAJOR "${CMAKE_MATCH_1}")
+      set(F2PY_VERSION_MINOR "${CMAKE_MATCH_3}")
+      set(F2PY_VERSION_PATCH "${CMAKE_MATCH_5}")
+   endif()
+
+   # Now we need to test if we can actually use f2py and what its suffix is
+
+   include(try_f2py_compile)
+   try_f2py_compile(
+      ${CMAKE_CURRENT_LIST_DIR}/check_compiler_support/test.F90
+      DETECT_F2PY_SUFFIX
+      )
+
+endif ()
 
 # handle the QUIET and REQUIRED arguments and set F2PY_FOUND to TRUE if
 # all listed variables are TRUE
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(F2PY
-  REQUIRED_VARS F2PY_EXECUTABLE
-  VERSION_VAR F2PY_VERSION_STRING
-  )
+   REQUIRED_VARS F2PY_EXECUTABLE F2PY_SUFFIX
+   VERSION_VAR F2PY_VERSION_STRING
+   )
 
-mark_as_advanced(F2PY_EXECUTABLE)
+mark_as_advanced(F2PY_EXECUTABLE F2PY_SUFFIX)
 
 if (F2PY_FOUND)
    include(UseF2Py)
