@@ -113,5 +113,5 @@ if(NOT TARGET ESMF)
 			${NETCDF_LIBRARIES} 
 			MPI::MPI_Fortran MPI::MPI_CXX rt ${ESMF_REQUIRED_CPP_STD_LIBRARIES}
 	)
-	target_include_directories(ESMF INTERFACE ${ESMF_INCLUDE_DIRS})
+	target_include_directories(ESMF INTERFACE ${ESMF_INCLUDE_DIRS} ${NETCDF_INCLUDE_DIRS})
 endif()
