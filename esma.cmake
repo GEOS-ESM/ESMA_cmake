@@ -12,6 +12,7 @@ endif()
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/@ecbuild/cmake")
 #set (BUILD_SHARED_LIBS OFF)
 option(BUILD_SHARED_LIBS "Build the shared library" OFF)
+option(HERMES_LIGHT "Build light-weighted GMAO_shared library" OFF)
 set (ECBUILD_2_COMPAT_VALUE OFF)
 include (ecbuild_system NO_POLICY_SCOPE)
 
