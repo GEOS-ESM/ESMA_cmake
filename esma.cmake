@@ -105,4 +105,4 @@ endmacro ()
 
 find_package(GitInfo)
 
-find_package(F2Py)
+find_package(F2PY)
