@@ -53,26 +53,25 @@ find_package(FARGPARSE QUIET)
 
 find_package(FLAP REQUIRED)
 
+# Need to do a bit of kludgy stuff here to allow Fortran linker to
+# find standard C and C++ libraries used by ESMF.
+# _And_ ESMF uses libc++ on some configs and libstdc++ on others.
 if (APPLE)
-  if (NOT "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+  if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+     set (stdcxx libc++.dylib)
+  else () # assume gcc
+    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.dylib OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
     execute_process (COMMAND ${CMAKE_C_COMPILER} --print-file-name=libgcc.a OUTPUT_VARIABLE libgcc OUTPUT_STRIP_TRAILING_WHITESPACE)
-  endif ()
-  execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.dylib OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
+  endif()
 else ()
   execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.so OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif ()
 
-# For OS X - use the gcc stdc++ library - not clang
-#find_library (STDCxx
-#  stdc++
-#  HINTS "/opt/local/lib/gcc5"
-#  )
 
 # We must statically link ESMF on Apple due mainly to an issue with how Baselibs is built.
 # Namely, the esmf dylib libraries end up with the full *build* path on Darwin (which is in 
 # src/esmf/lib/libO...) But we copy the dylib to $BASEDIR/lib. Thus, DYLD_LIBRARY_PATH gets
 # hosed. yay.
-
 if (APPLE)
    set (ESMF_LIBRARY ${BASEDIR}/lib/libesmf.a)
 else ()
