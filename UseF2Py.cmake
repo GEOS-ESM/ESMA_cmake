@@ -19,29 +19,6 @@
 # |   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 |
 # +-----------------------------------------------------------------------------+
 
-find_package(PythonInterp REQUIRED)
-
-if (NOT F2PY_SUFFIX)
-  execute_process(COMMAND "${PYTHON_EXECUTABLE}" -c "import sysconfig; print(sysconfig.get_config_var('EXT_SUFFIX') or sysconfig.get_config_var('SO'))"
-                  OUTPUT_VARIABLE PYTHON_EXT_SUFFIX
-                  RESULT_VARIABLE FOUND_PYTHON_EXT_SUFFIX
-                  OUTPUT_STRIP_TRAILING_WHITESPACE)
-  if (NOT FOUND_PYTHON_EXT_SUFFIX EQUAL 0)
-    set (F2PY_SUFFIX "" CACHE STRING "Suffix added by F2Py to the module name to get the output file name." )
-    message(FATAL_ERROR "Unable to determine file extension of compiled Python modules - specify it with F2PY_SUFFIX")
-  endif (NOT FOUND_PYTHON_EXT_SUFFIX EQUAL 0)
-
-  set (F2PY_SUFFIX "${PYTHON_EXT_SUFFIX}" CACHE INTERNAL "f2py suffix")
-  message(STATUS "Setting F2PY_SUFFIX to ${F2PY_SUFFIX}")
-endif (NOT F2PY_SUFFIX)
-
-## Path to the f2py executable
-find_program(F2PY_EXECUTABLE NAMES "f2py${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}"
-                                   "f2py-${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}"
-                                   "f2py${PYTHON_VERSION_MAJOR}"
-                                   "f2py"
-                             REQUIRED)
-
 ## -----------------------------------------------------------------------------
 ## Macro to generate a Python interface module from one or more Fortran sources
 ##
@@ -153,18 +130,18 @@ macro (add_f2py_module _name)
     add_custom_command(OUTPUT "${_name}${F2PY_SUFFIX}"
       COMMAND ${F2PY_EXECUTABLE} --quiet -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
-              ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs}
+              ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} &> /dev/null
       DEPENDS ${add_f2py_module_SOURCES}
       COMMENT "[F2PY] Building Fortran to Python interface module ${_name}")
   else ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
     add_custom_command(OUTPUT "${_name}${F2PY_SUFFIX}"
       COMMAND ${F2PY_EXECUTABLE} --quiet -m ${_name} -h ${_name}.pyf
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
-              --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs}
+              --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs} &> /dev/null
       COMMAND ${F2PY_EXECUTABLE} --quiet -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
               -c "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}/${_name}.pyf"
-              ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts}
+              ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} &> /dev/null
       DEPENDS ${add_f2py_module_SOURCES}
       COMMENT "[F2PY] Building Fortran to Python interface module ${_name}")
   endif ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
