@@ -26,6 +26,7 @@ include (esma_add_library)
 include (esma_generate_automatic_code)
 include (esma_create_stub_component)
 include (esma_fortran_generator_list)
+include (esma_find_python_module)
 
 find_package(ImageMagick)
 if (NOT ImageMagick_FOUND)
