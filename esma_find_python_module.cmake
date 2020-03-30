@@ -24,6 +24,8 @@ function(esma_find_python_module module)
     endif(NOT _${module}_status)
   endif(NOT PY_${module_upper})
   find_package_handle_standard_args(PY_${module} DEFAULT_MSG PY_${module_upper})
+  set (PY_${module}_FOUND ${PY_${module}_FOUND} PARENT_SCOPE)
+  set (PY_${module_upper}_FOUND ${PY_${module_upper}_FOUND} PARENT_SCOPE)
 
 endfunction(esma_find_python_module)
 
