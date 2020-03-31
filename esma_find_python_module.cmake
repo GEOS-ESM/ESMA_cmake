@@ -1,5 +1,5 @@
 #
-# Usage:  esma_find_python_module(PyQt4 REQUIRED)
+# Usage:  esma_find_python_module(<module> [REQUIRED])
 #
 
 # Citation: https://cmake.org/pipermail/cmake/2011-January/041666.html

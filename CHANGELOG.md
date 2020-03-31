@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added macro to verify availability of Python modules
   Use: esma_find_python_module(<module> [REQUIRED])
-  
+- Added macro to add a post-build check availability of Python modules
+  Use: esma_check_python_module(<module>)
 
 	
 
