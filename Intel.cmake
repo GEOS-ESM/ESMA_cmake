@@ -65,7 +65,7 @@ set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTE
 
 # GEOS Vectorize
 # --------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} -xCORE-AVX2 -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} -xCORE-AVX512 -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
 set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC}")
 
 # Common variables for every compiler
