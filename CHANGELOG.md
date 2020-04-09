@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Use: esma_find_python_module(<module> [REQUIRED])
 - Added macro to add a post-build check availability of Python modules
   Use: esma_check_python_module(<module>)
-
+- Added option is esma_add_library() to use SHARED
 	
 
 
