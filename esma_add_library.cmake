@@ -14,6 +14,9 @@ macro (esma_add_library this)
   endif ()
 
   set (options EXCLUDE_FROM_ALL)
+  set (oneValueArgs
+    # shared with ecbuild
+    TYPE)	
   set (multiValueArgs
     # esma unique
     SUBCOMPONENTS SUBDIRS NEVER_STUB PRIVATE_DEFINITIONS PUBLIC_DEFINITIONS
@@ -88,10 +91,14 @@ macro (esma_add_library this)
 
   # This library depends on all DEPENDENCIES and _non-stubbed_ subcomponents.
   set (all_dependencies ${ARGS_PUBLIC_LIBS} ${non_stubbed})
+  if (ARGS_TYPE)
+    set(ARGS_TYPE TYPE ${ARGS_TYPE})
+  endif()
   ecbuild_add_library (TARGET ${this}
     SOURCES ${ARGS_SOURCES}
     PUBLIC_LIBS ${all_dependencies}
     PUBLIC_INCLUDES ${ARGS_PUBLIC_INCLUDES}
+    ${ARGS_TYPE}
     )
 
   set_target_properties(${this} PROPERTIES EXCLUDE_FROM_ALL ${ARGS_EXCLUDE_FROM_ALL})
