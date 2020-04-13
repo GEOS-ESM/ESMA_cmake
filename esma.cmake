@@ -26,11 +26,23 @@ include (esma_add_library)
 include (esma_generate_automatic_code)
 include (esma_create_stub_component)
 include (esma_fortran_generator_list)
+include (esma_find_python_module)
+include (esma_check_python_module)
+
+find_package(ImageMagick)
+if (NOT ImageMagick_FOUND)
+   message(STATUS "NOTE: ImageMagick was not found. This will prevent using LaTeX and some postprocessing utilities from running, but does not affect the build")
+endif ()
 
 find_package(LATEX)
-# These are all the bits of LaTeX that UseLatex needs. As it's confusing how LATEX_FOUND from
-# find_package(LATEX) is set, we test all the bits that UseLatex requires
-if (LATEX_FOUND AND LATEX_PDFLATEX_FOUND AND LATEX_BIBTEX_FOUND AND LATEX_MAKEINDEX_FOUND)
+# These are all the bits of LaTeX that UseLatex needs. As it's confusing
+# how LATEX_FOUND from find_package(LATEX) is set, we test all the bits
+# that UseLatex requires
+#
+# Also, UseLatex assumes ImageMagick is installed. While this is always
+# nice (and technically required to generate plots with GEOS plotting 
+# utilities, it's not necessary to *build*
+if (LATEX_FOUND AND LATEX_PDFLATEX_FOUND AND LATEX_BIBTEX_FOUND AND LATEX_MAKEINDEX_FOUND AND ImageMagick_FOUND)
    # If they are all found, set LATEX_FOUND to TRUE...
    set (LATEX_FOUND TRUE)
 
@@ -94,3 +106,5 @@ macro (esma)
 endmacro ()
 
 find_package(GitInfo)
+
+find_package(F2PY)
