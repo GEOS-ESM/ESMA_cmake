@@ -12,15 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+- Added ability for OpenMP and Double Precision to be used with f2py
+  Used by the MAM Optics code
+
 ## [2.2.2]
 
 ### Added
 
 - Added macro to verify availability of Python modules
-  Use: esma_find_python_module(<module> [REQUIRED])
+  Use: `esma_find_python_module(<module> [REQUIRED])`
 - Added macro to add a post-build check availability of Python modules
-  Use: esma_check_python_module(<module>)
-- Added option is esma_add_library() to use SHARED
+  Use: `esma_check_python_module(<module>)`
+- Added option is `esma_add_library() to use SHARED
 	
 ## [2.2.1]
 
