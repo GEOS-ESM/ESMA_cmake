@@ -29,14 +29,9 @@ macro (esma_set_this)
     set (this ${ARGS_OVERRIDE})
   else ()
     get_filename_component (dir "${CMAKE_CURRENT_BINARY_DIR}" NAME)
-    string (SUBSTRING ${dir} 0 1 leading_character)
-    if (leading_character STREQUAL "@")
-      string (SUBSTRING ${dir} 1 -1 this) # strip leading "@"
-    else ()
-      set (this ${dir})
-    endif()
+    string(REPLACE "@" "" this ${dir})
   endif ()
-  
+
   set(include_${this} ${esma_include}/${this})
   file (MAKE_DIRECTORY ${esma_include}/${this})
   file (MAKE_DIRECTORY ${esma_etc}/${this})
