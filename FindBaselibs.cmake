@@ -48,8 +48,10 @@ set (INC_HDF ${BASEDIR}/include/hdf)
 set (INC_ESMF ${BASEDIR}/include/esmf)
 
 find_package(GFTL REQUIRED)
-find_package(GFTL_SHARED QUIET)
+find_package(GFTL_SHARED REQUIRED)
 find_package(FARGPARSE QUIET)
+find_package(YAFYAML REQUIRED)
+find_package(PFLOGGER REQUIRED)
 
 find_package(FLAP REQUIRED)
 
