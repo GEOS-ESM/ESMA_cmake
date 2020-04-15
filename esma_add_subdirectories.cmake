@@ -1,6 +1,6 @@
 # Only add the directories in alldirs list that actually exist.  GEOS
 # can build in multiple configurations, and the build system must be
-# able to skip non-existent directiories in the list.
+# able to skip non-existent directories in the list.
 
 # We allow nested repositories to have leading or trailing "@" in their
 # name which is disregarded for everything except path.
@@ -37,7 +37,7 @@ endfunction (esma_add_subdirectory)
 
 function (esma_add_subdirectories dirs)
   set (dirs_ ${dirs} ${ARGN})
-    ecbuild_debug ("esma_add_subdirectiories:  ${dirs}")
+    ecbuild_debug ("esma_add_subdirectories:  ${dirs}")
   foreach (subdir ${dirs_})
     esma_add_subdirectory(${subdir})
   endforeach()
