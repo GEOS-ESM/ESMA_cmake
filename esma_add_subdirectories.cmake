@@ -21,14 +21,15 @@ function  (esma_add_subdirectory dir)
 	set (${ARGS_FOUND} TRUE PARENT_SCOPE)
       endif()
       return()
-    else ()
-      if (ARGS_FOUND)
-	set (${ARGS_FOUND} FALSE PARENT_SCOPE)
-      else ()
-	ecbuild_warn(" directory not found ${dir}")
-      endif()
-      endif ()
+    endif()
   endforeach()
+
+  # dir not found
+  if (ARGS_FOUND)
+    set (${ARGS_FOUND} FALSE PARENT_SCOPE)
+  else ()
+    ecbuild_info(" directory not found ${dir} (possibly sparse checkout)")
+  endif()
 
 endfunction (esma_add_subdirectory)
 
