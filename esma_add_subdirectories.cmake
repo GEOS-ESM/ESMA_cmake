@@ -28,6 +28,8 @@ function  (esma_add_subdirectory dir)
   if (ARGS_FOUND)
     set (${ARGS_FOUND} FALSE PARENT_SCOPE)
   else ()
+    # The below should be changed to ecbuild_error() once the FOUND option
+    # is propagated through client code.
     ecbuild_info(" directory not found ${dir} (possibly sparse checkout)")
   endif()
 
@@ -35,7 +37,7 @@ endfunction (esma_add_subdirectory)
 
 function (esma_add_subdirectories dirs)
   set (dirs_ ${dirs} ${ARGN})
-    ecbuild_info ("esma_add_subdirectiories:  ${dirs}")
+    ecbuild_debug ("esma_add_subdirectiories:  ${dirs}")
   foreach (subdir ${dirs_})
     esma_add_subdirectory(${subdir})
   endforeach()
