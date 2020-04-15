@@ -1,10 +1,12 @@
 set (BASEDIR /does-not-exist CACHE PATH "Path to installed baselibs _including_ OS subdirectory (Linux or Darwin).")
 
 if (NOT EXISTS ${BASEDIR})
-  message (FATAL_ERROR "ERROR: Must specify a value for BASEDIR with cmake ... -DBASEDIR=<path>.")
+   message (FATAL_ERROR "ERROR: Must specify a value for BASEDIR with cmake ... -DBASEDIR=<path>.")
+else ()
+   message (STATUS "BASEDIR: ${BASEDIR}")   
 endif ()
 if (ESMA_SDF)
-  message (FATAL_ERROR "ERROR: -hdf option was thought to be obsolete when CMake was crafted.")
+   message (FATAL_ERROR "ERROR: -hdf option was thought to be obsolete when CMake was crafted.")
 endif ()
 
 link_directories (${BASEDIR}/lib)
@@ -48,8 +50,10 @@ set (INC_HDF ${BASEDIR}/include/hdf)
 set (INC_ESMF ${BASEDIR}/include/esmf)
 
 find_package(GFTL REQUIRED)
-find_package(GFTL_SHARED QUIET)
+find_package(GFTL_SHARED REQUIRED)
 find_package(FARGPARSE QUIET)
+find_package(YAFYAML REQUIRED)
+find_package(PFLOGGER REQUIRED)
 
 find_package(FLAP REQUIRED)
 

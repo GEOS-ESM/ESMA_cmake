@@ -27,19 +27,20 @@
 macro (add_f2py_module _name)
 
   # Parse arguments.
-  set (options USE_MPI)
+  set (options USE_MPI USE_OPENMP DOUBLE_PRECISION)
   set (oneValueArgs DESTINATION)
   set (multiValueArgs SOURCES ONLY LIBRARIES INCLUDEDIRS)
   cmake_parse_arguments(add_f2py_module "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
-  if (add_f2py_module_ONLY STREQUAL "")
-    set (_only "")
+  set(only_list ${add_f2py_module_ONLY})
+  if (only_list)
+     set(_only "only:")
+     list(APPEND _only ${add_f2py_module_ONLY})
+     list(APPEND _only ":")
   else ()
-    string(REPLACE ";" " " _only "${add_f2py_module_ONLY}")
-    set (_only "only: ${_only} :")
+    set (_only "")
   endif()
     
-
   # Sanity checks.
   if(add_f2py_module_SOURCES MATCHES "^$")
     message(FATAL_ERROR "add_f2py_module: no source files specified")
@@ -70,10 +71,34 @@ macro (add_f2py_module _name)
 
   # Set f2py compiler options: compiler vendor and path to Fortran77/90 compiler.
   if(F2PY_FCOMPILER)
+
+     set(F2PY_Fortran_FLAGS)
+
+     ###########################################################################
+     # # If you really want to pass in the flags used by the rest of the model #
+     # # this is how. But I don't think we want to do this                     #
+     # if (CMAKE_BUILD_TYPE MATCHES Release)                                   #
+     #    set(F2PY_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_RELEASE})               #
+     # elseif(CMAKE_BUILD_TYPE MATCHES Debug)                                  #
+     #    set(F2PY_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_DEBUG})                 #
+     # endif()                                                                 #
+     # separate_arguments(F2PY_Fortran_FLAGS)                                  #
+     ###########################################################################
+
+    if (${add_f2py_module_USE_OPENMP})
+       list(APPEND F2PY_Fortran_FLAGS ${OpenMP_Fortran_FLAGS})
+    endif()
+
+    if (${add_f2py_module_DOUBLE_PRECISION})
+       list(APPEND F2PY_Fortran_FLAGS ${FREAL8})
+    endif()
+
+    #message(STATUS "${_name} F2PY_Fortran_FLAGS ${F2PY_Fortran_FLAGS}")
+
     set(_fcompiler_opts "--fcompiler=${F2PY_FCOMPILER}")
-    list(APPEND _fcompiler_opts "--f77exec=${CMAKE_Fortran_COMPILER}" "--f77flags='${CMAKE_Fortran_FLAGS}'")
+    list(APPEND _fcompiler_opts "--f77exec=${CMAKE_Fortran_COMPILER}" "--f77flags='${F2PY_Fortran_FLAGS}'")
     if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
-      list(APPEND _fcompiler_opts "--f90exec=${CMAKE_Fortran_COMPILER}" "--f90flags='${CMAKE_Fortran_FLAGS}'")
+       list(APPEND _fcompiler_opts "--f90exec=${CMAKE_Fortran_COMPILER}" "--f90flags='${F2PY_Fortran_FLAGS}'")
     endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
   endif(F2PY_FCOMPILER)
 
@@ -92,7 +117,7 @@ macro (add_f2py_module _name)
 
   set(_inc_opts)
   set(_lib_opts)
-  set(_inc_path_list)
+  set(_inc_dirs)
   foreach(_dir ${add_f2py_module_INCLUDEDIRS})
     list(APPEND _inc_opts "-I${_dir}")
     list(APPEND _lib_opts "-L${_dir}")
@@ -124,6 +149,28 @@ macro (add_f2py_module _name)
      endforeach ()
   endif ()
 
+  if ( ${add_f2py_module_USE_OPENMP})
+     foreach (lib ${OpenMP_Fortran_LIBRARIES})
+        get_filename_component(lib_dir ${lib} DIRECTORY)
+        list(APPEND _lib_opts "-L${lib_dir}")
+
+        get_filename_component(lib_name ${lib} NAME)
+        string(REGEX MATCH "lib(.*)(${CMAKE_SHARED_LIBRARY_SUFFIX}|${CMAKE_STATIC_LIBRARY_SUFFIX})" BOBO ${lib_name})
+        set(short_lib_name "${CMAKE_MATCH_1}")
+        list(APPEND _lib_opts "-l${short_lib_name}")
+     endforeach()
+  endif ()
+
+  # This is an ugly hack but the MAM optics f2py required it. The
+  # fortran is compiled -r8 but python doesn't know that. Thus, you have
+  # to let python know that "real" is actually "double". The way to do
+  # this according to the internet is to add a dotfile with this junk in
+  # it to allow for this. It's possible it's not correct, but it seem to
+  # let things run
+  if(${add_f2py_module_DOUBLE_PRECISION})
+     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.f2py_f2cmap "{'real':{'':'double'},'integer':{'':'long'},'real*8':{'':'double'},'complex':{'':'complex_double'}}")
+  endif()
+
   # Define the command to generate the Fortran to Python interface module. The
   # output will be a shared library that can be imported by python.
   if ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
@@ -141,7 +188,7 @@ macro (add_f2py_module _name)
       COMMAND ${F2PY_EXECUTABLE} --quiet -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
               -c "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}/${_name}.pyf"
-              ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} &> /dev/null
+              ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} &> /dev/null
       DEPENDS ${add_f2py_module_SOURCES}
       COMMENT "[F2PY] Building Fortran to Python interface module ${_name}")
   endif ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
