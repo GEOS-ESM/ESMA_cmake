@@ -64,12 +64,7 @@ macro (esma_add_library this)
   set (non_stubbed)
   foreach (subdir ${ARGS_SUBCOMPONENTS})
 
-    string (SUBSTRING ${subdir} 0 1 leading_character)
-    if (leading_character STREQUAL "@")
-      string (SUBSTRING ${subdir} 1 -1 mod_name) # strip leading "@"
-    else ()
-      set (mod_name ${subdir})
-    endif()
+    string(REPLACE "@" "" mod_name ${subdir})
 
     if (NOT rename_${subdir}) # usual case
       set (module_name ${mod_name})
@@ -77,13 +72,11 @@ macro (esma_add_library this)
       set(module_name ${rename_${mod_name}})
     endif ()
 
-    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${subdir})
-      add_subdirectory (${subdir})
+    esma_add_subdirectory(${mod_name} FOUND found)
+    if (found)
       list (APPEND non_stubbed ${mod_name})
-    else () # make stub and append to sources (in ARGS_SOURCES)
-      if (CMAKE_DEBUG)
-	message (STATUS  "  ... Creating stub component ${module_name}")
-      endif()
+    else ()
+      ecbuild_debug("  ... Creating stub component ${module_name}")
       esma_create_stub_component (ARGS_SOURCES ${module_name})
     endif ()
 
