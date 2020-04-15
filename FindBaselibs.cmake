@@ -1,10 +1,12 @@
 set (BASEDIR /does-not-exist CACHE PATH "Path to installed baselibs _including_ OS subdirectory (Linux or Darwin).")
 
 if (NOT EXISTS ${BASEDIR})
-  message (FATAL_ERROR "ERROR: Must specify a value for BASEDIR with cmake ... -DBASEDIR=<path>.")
+   message (FATAL_ERROR "ERROR: Must specify a value for BASEDIR with cmake ... -DBASEDIR=<path>.")
+else ()
+   message (STATUS "BASEDIR: ${BASEDIR}")   
 endif ()
 if (ESMA_SDF)
-  message (FATAL_ERROR "ERROR: -hdf option was thought to be obsolete when CMake was crafted.")
+   message (FATAL_ERROR "ERROR: -hdf option was thought to be obsolete when CMake was crafted.")
 endif ()
 
 link_directories (${BASEDIR}/lib)
