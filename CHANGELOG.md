@@ -8,12 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Made gFTL-shared, yaFyaml, and pFlogger REQUIRED
+
 ### Fixed
 ### Removed
 ### Added
 
 - Added ability for OpenMP and Double Precision to be used with f2py
   Used by the MAM Optics code
+- Add ability to allow @-symbol to be at beginning or end of sub-repo (still in progress)
 
 ## [2.2.2]
 
