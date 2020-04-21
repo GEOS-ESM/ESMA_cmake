@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.0.1] - 2020-04-21
+
+### Changed
+
+- Allow ecbuild to be mounted as `ecbuild@`, `@ecbuild`, or `ecbuild`
+
 ## [3.0.0] - 2020-04-15
 
 NOTE: This version of ESMA_cmake now requires Baselibs 6.0.10 or higher
