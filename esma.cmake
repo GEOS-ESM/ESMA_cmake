@@ -9,7 +9,16 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 # Bring in ecbuild
-list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/@ecbuild/cmake")
+if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/ecbuild")
+  list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/ecbuild/cmake")
+elseif (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/@ecbuild")
+  list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/@ecbuild/cmake")
+elseif (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/ecbuild@")
+  list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/ecbuild@/cmake")
+else ()
+  message (FATAL_ERROR "ecbuild subdir not found")
+endif()
+  
 #set (BUILD_SHARED_LIBS OFF)
 option(BUILD_SHARED_LIBS "Build the shared library" OFF)
 set (ECBUILD_2_COMPAT_VALUE OFF)
