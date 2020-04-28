@@ -37,6 +37,7 @@ include (esma_create_stub_component)
 include (esma_fortran_generator_list)
 include (esma_find_python_module)
 include (esma_check_python_module)
+include (esma_add_f2py_module)
 
 find_package(ImageMagick)
 if (NOT ImageMagick_FOUND)
