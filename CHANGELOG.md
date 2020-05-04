@@ -9,14 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 ### Fixed
+### Removed
+### Added
+
+## [3.0.2] - 2020-05-04  
+
+### Fixed
+
 - Typo in message in esma_add_library().
 
-### Removed
 ### Added
 
 - Added macro esma_add_f2py_module() which wraps existing add_f2py_module() and
   a call to add_test().
-  
 
 ## [3.0.1] - 2020-04-21
 
