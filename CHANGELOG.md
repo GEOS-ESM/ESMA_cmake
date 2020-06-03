@@ -14,7 +14,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Option to use cmake macro defined in MAPL for creating stubs.
   Option should be removed once MAPL changes are accepted.
 
-## [3.0.2] - 2020-05-04  
+## [3.0.4] - 2020-06-03
+
+### Changed
+
+- Updated to ecbuild geos/v1.0.5
+
+### Fixed
+
+- Updates for JEDI Compatibility
+
+## [3.0.3] - 2020-05-18
+
+### Added
+
+- Support for GCC 10
+  - See releases tab for more information
+
+## [3.0.2] - 2020-05-04
 
 ### Fixed
 
