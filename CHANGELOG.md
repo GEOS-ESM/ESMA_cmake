@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Removed
 ### Added
+- Option to use cmake macro defined in MAPL for creating stubs.
+  Option should be removed once MAPL changes are accepted.
 
 ## [3.0.2] - 2020-05-04  
 
