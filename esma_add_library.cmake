@@ -13,7 +13,7 @@ macro (esma_add_library this)
     message (STATUS "Generating build instructions for component: ${this}")
   endif ()
 
-  set (options EXCLUDE_FROM_ALL)
+  set (options EXCLUDE_FROM_ALL NOINSTALL)
   set (oneValueArgs
     # shared with ecbuild
     TYPE)	
@@ -87,11 +87,15 @@ macro (esma_add_library this)
   if (ARGS_TYPE)
     set(ARGS_TYPE TYPE ${ARGS_TYPE})
   endif()
+  if (ARGS_NOINSTALL)
+    set(NOINSTALL_ "NOINSTALL")
+  endif()
   ecbuild_add_library (TARGET ${this}
     SOURCES ${ARGS_SOURCES}
     PUBLIC_LIBS ${all_dependencies}
     PUBLIC_INCLUDES ${ARGS_PUBLIC_INCLUDES}
     ${ARGS_TYPE}
+    ${NOINSTALL_}
     )
 
   set_target_properties(${this} PROPERTIES EXCLUDE_FROM_ALL ${ARGS_EXCLUDE_FROM_ALL})
