@@ -5,7 +5,11 @@ set (acg_flags -v)
 macro (new_esma_generate_automatic_code
     target registry headers rcs headers_destination rcs_destination flags)
 
-  set (generator ${esma_include}/MAPL_Base/mapl_acg.pl)
+  find_file (generator
+    NAME mapl_acg.pl
+    PATHS ${esma_include}/MAPL_Base ${esma_etc}/MAPL)
+
+  message("HUH: ${generator}")
   set (generated_files "${headers};${rcs}")
 
   add_custom_command (
@@ -56,7 +60,10 @@ macro (esma_generate_gmi_code target type)
     ${name}_ExportSpec___.h
     )
 
-  set (generator ${CMAKE_SOURCE_DIR}/GMAO_Shared/MAPL_Base/mapl_acg.pl)
+  find_file (generator
+    NAME mapl_acg.pl
+    PATHS ${esma_include}/MAPL_Base ${esma_etc}/MAPL)
+  message("HUH2: ${generator}")
 
   add_custom_command (
     #    TARGET ${this}
@@ -80,9 +87,14 @@ endmacro ()
 macro (esma_generate_automatic_code this name destination flags)
   set (registry ${CMAKE_CURRENT_SOURCE_DIR}/${name}_Registry.rc)
 
+  find_file (generator
+    NAME mapl_acg.pl
+    PATHS ${esma_include}/MAPL_Base ${esma_etc}/MAPL)
+  message("HUH3: ${generator}")
+
   add_custom_command (
     OUTPUT ${name}_ExportSpec___.h ${name}_GetPointer___.h ${name}_History___.rc
-    COMMAND ${CMAKE_SOURCE_DIR}/GMAO_Shared/MAPL_Base/mapl_acg.pl ${acg_flags} ${flags} ${registry}
+    COMMAND ${generator} ${acg_flags} ${flags} ${registry}
     COMMAND ${CMAKE_COMMAND} -E copy ${name}_ExportSpec___.h ${include_GEOSchem_GridComp}
     COMMAND ${CMAKE_COMMAND} -E copy ${name}_ImportSpec___.h ${include_GEOSchem_GridComp}
     COMMAND ${CMAKE_COMMAND} -E copy ${name}_GetPointer___.h ${include_GEOSchem_GridComp}
