@@ -8,12 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-
-- Use `find_file` to generalize path to MAPL utilities (acg)
-
 ### Fixed
 ### Removed
 ### Added
+
+## [3.0.5] - 2020-06-05
+
+### Changed
+
+- Use `find_file` to generalize path to MAPL utilities (acg)
 
 ## [3.0.4] - 2020-06-03
 
