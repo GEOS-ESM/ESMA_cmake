@@ -107,7 +107,9 @@ option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
 # Baselibs ...
 include (FindBaselibs)
 
-enable_testing()
+# Testing
+include (esma_enable_tests)
+
 set (CMAKE_INSTALL_MESSAGE LAZY)
 
 # This is a "stub" macro to detect building within an ESMA project (for MAPL standalone)
