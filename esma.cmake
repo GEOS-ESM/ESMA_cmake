@@ -87,6 +87,14 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
 find_package (MPI REQUIRED)
 
+find_package(MKL)
+if (MKL_FOUND)
+   ecbuild_info("Found MKL:")
+   ecbuild_info("  MKL_INCLUDE_DIRS: ${MKL_INCLUDE_DIRS}")
+   ecbuild_info("  MKL_LIBRARIES: ${MKL_LIBRARIES}")
+
+   set(BLA_VENDOR Intel10_64lp_seq)
+endif ()
 
 find_package(LAPACK REQUIRED)
 if (LAPACK_FOUND)
@@ -108,13 +116,6 @@ if (BLAS_FOUND)
       ecbuild_info("Found BLAS95:")
       ecbuild_info("  BLAS95_LIBRARIES: ${BLAS95_LIBRARIES}")
    endif ()
-endif ()
-
-find_package(MKL)
-if (MKL_FOUND)
-   ecbuild_info("Found MKL:")
-   ecbuild_info("  MKL_INCLUDE_DIRS: ${MKL_INCLUDE_DIRS}")
-   ecbuild_info("  MKL_LIBRARIES: ${MKL_LIBRARIES}")
 endif ()
 
 option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
