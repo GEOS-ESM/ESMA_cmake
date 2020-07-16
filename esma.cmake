@@ -119,4 +119,8 @@ endmacro ()
 
 find_package(GitInfo)
 
-find_package(F2PY)
+option(USE_F2PY "Turn on F2PY builds" ON)
+
+if (USE_F2PY)
+   find_package(F2PY)
+endif ()
