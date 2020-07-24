@@ -16,6 +16,7 @@ else ()
       execute_process(
          COMMAND curl --connect-timeout 0.1 http://169.254.169.254/latest/meta-data/instance-id
          TIMEOUT 1.0
+         OUTPUT_QUIET ERROR_QUIET
          RESULT_VARIABLE STATUS
          )
       if(STATUS AND NOT STATUS EQUAL 0)
@@ -29,4 +30,4 @@ else ()
 endif ()
 
 set(GEOS_SITE ${DETECTED_SITE} CACHE STRING "Detected site for use with GEOS setup scripts")
-#message("Setting GEOS_SITE to ${GEOS_SITE}")
+message(STATUS "Setting GEOS_SITE to ${GEOS_SITE}")
