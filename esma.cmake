@@ -89,7 +89,7 @@ find_package (MPI REQUIRED)
 
 if (APPLE)
   if (DEFINED ENV{MKLROOT})
-    set (MKL_Fortran)
+    set (MKL_Fortran True)
     find_package (MKL REQUIRED)
   else ()
     if ("${CMAKE_Fortran_COMPILER_ID}" MATCHES "GNU")
