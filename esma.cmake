@@ -87,6 +87,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
 find_package (MPI REQUIRED)
 
+if (APPLE)
+    set (MKL_Fortran True)
+endif ()
 find_package(MKL)
 if (MKL_FOUND)
    ecbuild_info("Found MKL:")
@@ -135,4 +138,8 @@ endmacro ()
 
 find_package(GitInfo)
 
-find_package(F2PY)
+option(USE_F2PY "Turn on F2PY builds" ON)
+
+if (USE_F2PY)
+   find_package(F2PY)
+endif ()
