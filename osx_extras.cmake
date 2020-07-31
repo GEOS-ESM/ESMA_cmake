@@ -25,3 +25,14 @@ set (OSX_EXTRA_LIBRARY_PATH $ENV{OSX_EXTRA_LIBRARY_PATH} CACHE PATH "Fill with D
 
 # 4) In order for MKL to work at runtim, this is needed
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+# 5) With the advent of shared libraries in GEOS, one needs to symlink install/lib in an experiment
+#    or use this command
+ecbuild_warn(
+   "Setting ENABLE_RELATIVE_RPATHS to FALSE.\n"
+   "This changes LC_RPATH in the executable from:\n"
+   " path @loader_path/../lib\n"
+   "to:\n"
+   " path ${CMAKE_INSTALL_PREFIX}/lib"
+   )
+set (ENABLE_RELATIVE_RPATHS FALSE)
