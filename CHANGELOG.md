@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+- Added macro esma_add_f2p_module() that adds a ctest for python module availability.
+
 ## [3.0.5] - 2020-06-05
 
 ### Changed
