@@ -125,7 +125,12 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
 # ------------
-set (GEOS_Fortran_Release_Flags "${FOPT3} -march=westmere -mtune=generic -funroll-loops ${DEBINFO}")
+if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
+   set(GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
+else ()
+   set(GNU_TARGET_ARCH "westmere")
+endif ()
+set (GEOS_Fortran_Release_Flags "${FOPT3} -march=${GNU_TARGET_ARCH} -mtune=generic -funroll-loops ${DEBINFO}")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Vectorize
