@@ -14,6 +14,8 @@ set (FPE3 "-fpe3")
 set (FP_MODEL_SOURCE "-fp-model source")
 set (FP_MODEL_STRICT "-fp-model strict")
 set (FP_MODEL_CONSISTENT "-fp-model consistent")
+set (FP_MODEL_FAST1 "-fp-model fast=1")
+set (FP_MODEL_FAST2 "-fp-model fast=2")
 
 set (OPTREPORT0 "-qopt-report0")
 set (OPTREPORT5 "-qopt-report5")
@@ -41,6 +43,7 @@ set (ARCH_CONSISTENCY "-fimf-arch-consistency=true")
 set (FTZ "-ftz")
 set (ALIGN_ALL "-align all")
 set (NO_ALIAS "-fno-alias")
+set (USE_SVML "-fimf-use-svml=true")
 
 set (NO_RANGE_CHECK "")
 
@@ -67,6 +70,12 @@ set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTE
 # --------------
 set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} -xCORE-AVX2 -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
 set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC}")
+
+# GEOS Aggressive
+# ---------------
+set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} -xCORE-AVX2 -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+#set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} -xSKYLAKE-AVX512 -qopt-zmm-usage=high -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array64byte")
+set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${USE_SVML} ${NOOLD_MAXMINLOC}")
 
 # Common variables for every compiler
 include(GenericCompiler)
