@@ -147,3 +147,8 @@ option(USE_F2PY "Turn on F2PY builds" ON)
 if (USE_F2PY)
    find_package(F2PY)
 endif ()
+
+# ecbuild by default puts modules in build-dir/module. This can cause issues if same-named modules
+# are in two directories that aren't using esma_add_library(). This sets the the value to
+# nothing with puts modules in the build directory equivalent of the source directory
+set(CMAKE_Fortran_MODULE_DIRECTORY "" CACHE PATH "Fortran module directory default" FORCE)
