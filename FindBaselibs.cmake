@@ -62,8 +62,6 @@ if (Baselibs_FOUND)
   find_package(YAFYAML REQUIRED)
   find_package(PFLOGGER REQUIRED)
 
-  find_package(FLAP REQUIRED)
-
   # Need to do a bit of kludgy stuff here to allow Fortran linker to
   # find standard C and C++ libraries used by ESMF.
   # _And_ ESMF uses libc++ on some configs and libstdc++ on others.
