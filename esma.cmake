@@ -8,6 +8,10 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     message(STATUS "*** Override with -DCMAKE_INSTALL_PREFIX=<path>.")
 endif()
 
+# FindPython often finds the wrong python (system rather than a python stack
+# provided by GEOS-ESM maintainers). This allows us 
+find_program(Python_EXECUTABLE python python3 python2)
+
 # Bring in ecbuild
 if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/ecbuild")
   list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/ecbuild/cmake")
@@ -92,18 +96,37 @@ set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
 find_package (MPI REQUIRED)
 
 if (APPLE)
-  if (DEFINED ENV{MKLROOT})
-    set (MKL_Fortran)
-    find_package (MKL REQUIRED)
-  else ()
-    if ("${CMAKE_Fortran_COMPILER_ID}" MATCHES "GNU")
-      #USE FRAMEWORK
-      message(STATUS "Found macOS and gfortran, using framework Accelerate")
-      link_libraries("-framework Accelerate")
-    endif ()
-  endif ()
-else ()
-  find_package (MKL REQUIRED)
+    set (MKL_Fortran True)
+endif ()
+find_package(MKL)
+if (MKL_FOUND)
+   ecbuild_info("Found MKL:")
+   ecbuild_info("  MKL_INCLUDE_DIRS: ${MKL_INCLUDE_DIRS}")
+   ecbuild_info("  MKL_LIBRARIES: ${MKL_LIBRARIES}")
+
+   set(BLA_VENDOR Intel10_64lp_seq)
+endif ()
+
+find_package(LAPACK)
+if (LAPACK_FOUND)
+   ecbuild_info("Found LAPACK:")
+   ecbuild_info("  LAPACK_LINKER_FLAGS: ${LAPACK_LINKER_FLAGS}")
+   ecbuild_info("  LAPACK_LIBRARIES: ${LAPACK_LIBRARIES}")
+   if (LAPACK95_FOUND)
+      ecbuild_info("Found LAPACK95:")
+      ecbuild_info("  LAPACK95_LIBRARIES: ${LAPACK95_LIBRARIES}")
+   endif ()
+endif ()
+
+find_package(BLAS)
+if (BLAS_FOUND)
+   ecbuild_info("Found BLAS:")
+   ecbuild_info("  BLAS_LINKER_FLAGS: ${BLAS_LINKER_FLAGS}")
+   ecbuild_info("  BLAS_LIBRARIES: ${BLAS_LIBRARIES}")
+   if (BLAS95_FOUND)
+      ecbuild_info("Found BLAS95:")
+      ecbuild_info("  BLAS95_LIBRARIES: ${BLAS95_LIBRARIES}")
+   endif ()
 endif ()
 
 option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
@@ -123,4 +146,13 @@ endmacro ()
 
 find_package(GitInfo)
 
-find_package(F2PY)
+option(USE_F2PY "Turn on F2PY builds" ON)
+
+if (USE_F2PY)
+   find_package(F2PY)
+endif ()
+
+# ecbuild by default puts modules in build-dir/module. This can cause issues if same-named modules
+# are in two directories that aren't using esma_add_library(). This sets the the value to
+# nothing with puts modules in the build directory equivalent of the source directory
+set(CMAKE_Fortran_MODULE_DIRECTORY "" CACHE PATH "Fortran module directory default" FORCE)
