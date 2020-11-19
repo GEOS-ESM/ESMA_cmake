@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Added Docker authentication for CI
+- Updates from UFS to enable use with MAPL without Baselibs
+
 ### Fixed
 ### Removed
 ### Added
