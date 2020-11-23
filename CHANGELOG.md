@@ -8,13 +8,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-
-- Added Docker authentication for CI
-- Updates from UFS to enable use with MAPL without Baselibs
-
 ### Fixed
 ### Removed
 ### Added
+
+## [3.3.1] - 2020-11-23
+
+### Removed
+
+- Remove `Externals.cfg` as part of `manage_externals` deprecation
+
+## [3.3.0] - 2020-11-19
+
+### Changed
+
+- Added Docker authentication for CI
+- Updates from UFS to enable use with MAPL without Baselibs (Requires MAPL 2.4.0+)
+
+## [3.2.1] - 2020-09-28
+
+### Fixed
+
+- Fix for default Fortran module directory
+
+## [3.2.0] - 2020-09-22
+
+### Added
+
+- Add support for Arm64 machines
+
+### Changed
+
+- Requirement for MKL is removed (MKL is used if found, otherwise BLAS/LAPACK is used)
+
+## [3.1.4] - 2020-09-18
+
+### Changed
+
+- Update Intel Debug flags to be more comprehensive
+
+### Added
+
+- Add CircleCI testing
 
 ## [3.1.3] - 2020-08-07
 
