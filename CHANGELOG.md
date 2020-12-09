@@ -9,10 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 ### Fixed
+### Removed
+### Added
+
+## [3.3.2] - 2020-12-08
+
+### Fixed
 
 - Fixed `new_esma_generate_automatic_code` macro to better handle automatically generated files (see https://github.com/GEOS-ESM/GEOSchem_GridComp/issues/108)
 
-### Removed
 ### Added
 
 - Add changelog enforcer
