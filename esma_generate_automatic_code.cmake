@@ -9,12 +9,10 @@ macro (new_esma_generate_automatic_code
     NAME mapl_acg.pl
     PATHS ${esma_include}/MAPL_Base ${esma_etc}/MAPL)
 
-  set (generated_files "${headers};${rcs}")
-
   add_custom_command (
-    OUTPUT ${generated_files}
+    OUTPUT ${rcs}
+    BYPRODUCTS ${headers}
     COMMAND ${generator} ${acg_flags} ${flags} ${CMAKE_CURRENT_SOURCE_DIR}/${registry}
-    COMMAND ${CMAKE_COMMAND} -E copy ${headers} ${headers_destination}
     COMMAND ${CMAKE_COMMAND} -E copy ${rcs} ${rcs_destination}
     COMMAND touch foo
     MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/${registry}
@@ -22,7 +20,7 @@ macro (new_esma_generate_automatic_code
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating automated code for ${registry}"
     )
-  add_custom_target (phony_${target} DEPENDS ${generated_files})
+  add_custom_target (phony_${target} DEPENDS ${rcs})
   add_dependencies (${target} phony_${target})
   install(FILES ${rcs_destination}/${rcs} DESTINATION etc)
 
