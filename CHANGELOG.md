@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+- Add ability for `Aggressive` build type
+
 ## [3.3.2] - 2020-12-08
 
 ### Fixed
