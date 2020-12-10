@@ -12,7 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
-- Add ability for `Aggressive` build type
+## [3.3.3] - 2020-12-10
+
+### Added
+
+- Add ability for `Aggressive` build type (note: requires [GEOS-ESM/ecbuild geos/v1.0.6](https://github.com/GEOS-ESM/ecbuild/releases/tag/geos%2Fv1.0.6) to use as ecbuild restricts allowed `CMAKE_BUILD_TYPE`)
 
 ## [3.3.2] - 2020-12-08
 
