@@ -149,11 +149,11 @@ set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 
 # Options per Jerry DeLisle on GCC Fortran List
 set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 -mprefer-avx128 -mno-fma")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK}")
+set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
 # Options per Jerry DeLisle on GCC Fortran List with SVML (does not seem to help)
 #set (GEOS_Fortran_Aggressive_Flags "-O2 -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 -mprefer-avx128 -mno-fma -mveclibabi=svml")
-#set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK}")
+#set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
 
 # Common variables for every compiler
