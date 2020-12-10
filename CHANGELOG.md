@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.3.4] - 2020-12-10
+
+### Fixed
+
+- Fixed Aggressive flags with GCC 10
+
 ## [3.3.3] - 2020-12-10
 
 ### Added
