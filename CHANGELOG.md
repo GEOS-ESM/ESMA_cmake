@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.3.5] - 2020-12-23
+
+### Fixed
+
+- Changed `-extend_source` to `-extend-source` due to warning print in
+  Intel 2021
+
 ## [3.3.4] - 2020-12-10
 
 ### Fixed
