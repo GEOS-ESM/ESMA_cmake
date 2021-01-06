@@ -14,6 +14,7 @@ set (FPE3 "-fpe3")
 set (FP_MODEL_SOURCE "-fp-model source")
 set (FP_MODEL_STRICT "-fp-model strict")
 set (FP_MODEL_CONSISTENT "-fp-model consistent")
+set (FP_MODEL_FAST "-fp-model fast")
 
 set (OPTREPORT0 "-qopt-report0")
 set (OPTREPORT5 "-qopt-report5")
@@ -51,7 +52,8 @@ add_definitions(-DHAVE_SHMEM)
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS}")
-set (common_Fortran_fpe_flags "${FPE0} ${FP_MODEL_SOURCE} ${HEAPARRAYS} ${NOOLD_MAXMINLOC}")
+#set (common_Fortran_fpe_flags "${FPE0} ${FP_MODEL_SOURCE} ${HEAPARRAYS} ${NOOLD_MAXMINLOC}")
+set (common_Fortran_fpe_flags "${FPE0} ${FP_MODEL_SOURCE} ${NOOLD_MAXMINLOC} ${HEAPARRAYS}")
 
 # GEOS Debug
 # ----------
@@ -60,13 +62,16 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
 # ------------
-set (GEOS_Fortran_Release_Flags "${FOPT3} ${DEBINFO} ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS}")
+#set (GEOS_Fortran_Release_Flags "${FOPT3} ${DEBINFO} ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS}")
+set (GEOS_Fortran_Release_Flags "${FOPT3} -xCORE-AVX512 -no-prec-div -fma ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS}")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTENCY}")
 
 # GEOS Vectorize
 # --------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} -xCORE-AVX2 -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
-set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC}")
+#set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} -xCORE-AVX2 -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+#set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC} ${HEAPARRAYS}")
+set (GEOS_Fortran_Vect_Flags "${FOPT3} -xCORE-AVX512 -no-prec-div -fma ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${NOOLD_MAXMINLOC} ${HEAPARRAYS}")
 
 # Common variables for every compiler
 include(GenericCompiler)
