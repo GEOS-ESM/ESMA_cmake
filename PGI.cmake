@@ -46,6 +46,12 @@ set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 set (GEOS_Fortran_Vect_Flags ${GEOS_Fortran_Release_Flags})
 set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 
+# GEOS Aggressive
+# ---------------
+# Until good options can be found, make vectorize equal common flags
+set (GEOS_Fortran_Aggressive_Flags ${GEOS_Fortran_Release_Flags})
+set (GEOS_Fortran_Aggressive_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
+
 # Common variables for every compiler
 include(GenericCompiler)
 

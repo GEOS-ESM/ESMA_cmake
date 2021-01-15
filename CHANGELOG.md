@@ -12,6 +12,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.3.5] - 2020-12-23
+
+### Fixed
+
+- Changed `-extend_source` to `-extend-source` due to warning print in
+  Intel 2021
+
+## [3.3.4] - 2020-12-10
+
+### Fixed
+
+- Fixed Aggressive flags with GCC 10
+
+## [3.3.3] - 2020-12-10
+
+### Added
+
+- Add ability for `Aggressive` build type (note: requires [GEOS-ESM/ecbuild geos/v1.0.6](https://github.com/GEOS-ESM/ecbuild/releases/tag/geos%2Fv1.0.6) to use as ecbuild restricts allowed `CMAKE_BUILD_TYPE`)
+
+## [3.3.2] - 2020-12-08
+
+### Fixed
+
+- Fixed `new_esma_generate_automatic_code` macro to better handle automatically generated files (see https://github.com/GEOS-ESM/GEOSchem_GridComp/issues/108)
+
+### Added
+
+- Add changelog enforcer
+
 ## [3.3.1] - 2020-11-23
 
 ### Removed
