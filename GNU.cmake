@@ -128,7 +128,8 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
    set(GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
 else ()
-   set(GNU_TARGET_ARCH "westmere")
+   #set(GNU_TARGET_ARCH "westmere")
+   set(GNU_TARGET_ARCH "znver2")
 endif ()
 set (GEOS_Fortran_Release_Flags "${FOPT3} -march=${GNU_TARGET_ARCH} -mtune=generic -funroll-loops ${DEBINFO}")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
@@ -148,7 +149,8 @@ set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 #       does not layout regress.
 
 # Options per Jerry DeLisle on GCC Fortran List
-set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 -mprefer-avx128 -mno-fma")
+#set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 -mprefer-avx128 -mno-fma")
+set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 -mno-fma")
 set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
 # Options per Jerry DeLisle on GCC Fortran List with SVML (does not seem to help)
