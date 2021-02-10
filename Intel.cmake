@@ -47,6 +47,15 @@ set (USE_SVML "-fimf-use-svml=true")
 
 set (NO_RANGE_CHECK "")
 
+cmake_host_system_information(RESULT proc_decription QUERY PROCESSOR_DESCRIPTION)
+if (${proc_decription} MATCHES "EPYC")
+   set (COREAVX2_FLAG "-march=core-avx2")
+elseif (${proc_decription} MATCHES "Intel")
+   set (COREAVX2_FLAG "-xCORE-AVX2")
+else ()
+   message(FATAL_ERROR "Unknown processor. Contact Matt Thompson")
+endif ()
+
 add_definitions(-DHAVE_SHMEM)
 
 ####################################################
@@ -68,12 +77,12 @@ set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTE
 
 # GEOS Vectorize
 # --------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} -xCORE-AVX2 -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
 set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC}")
 
 # GEOS Aggressive
 # ---------------
-set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} -xCORE-AVX2 -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
 #set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} -xSKYLAKE-AVX512 -qopt-zmm-usage=high -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array64byte")
 set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${USE_SVML} ${NOOLD_MAXMINLOC}")
 

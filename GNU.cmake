@@ -109,6 +109,19 @@ set (NO_ALIAS "")
 
 set (NO_RANGE_CHECK "-fno-range-check")
 
+cmake_host_system_information(RESULT proc_decription QUERY PROCESSOR_DESCRIPTION)
+
+if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
+   set (GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
+elseif (${proc_decription} MATCHES "EPYC")
+   set (GNU_TARGET_ARCH "znver2")
+elseif (${proc_decription} MATCHES "Intel")
+   set (GNU_TARGET_ARCH "westmere")
+   set (PREFER_AVX128 "-mprefer-avx128")
+else ()
+   message(FATAL_ERROR "Unknown processor. Contact Matt Thompson")
+endif ()
+
 ####################################################
 
 add_definitions(-D__GFORTRAN__)
@@ -125,18 +138,13 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
 # ------------
-if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
-   set(GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
-else ()
-   set(GNU_TARGET_ARCH "westmere")
-endif ()
 set (GEOS_Fortran_Release_Flags "${FOPT3} -march=${GNU_TARGET_ARCH} -mtune=generic -funroll-loops ${DEBINFO}")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Vectorize
 # --------------
 # NOTE: gfortran does get a benefit from vectorization, but the resulting code
-#       does not layout regress. See Aggressive for the flags
+#       does not layout regress. See Aggressive for the vectorizing flags
 
 # Until good options can be found, make vectorize equal common flags
 set (GEOS_Fortran_Vect_Flags ${GEOS_Fortran_Release_Flags})
@@ -146,13 +154,14 @@ set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 # ---------------
 # NOTE: gfortran does get a benefit from vectorization, but the resulting code
 #       does not layout regress.
+# NOTE2: This uses -march=native so compile on your target architecture!!!
 
 # Options per Jerry DeLisle on GCC Fortran List
-set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 -mprefer-avx128 -mno-fma")
+set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} -mno-fma")
 set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
 # Options per Jerry DeLisle on GCC Fortran List with SVML (does not seem to help)
-#set (GEOS_Fortran_Aggressive_Flags "-O2 -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 -mprefer-avx128 -mno-fma -mveclibabi=svml")
+#set (GEOS_Fortran_Aggressive_Flags "-O2 -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} -mno-fma -mveclibabi=svml")
 #set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
 
