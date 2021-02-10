@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.3.6] - 2021-02-10
+
+### Added
+
+- Added test for GNU and Intel to try and determine if building on Intel or AMD chips and choose correct vectorization flags.
+
 ## [3.3.5] - 2020-12-23
 
 ### Fixed
