@@ -12,6 +12,7 @@ set (CRAY_POINTER "")
 set (EXTENDED_SOURCE "-132")
 set (FIXED_SOURCE "-fixed")
 
+add_definitions(-D__NAGFORTRAN__)
 ####################################################
 
 # Common Fortran Flags
