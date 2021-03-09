@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.3.7] - 2021-03-09
+
+### Fixed
+
+- Fixed Aggressive GNU flags on Graviton2 processors
+
 ## [3.3.6] - 2021-02-10
 
 ### Added

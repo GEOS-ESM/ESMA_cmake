@@ -113,11 +113,16 @@ cmake_host_system_information(RESULT proc_decription QUERY PROCESSOR_DESCRIPTION
 
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
    set (GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
+   set (GNU_NATIVE_ARCH ${GNU_TARGET_ARCH})
 elseif (${proc_decription} MATCHES "EPYC")
    set (GNU_TARGET_ARCH "znver2")
+   set (GNU_NATIVE_ARCH "native")
+   set (NO_FMA "-mno-fma")
 elseif (${proc_decription} MATCHES "Intel")
    set (GNU_TARGET_ARCH "westmere")
+   set (GNU_NATIVE_ARCH "native")
    set (PREFER_AVX128 "-mprefer-avx128")
+   set (NO_FMA "-mno-fma")
 else ()
    message(FATAL_ERROR "Unknown processor. Contact Matt Thompson")
 endif ()
@@ -157,7 +162,7 @@ set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 # NOTE2: This uses -march=native so compile on your target architecture!!!
 
 # Options per Jerry DeLisle on GCC Fortran List
-set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} -mno-fma")
+set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=${GNU_NATIVE_ARCH} -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} ${NO_FMA}")
 set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
 # Options per Jerry DeLisle on GCC Fortran List with SVML (does not seem to help)
