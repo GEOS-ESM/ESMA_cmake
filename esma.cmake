@@ -8,10 +8,6 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     message(STATUS "*** Override with -DCMAKE_INSTALL_PREFIX=<path>.")
 endif()
 
-# FindPython often finds the wrong python (system rather than a python stack
-# provided by GEOS-ESM maintainers). This allows us 
-find_program(Python_EXECUTABLE python python3 python2)
-
 # Bring in ecbuild
 if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/ecbuild")
   list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/ecbuild/cmake")
