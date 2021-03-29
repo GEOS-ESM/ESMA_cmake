@@ -38,9 +38,12 @@ include (esma_add_library)
 include (esma_generate_automatic_code)
 include (esma_create_stub_component)
 include (esma_fortran_generator_list)
-include (esma_find_python_module)
-include (esma_check_python_module)
-include (esma_add_f2py_module)
+include (esma_find_python2_module)
+include (esma_check_python2_module)
+include (esma_find_python3_module)
+include (esma_check_python3_module)
+include (esma_add_f2py2_module)
+include (esma_add_f2py3_module)
 
 find_package(ImageMagick)
 if (NOT ImageMagick_FOUND)
@@ -142,10 +145,6 @@ endmacro ()
 find_package(GitInfo)
 
 option(USE_F2PY "Turn on F2PY builds" ON)
-
-if (USE_F2PY)
-   find_package(F2PY)
-endif ()
 
 # ecbuild by default puts modules in build-dir/module. This can cause issues if same-named modules
 # are in two directories that aren't using esma_add_library(). This sets the the value to
