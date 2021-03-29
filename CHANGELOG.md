@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+- Added Python2 and Python3 versions of generic Python F2PY macros.
+
 ## [3.3.7] - 2021-03-09
 
 ### Fixed
