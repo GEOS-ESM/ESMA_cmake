@@ -54,7 +54,11 @@ if (Baselibs_FOUND)
   set (INC_HDF5 ${BASEDIR}/include/hdf5)
   set (INC_NETCDF ${BASEDIR}/include/netcdf)
   set (INC_HDF ${BASEDIR}/include/hdf)
-  set (INC_ESMF ${BASEDIR}/include/esmf)
+  if (ALT_ESMF)
+    set (INC_ESMF ${ALT_ESMF}/include)
+  else ()
+    set (INC_ESMF ${BASEDIR}/include/esmf)
+  endif ()
 
   find_package(GFTL REQUIRED)
   find_package(GFTL_SHARED REQUIRED)
@@ -81,15 +85,23 @@ if (Baselibs_FOUND)
   # src/esmf/lib/libO...) But we copy the dylib to $BASEDIR/lib. Thus, DYLD_LIBRARY_PATH gets
   # hosed. yay.
   if (APPLE)
-     set (ESMF_LIBRARY ${BASEDIR}/lib/libesmf.a)
+     if (ALT_ESMF)
+        set (ESMF_LIBRARY ${ALT_ESMF}/lib/libesmf.a)
+     else ()
+        set (ESMF_LIBRARY ${BASEDIR}/lib/libesmf.a)
+     endif ()
      set (ESMF_LIBRARY_PATH ${ESMF_LIBRARY})
   else ()
      set (ESMF_LIBRARY esmf_fullylinked)
-     set (ESMF_LIBRARY_PATH ${BASEDIR}/lib/lib${ESMF_LIBRARY}.so)
+     if (ALT_ESMF)
+        set (ESMF_LIBRARY_PATH ${ALT_ESMF}/lib/lib${ESMF_LIBRARY}.so)
+     else ()
+        set (ESMF_LIBRARY_PATH ${BASEDIR}/lib/lib${ESMF_LIBRARY}.so)
+     endif ()
   endif ()
 
   set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
-  set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
+  set (ESMF_LIBRARIES ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
 
   # Create targets
   # - NetCDF Fortran
@@ -108,7 +120,11 @@ if (Baselibs_FOUND)
     IMPORTED_LOCATION ${ESMF_LIBRARY_PATH}
     INTERFACE_INCLUDE_DIRECTORIES "${INC_ESMF}"
     INTERFACE_LINK_LIBRARIES  "${ESMF_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+    if (ALT_ESMF)
+       INTERFACE_LINK_DIRECTORIES "${ALT_ESMF}/lib"
+    else ()
+       INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+    endif ()
     )
   set(esmf_FOUND TRUE CACHE BOOL "ESMF Found" FORCE)
 
