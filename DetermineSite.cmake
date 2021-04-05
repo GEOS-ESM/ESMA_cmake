@@ -6,7 +6,7 @@
 
 if (${BUILD_SITE} MATCHES "discover*" OR ${BUILD_SITE} MATCHES "borg*")
    set (DETECTED_SITE "NCCS")
-elseif (${BUILD_SITE} MATCHES "pfe" OR ${BUILD_SITE} MATCHES "r[0-9]*i[0-9]*n[0-9]*" OR ${BUILD_SITE} MATCHES "maia*")
+elseif (${BUILD_SITE} MATCHES "pfe" OR ${BUILD_SITE} MATCHES "r[0-9]*i[0-9]*n[0-9]*" OR ${BUILD_SITE} MATCHES "r[0-9]*c[0-9]*t[0-9]*n[0-9]*")
    set (DETECTED_SITE "NAS")
 elseif (EXISTS /ford1/share/gmao_SIteam AND EXISTS /ford1/local AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    set (DETECTED_SITE "GMAO.desktop")

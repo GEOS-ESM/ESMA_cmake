@@ -16,6 +16,18 @@ endif ()
 
 if (Baselibs_FOUND)
 
+  if (ALT_ESMF)
+    if (IS_DIRECTORY ${ALT_ESMF}/include/esmf)
+      message (STATUS "ALT_ESMF: ${ALT_ESMF}")
+      set (ESMFDIR ${ALT_ESMF})
+    else ()
+      message (STATUS "WARNING: ALT_ESMF defined but no ESMF installation is found; make sure you have <path_to_ALT_ESMF>/include/esmf and <path_to_ALT_ESMF>/lib. Defaulting to BASEDIR ESMF installation.")
+      set (ESMFDIR ${BASEDIR})
+    endif ()
+  else ()
+    set (ESMFDIR ${BASEDIR})
+  endif ()
+
   link_directories (${BASEDIR}/lib)
 
   # Add path to GFE packages
@@ -54,7 +66,7 @@ if (Baselibs_FOUND)
   set (INC_HDF5 ${BASEDIR}/include/hdf5)
   set (INC_NETCDF ${BASEDIR}/include/netcdf)
   set (INC_HDF ${BASEDIR}/include/hdf)
-  set (INC_ESMF ${BASEDIR}/include/esmf)
+  set (INC_ESMF ${ESMFDIR}/include/esmf)
 
   find_package(GFTL REQUIRED)
   find_package(GFTL_SHARED REQUIRED)
@@ -81,15 +93,15 @@ if (Baselibs_FOUND)
   # src/esmf/lib/libO...) But we copy the dylib to $BASEDIR/lib. Thus, DYLD_LIBRARY_PATH gets
   # hosed. yay.
   if (APPLE)
-     set (ESMF_LIBRARY ${BASEDIR}/lib/libesmf.a)
+     set (ESMF_LIBRARY ${ESMFDIR}/lib/libesmf.a)
      set (ESMF_LIBRARY_PATH ${ESMF_LIBRARY})
   else ()
      set (ESMF_LIBRARY esmf_fullylinked)
-     set (ESMF_LIBRARY_PATH ${BASEDIR}/lib/lib${ESMF_LIBRARY}.so)
+     set (ESMF_LIBRARY_PATH ${ESMFDIR}/lib/lib${ESMF_LIBRARY}.so)
   endif ()
 
   set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
-  set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
+  set (ESMF_LIBRARIES ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
 
   # Create targets
   # - NetCDF Fortran
@@ -108,7 +120,7 @@ if (Baselibs_FOUND)
     IMPORTED_LOCATION ${ESMF_LIBRARY_PATH}
     INTERFACE_INCLUDE_DIRECTORIES "${INC_ESMF}"
     INTERFACE_LINK_LIBRARIES  "${ESMF_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+    INTERFACE_LINK_DIRECTORIES "${ESMFDIR}/lib"
     )
   set(esmf_FOUND TRUE CACHE BOOL "ESMF Found" FORCE)
 
