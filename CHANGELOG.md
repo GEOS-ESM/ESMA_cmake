@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+- Added option to BUILD_WITH_PFLOGGER
+
 ## [3.3.8] - 2021-04-09
 
 ### Added
