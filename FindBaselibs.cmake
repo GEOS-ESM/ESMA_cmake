@@ -60,8 +60,11 @@ if (Baselibs_FOUND)
   find_package(GFTL_SHARED REQUIRED)
   find_package(FARGPARSE QUIET)
   find_package(YAFYAML REQUIRED)
-  find_package(PFLOGGER REQUIRED)
 
+  option(BUILD_WITH_PFLOGGER "use pFlogger" ON)
+  if (BUILD_WITH_PFLOGGER)
+    find_package(PFLOGGER REQUIRED)
+  endif()
   # Need to do a bit of kludgy stuff here to allow Fortran linker to
   # find standard C and C++ libraries used by ESMF.
   # _And_ ESMF uses libc++ on some configs and libstdc++ on others.
