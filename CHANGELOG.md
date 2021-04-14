@@ -12,7 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
-- Added option to BUILD_WITH_PFLOGGER
+## [3.3.9] - 2021-04-14
+
+### Added
+
+- Added option `BUILD_WITH_PFLOGGER` which defaults to `ON`. This is
+  added for collaborators that do not use pFlogger
 
 ## [3.3.8] - 2021-04-09
 
