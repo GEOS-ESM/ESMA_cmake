@@ -1,6 +1,6 @@
-# Contributing to XXX
+# Contributing to ESMA_cmake
 
-Contributing code to XXX should be done via a Pull Request to this repository.
+Contributing code to ESMA_cmake should be done via a Pull Request to this repository.
 
 ## Contributor License Agreement (CLA)
 
