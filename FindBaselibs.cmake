@@ -99,7 +99,7 @@ if (Baselibs_FOUND)
      set (ESMF_LIBRARY ${ESMFDIR}/lib/libesmf.a)
      set (ESMF_LIBRARY_PATH ${ESMF_LIBRARY})
   else ()
-     set (ESMF_LIBRARY esmf_fullylinked)
+     set (ESMF_LIBRARY esmf)
      set (ESMF_LIBRARY_PATH ${ESMFDIR}/lib/lib${ESMF_LIBRARY}.so)
   endif ()
 
