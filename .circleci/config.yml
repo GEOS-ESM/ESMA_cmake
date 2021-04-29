@@ -3,7 +3,7 @@ version: 2.1
 executors:
   gcc-build-env:
     docker:
-      - image: gmao/ubuntu20-geos-env-mkl:v6.0.27-openmpi_4.0.5-gcc_10.2.0
+      - image: gmao/ubuntu20-geos-env-mkl:v6.1.0-openmpi_4.0.5-gcc_10.2.0
         auth:
           username: $DOCKERHUB_USER
           password: $DOCKERHUB_AUTH_TOKEN
@@ -50,7 +50,7 @@ jobs:
             cd ${CIRCLE_WORKING_DIRECTORY}/GEOSgcm
             mkdir build
             cd build
-            cmake .. -DBASEDIR=$BASEDIR/Linux -DCMAKE_Fortran_COMPILER=gfortran -DCMAKE_BUILD_TYPE=Debug
+            cmake .. -DBASEDIR=$BASEDIR/Linux -DCMAKE_Fortran_COMPILER=gfortran -DCMAKE_BUILD_TYPE=Debug -DUSE_F2PY=OFF
       - run:
           name: "Build"
           command: |

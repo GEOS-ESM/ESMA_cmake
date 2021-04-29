@@ -8,10 +8,6 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     message(STATUS "*** Override with -DCMAKE_INSTALL_PREFIX=<path>.")
 endif()
 
-# FindPython often finds the wrong python (system rather than a python stack
-# provided by GEOS-ESM maintainers). This allows us 
-find_program(Python_EXECUTABLE python python3 python2)
-
 # Bring in ecbuild
 if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/ecbuild")
   list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/ecbuild/cmake")
@@ -38,9 +34,12 @@ include (esma_add_library)
 include (esma_generate_automatic_code)
 include (esma_create_stub_component)
 include (esma_fortran_generator_list)
-include (esma_find_python_module)
-include (esma_check_python_module)
-include (esma_add_f2py_module)
+include (esma_find_python2_module)
+include (esma_check_python2_module)
+include (esma_find_python3_module)
+include (esma_check_python3_module)
+include (esma_add_f2py2_module)
+include (esma_add_f2py3_module)
 
 find_package(ImageMagick)
 if (NOT ImageMagick_FOUND)
@@ -125,6 +124,8 @@ if (BLAS_FOUND)
 endif ()
 
 option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
+# Temporary option for transition purposes.
+option (ESMA_USE_GFE_NAMESPACE "use cmake namespace with GFE projects" OFF)
 
 # Baselibs ...
 include (FindBaselibs)
@@ -142,10 +143,6 @@ endmacro ()
 find_package(GitInfo)
 
 option(USE_F2PY "Turn on F2PY builds" ON)
-
-if (USE_F2PY)
-   find_package(F2PY)
-endif ()
 
 # ecbuild by default puts modules in build-dir/module. This can cause issues if same-named modules
 # are in two directories that aren't using esma_add_library(). This sets the the value to
