@@ -177,18 +177,18 @@ macro (add_f2py_module _name)
     add_custom_command(OUTPUT "${_name}${F2PY_SUFFIX}"
       COMMAND ${F2PY_EXECUTABLE} --quiet -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
-              ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} &> /dev/null
+              ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs}
       DEPENDS ${add_f2py_module_SOURCES}
       COMMENT "[F2PY] Building Fortran to Python interface module ${_name}")
   else ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
     add_custom_command(OUTPUT "${_name}${F2PY_SUFFIX}"
       COMMAND ${F2PY_EXECUTABLE} --quiet -m ${_name} -h ${_name}.pyf
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
-              --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs} &> /dev/null
+              --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs}
       COMMAND ${F2PY_EXECUTABLE} --quiet -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
               -c "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}/${_name}.pyf"
-              ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} &> /dev/null
+              ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only}
       DEPENDS ${add_f2py_module_SOURCES}
       COMMENT "[F2PY] Building Fortran to Python interface module ${_name}")
   endif ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
