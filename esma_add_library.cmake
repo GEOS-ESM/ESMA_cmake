@@ -98,6 +98,13 @@ macro (esma_add_library this)
     ${NOINSTALL_}
     )
 
+  set (CPP_DEBUG_${this} "" CACHE STRING "List of files to pass -DDEBUG")
+  foreach (file ${CPP_DEBUG_${this}})
+    ecbuild_info("setting debug option for ${file}")
+    set_source_files_properties (${file} PROPERTIES COMPILE_DEFINITIONS -DDEBUG)
+  endforeach()
+
+
   set_target_properties(${this} PROPERTIES EXCLUDE_FROM_ALL ${ARGS_EXCLUDE_FROM_ALL})
   set_target_properties (${this} PROPERTIES Fortran_MODULE_DIRECTORY ${esma_include}/${this})
 
