@@ -90,7 +90,10 @@ macro (add_f2py2_module _name)
     endif()
 
     if (${add_f2py2_module_DOUBLE_PRECISION})
-       list(APPEND F2PY2_Fortran_FLAGS ${FREAL8})
+       string(REPLACE " " ";" tmp ${FREAL8})
+       foreach (flag ${tmp})
+          list(APPEND F2PY2_Fortran_FLAGS ${tmp})
+       endforeach ()
     endif()
 
     #message(STATUS "${_name} F2PY2_Fortran_FLAGS ${F2PY2_Fortran_FLAGS}")
