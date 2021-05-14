@@ -9,8 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 ### Fixed
+
+- Removed extra space in diagnostic message about missing directories
+
 ### Removed
 ### Added
+
+- A new CMake variable `CPP_DEBUG_<target>` has been added for each
+  target.  The value is a list of source files that should receive the
+  "`-DDEBUG`" compile definition.  To use:
+  ```
+  $ cmake .. -DCPP_DEBUG_MAPL.base=MAPL_base.F90
+  ```
+  To use with multiple files use quotes and separate with `;`
+  ```
+  $ cmake .. -DCPP_DEBUG_MAPL.base="MAPL_base.F90;MAPL_CFIO.F90"
+  ```
 
 ## [3.4.0] - 2021-04-30
 
