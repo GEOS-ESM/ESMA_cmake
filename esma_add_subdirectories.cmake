@@ -30,7 +30,7 @@ function  (esma_add_subdirectory dir)
   else ()
     # The below should be changed to ecbuild_error() once the FOUND option
     # is propagated through client code.
-    ecbuild_info(" directory not found ${dir} (possibly sparse checkout)")
+    ecbuild_info("directory not found ${dir} (possibly sparse checkout)")
   endif()
 
 endfunction (esma_add_subdirectory)
