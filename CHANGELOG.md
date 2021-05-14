@@ -15,9 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
-- A new CMake variable CPP_DEBUG_<target> has been added for each
+- A new CMake variable `CPP_DEBUG_<target>` has been added for each
   target.  The value is a list of source files that should receive the
-  "-DEBUG" compile option.  To use:
+  "`-DDEBUG`" compile definition.  To use:
   ```
   $ cmake .. -DCPP_DEBUG_MAPL.base=MAPL_base.F90
   ```
