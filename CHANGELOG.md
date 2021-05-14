@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Removed extra space in diagnostic message about missing directories
+- Fixed a bug with double precision handling and GNU
 
 ### Removed
 ### Added
