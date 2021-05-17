@@ -9,11 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 ### Fixed
+### Removed
+### Added
+
+## [3.4.1] - 2021-05-14
+
+### Fixed
 
 - Removed extra space in diagnostic message about missing directories
 - Fixed a bug with double precision handling and GNU
 
-### Removed
 ### Added
 
 - A new CMake variable `CPP_DEBUG_<target>` has been added for each
