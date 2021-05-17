@@ -52,11 +52,13 @@ if(F2PY2_EXECUTABLE)
 
    # Now we need to test if we can actually use f2py2 and what its suffix is
 
-   include(try_f2py2_compile)
-   try_f2py2_compile(
-      ${CMAKE_CURRENT_LIST_DIR}/check_compiler_support/test.F90
-      DETECT_F2PY2_SUFFIX
-      )
+   if (NOT F2PY2_SUFFIX)
+      include(try_f2py2_compile)
+      try_f2py2_compile(
+         ${CMAKE_CURRENT_LIST_DIR}/check_compiler_support/test.F90
+         DETECT_F2PY2_SUFFIX
+         )
+   endif ()
 
 endif ()
 
