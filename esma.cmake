@@ -125,7 +125,7 @@ endif ()
 
 option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
 # Temporary option for transition purposes.
-option (ESMA_USE_GFE_NAMESPACE "use cmake namespace with GFE projects" OFF)
+option (ESMA_USE_GFE_NAMESPACE "use cmake namespace with GFE projects" ON)
 
 # Baselibs ...
 include (FindBaselibs)
