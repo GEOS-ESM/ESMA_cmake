@@ -37,8 +37,18 @@ macro (esma_set_this)
   file (MAKE_DIRECTORY ${esma_etc}/${this})
 
   # Control debugging for this subtree
-
   esma_check_if_debug()
+
+  # Control extra flags in this dir
+  if (XFLAGS_SOURCES)
+    string (REPLACE " " ";" local_sources ${XFLAGS_SOURCES})
+    if (XFLAGS)
+      string (REPLACE " " ";" extra_flags ${XFLAGS})
+      foreach (file ${local_sources})
+	set_property (SOURCE ${file} APPEND PROPERTY COMPILE_DEFINITIONS "${extra_flags}")
+      endforeach()
+    endif ()
+  endif ()
 
 endmacro()
 

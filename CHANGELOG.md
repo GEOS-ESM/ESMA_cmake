@@ -8,6 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Previous option `CPP_DEBUG_<target` has now been replaced with a
+  more fine-grained combination of cmake variables: `XFLAGS` and
+  `XFLAGS_SOURCES`.   To use
+  
+  ```
+  $cmake .. -DXFLAGS="foo bar=7 DEBUG" -DXFLAGS_SOURCES="<file1> <file2>"
+  $ make
+  ```
+  
+  NOTE: This change requires checking for specified sources in every
+  directory (or rather in those that use `esma_set_this()` and thus
+  add some overhead to cmake.  We may later decide to implement a
+  per-target or per-directory pair of flags to address this, but that
+  will be harder for the user to use.
+  
+  
+
 ### Fixed
 ### Removed
 ### Added
