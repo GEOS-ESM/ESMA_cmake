@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Change `ESMA_USE_GFE_NAMESPACE` default to `ON`. This requires Baselibs v6.2 or the latest libraries
+- On Linux, link to `libesmf.so` rather than `libesmf_fullylinked.so`
+  per advice of ESMF developers.
 
 ### Fixed
 ### Removed
