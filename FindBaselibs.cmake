@@ -103,7 +103,12 @@ if (Baselibs_FOUND)
 
   # We need to append the frameworks to this
   if (APPLE)
-    list(APPEND NETCDF_LIBRARIES ${FWSystemConfiguration} ${FWCoreFoundation} ${FWSecurity})
+    list(APPEND NETCDF_LIBRARIES ${FWSystemConfiguration} ${FWCoreFoundation})
+    # The security framework is only used when cURL is compiled with Clang
+    # due to a bug between cURL and GCC
+    if (CMAKE_C_COMPILER_ID MATCHES "Clang")
+      list(APPEND NETCDF_LIBRARIES ${FWSecurity})
+    endif ()
   endif ()
 
   set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
