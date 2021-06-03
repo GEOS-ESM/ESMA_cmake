@@ -44,6 +44,14 @@ if (Baselibs_FOUND)
   list (REMOVE_DUPLICATES NETCDF_LIBRARIES_OLD)
   list (REVERSE NETCDF_LIBRARIES_OLD)
 
+  # Changes in Baselibs mean on Darwin we need to capture three
+  # Framework Libraries needed to link with Curl (so netCDF needs them)
+  if (APPLE)
+    find_library(FWSystemConfiguration NAMES SystemConfiguration)
+    find_library(FWCoreFoundation      NAMES CoreFoundation)
+    find_library(FWSecurity            NAMES Security)
+  endif ()
+
   add_definitions(-DHAS_NETCDF4)
   add_definitions(-DHAS_NETCDF3)
   add_definitions(-DH5_HAVE_PARALLEL)
@@ -92,6 +100,12 @@ if (Baselibs_FOUND)
   endif ()
 
   set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
+
+  # We need to append the frameworks to this
+  if (APPLE)
+    list(APPEND NETCDF_LIBRARIES ${FWSystemConfiguration} ${FWCoreFoundation} ${FWSecurity})
+  endif ()
+
   set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
 
   # Create targets
