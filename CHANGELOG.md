@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Add ability to detect BASEDIR from the environment.
+- Add checks to `FindBaselibs.cmake` to make sure BASEDIR has the right arch (as defined by `uname -s`) as this is still a requirement for
+  GEOS run scripts. The code will also try to make a valid BASEDIR. That is, if you pass in /path/to/baselibs, but it sees a
+  /path/to/baselibs/arch/lib exists, it will allow that.
+
 ### Fixed
 ### Removed
 ### Added
