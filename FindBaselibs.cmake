@@ -47,21 +47,15 @@ if (BASEDIR)
 
   # If we get here, we have a BASEDIR, but it's not right...
   else ()
-    if (NOT BASEDIR_FROM_ENVIRONMENT)
-      message(FATAL_ERROR
-        "GEOS requires that BASEDIR be such that /path/to/baselibs/${CMAKE_HOST_SYSTEM_NAME}/lib exists\n"
-        "However, you provided\n"
-        "   ${BASEDIR} \n"
-        "but a good path not seem to exist. Please check your input"
-        )
-    else ()
-      message(FATAL_ERROR
-        "GEOS requires that BASEDIR be such that /path/to/baselibs/${CMAKE_HOST_SYSTEM_NAME}/lib exists\n"
-        "However, we found\n"
-        "   ${BASEDIR} \n"
-        "in the environment, but a good path does not seem to exist. Please check your input"
-        )
+    if (BASEDIR_FROM_ENVIRONMENT)
+      set (EXTRA_TEXT "in the environment, ")
     endif ()
+    message(FATAL_ERROR
+      "GEOS requires that BASEDIR be such that /path/to/baselibs/${CMAKE_HOST_SYSTEM_NAME}/lib exists\n"
+      "However, we found\n"
+      "   ${BASEDIR} \n"
+      "${EXTRA_TEXT}but a good path does not seem to exist. Please check your input"
+      )
   endif ()
 else ()
   message (STATUS "WARNING: BASEDIR not specified. Please use cmake ... -DBASEDIR=<path>.")
