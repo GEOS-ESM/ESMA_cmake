@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+### Fixed
+### Removed
+### Added
+
 ## [3.4.3] - 2021-Jun-04
 
 ### Changed
@@ -27,10 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   add some overhead to cmake.  We may later decide to implement a
   per-target or per-directory pair of flags to address this, but that
   will be harder for the user to use.
-
-### Fixed
-### Removed
-### Added
 
 ## [3.4.2] - 2021-05-17
 
