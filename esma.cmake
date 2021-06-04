@@ -127,6 +127,9 @@ option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
 # Temporary option for transition purposes.
 option (ESMA_USE_GFE_NAMESPACE "use cmake namespace with GFE projects" ON)
 
+set (XFLAGS "" CACHE STRING "List of extra FPP options that will be passed to select source files.")
+set (XFLAGS_SOURCES "" CACHE STRING "List of sources to which XFLAGS will be applied.")
+
 # Baselibs ...
 include (FindBaselibs)
 
