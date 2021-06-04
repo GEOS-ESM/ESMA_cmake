@@ -12,6 +12,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.4.3] - 2021-Jun-04
+
+### Changed
+
+- Add ability to detect BASEDIR from the environment.
+- Add checks to `FindBaselibs.cmake` to make sure BASEDIR has the right arch (as defined by `uname -s`) as this is still a requirement for
+  GEOS run scripts. The code will also try to make a valid BASEDIR. That is, if you pass in `/path/to/baselibs`, but it sees a
+  `/path/to/baselibs/arch/lib` exists, it will allow that and try to use it.
+- Previous option `CPP_DEBUG_<target` has now been replaced with a
+  more fine-grained combination of cmake variables: `XFLAGS` and
+  `XFLAGS_SOURCES`.   To use
+  
+  ```
+  $cmake .. -DXFLAGS="foo bar=7 DEBUG" -DXFLAGS_SOURCES="<file1> <file2>"
+  $ make
+  ```
+  
+  NOTE: This change requires checking for specified sources in every
+  directory (or rather in those that use `esma_set_this()` and thus
+  add some overhead to cmake.  We may later decide to implement a
+  per-target or per-directory pair of flags to address this, but that
+  will be harder for the user to use.
+
 ## [3.4.2] - 2021-05-17
 
 ### Fixed

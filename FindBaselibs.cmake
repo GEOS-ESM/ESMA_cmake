@@ -1,10 +1,61 @@
-set (BASEDIR "" CACHE PATH "Path to installed baselibs _including_ OS subdirectory (Linux or Darwin).")
-set (Baselibs_FOUND FALSE)
+set (BASEDIR "" CACHE PATH "Path to installed baselibs")
+set (Baselibs_FOUND FALSE CACHE BOOL "Baselibs Found")
+
+# We want to detect if BASEDIR is set in the environment (but not on the command line)
+if (NOT BASEDIR AND DEFINED ENV{BASEDIR})
+  message (STATUS "BASEDIR not set on command line, but found BASEDIR in the environment")
+  set (BASEDIR $ENV{BASEDIR})
+  set (BASEDIR_FROM_ENVIRONMENT TRUE)
+else ()
+  set (BASEDIR_FROM_ENVIRONMENT FALSE)
+endif ()
+
+# Next, GEOS requires all BASEDIR to be of the format
+# BASEDIR/ARCH/lib, say, where ARCH is the output of `uname -s`
+# In CMake this is CMAKE_HOST_SYSTEM_NAME
 
 if (BASEDIR)
+  # First, what if we have a BASEDIR/lib, let's make sure it's like we want
+  # That is, it has ARCH and it's the *right* ARCH!
   if (IS_DIRECTORY ${BASEDIR}/lib)
-    set (Baselibs_FOUND TRUE)
+
+    # Get the last directory node in BASEDIR
+    get_filename_component(SHOULD_BE_ARCH ${BASEDIR} NAME)
+
+    # Test to make sure it's the right arch
+    if (NOT SHOULD_BE_ARCH STREQUAL ${CMAKE_HOST_SYSTEM_NAME})
+      message(FATAL_ERROR
+        "GEOS requires that BASEDIR be such that /path/to/baselibs/${CMAKE_HOST_SYSTEM_NAME}/lib exists\n"
+        "However, you provided\n"
+        "   ${BASEDIR} \n"
+        "which does not have the correct format. Please make sure BASEDIR is correctly built and set."
+        )
+    endif ()
+
+    set (Baselibs_FOUND TRUE CACHE BOOL "Baselibs Found" FORCE)
     message (STATUS "BASEDIR: ${BASEDIR}")
+  # what if BASEDIR doesn't have ARCH, so we look for BASEDIR/ARCH/lib
+  elseif (IS_DIRECTORY ${BASEDIR}/${CMAKE_HOST_SYSTEM_NAME}/lib)
+    # Then we re-set BASEDIR so that it has the ARCH as that's what the CMake
+    # system here expects
+    message (STATUS "BASEDIR passed in without ${CMAKE_HOST_SYSTEM_NAME}. Setting BASEDIR internally to ${BASEDIR}/${CMAKE_HOST_SYSTEM_NAME}.")
+    set (BASEDIR ${BASEDIR}/${CMAKE_HOST_SYSTEM_NAME})
+    # Say we found Baselibs
+    set (Baselibs_FOUND TRUE CACHE BOOL "Baselibs Found" FORCE)
+    # And output a message
+    message (STATUS "BASEDIR: ${BASEDIR}")
+
+  # If we get here, we have a BASEDIR, but it's not right...
+  else ()
+    if (BASEDIR_FROM_ENVIRONMENT)
+      set (EXTRA_TEXT "in the environment, ")
+    endif ()
+    message(FATAL_ERROR
+      "GEOS requires that BASEDIR be such that /path/to/baselibs/${CMAKE_HOST_SYSTEM_NAME}/lib exists\n"
+      "However, we found\n"
+      "   ${BASEDIR} \n"
+      "${EXTRA_TEXT}but a good path does not seem to exist. Please check your input"
+      )
   endif ()
 else ()
   message (STATUS "WARNING: BASEDIR not specified. Please use cmake ... -DBASEDIR=<path>.")
