@@ -1,5 +1,5 @@
 set (BASEDIR "" CACHE PATH "Path to installed baselibs")
-set (Baselibs_FOUND FALSE)
+set (Baselibs_FOUND FALSE CACHE BOOL "Baselibs Found")
 
 # We want to detect if BASEDIR is set in the environment (but not on the command line)
 if (NOT BASEDIR AND DEFINED ENV{BASEDIR})
@@ -32,7 +32,7 @@ if (BASEDIR)
         )
     endif ()
 
-    set (Baselibs_FOUND TRUE)
+    set (Baselibs_FOUND TRUE CACHE BOOL "Baselibs Found" FORCE)
     message (STATUS "BASEDIR: ${BASEDIR}")
   # what if BASEDIR doesn't have ARCH, so we look for BASEDIR/ARCH/lib
   elseif (IS_DIRECTORY ${BASEDIR}/${CMAKE_HOST_SYSTEM_NAME}/lib)
@@ -41,7 +41,7 @@ if (BASEDIR)
     message (STATUS "BASEDIR passed in without ${CMAKE_HOST_SYSTEM_NAME}. Setting BASEDIR internally to ${BASEDIR}/${CMAKE_HOST_SYSTEM_NAME}.")
     set (BASEDIR ${BASEDIR}/${CMAKE_HOST_SYSTEM_NAME})
     # Say we found Baselibs
-    set (Baselibs_FOUND TRUE)
+    set (Baselibs_FOUND TRUE CACHE BOOL "Baselibs Found" FORCE)
     # And output a message
     message (STATUS "BASEDIR: ${BASEDIR}")
 
