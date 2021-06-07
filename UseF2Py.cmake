@@ -144,10 +144,10 @@ macro (add_f2py_module _name)
      # NOTE: This can't be done in one a-and-b test because CMake will not do:
      #         if( foo MATCHES )
      #       where the matches regex is blank
-     if (${CMAKE_THREAD_LIBS_INIT})
-       if (_lib MATCHES ${CMAKE_THREAD_LIBS_INIT})
-          continue()
-        endif ()
+     if (CMAKE_THREAD_LIBS_INIT)
+       if (_lib STREQUAL "${CMAKE_THREAD_LIBS_INIT}")
+         continue()
+       endif ()
      endif ()
 
      # It also seems like f2py cannot handle XCode Frameworks
