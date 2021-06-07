@@ -138,8 +138,20 @@ macro (add_f2py3_module _name)
         set (_lib esmf)
      endif ()
 
-     # For some reason, -pthread screws up f2py3
-     if (NOT _lib MATCHES ${CMAKE_THREAD_LIBS_INIT})
+     # For some reason, -pthread screws up f2py3, but it's not defined on
+     # all systems (macOS + GCC at least), so, if it is set and it's passed in, skip
+     #
+     # NOTE: This can't be done in one a-and-b test because CMake will not do:
+     #         if( foo MATCHES )
+     #       where the matches regex is blank
+     if (${CMAKE_THREAD_LIBS_INIT})
+       if (_lib MATCHES ${CMAKE_THREAD_LIBS_INIT})
+          continue()
+        endif ()
+     endif ()
+
+     # It also seems like f2py3 cannot handle XCode Frameworks
+     if (NOT _lib MATCHES "^.*framework$")
        list(APPEND _lib_opts "-l${_lib}")
      endif ()
   endforeach(_lib)
