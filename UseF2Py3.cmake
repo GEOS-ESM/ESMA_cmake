@@ -137,7 +137,11 @@ macro (add_f2py3_module _name)
      if (_lib MATCHES "esmf\.a")
         set (_lib esmf)
      endif ()
-     list(APPEND _lib_opts "-l${_lib}")
+
+     # For some reason, -pthread screws up f2py3
+     if (NOT _lib MATCHES ${CMAKE_THREAD_LIBS_INIT})
+       list(APPEND _lib_opts "-l${_lib}")
+     endif ()
   endforeach(_lib)
 
   if ( ${add_f2py3_module_USE_MPI})

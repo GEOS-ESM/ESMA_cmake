@@ -162,6 +162,9 @@ if (Baselibs_FOUND)
     endif ()
   endif ()
 
+  # We also need to append the pthread flag at link time
+  list(APPEND NETCDF_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+
   set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
 
   # Create targets
