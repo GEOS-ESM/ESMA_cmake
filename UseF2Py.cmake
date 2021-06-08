@@ -137,7 +137,23 @@ macro (add_f2py_module _name)
      if (_lib MATCHES "esmf\.a")
         set (_lib esmf)
      endif ()
-     list(APPEND _lib_opts "-l${_lib}")
+
+     # For some reason, -pthread screws up f2py, but it's not defined on
+     # all systems (macOS + GCC at least), so, if it is set and it's passed in, skip
+     #
+     # NOTE: This can't be done in one a-and-b test because CMake will not do:
+     #         if( foo MATCHES )
+     #       where the matches regex is blank
+     if (CMAKE_THREAD_LIBS_INIT)
+       if (_lib STREQUAL "${CMAKE_THREAD_LIBS_INIT}")
+         continue()
+       endif ()
+     endif ()
+
+     # It also seems like f2py cannot handle XCode Frameworks
+     if (NOT _lib MATCHES "^.*framework$")
+       list(APPEND _lib_opts "-l${_lib}")
+     endif ()
   endforeach(_lib)
 
   if ( ${add_f2py_module_USE_MPI})
