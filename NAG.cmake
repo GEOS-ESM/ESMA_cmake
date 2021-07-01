@@ -1,5 +1,5 @@
-if (CMAKE_Fortran_COMPILER_VERSION VERSION_LESS 6.0)
-  message(FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be at least 6.0!")
+if (CMAKE_Fortran_COMPILER_VERSION VERSION_LESS 7.0)
+  message(FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be at least 7.0!")
 endif()
 
 set (FREAL8 "-r8")
