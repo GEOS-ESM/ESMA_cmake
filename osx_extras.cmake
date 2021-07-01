@@ -5,6 +5,8 @@
 #    In the future, we'll need a config flag to support both variants.
 #    But for now we want gcc only.
 
+
+
 # 2) On OS X, object files with variables but no code (e.g. simple Fortran module files)
 #    cause warning messages in the link stage.
 #    The logic below deactivates the warnings.
@@ -18,15 +20,30 @@ foreach(lang Fortran C CXX)
 endforeach()
 
 
-# 3) Possibly not an OS X issue.  Encountered with supporting run of tests when using OpenMP with intel.
-#    some funny rpath issue
-set (CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-set (OSX_EXTRA_LIBRARY_PATH $ENV{OSX_EXTRA_LIBRARY_PATH} CACHE PATH "Fill with DYLD_LIBRARY_PATH.")
 
-# 4) In order for MKL to work at runtim, this is needed
+# 3) Rpath handling per https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling#always-full-rpath
+
+## use, i.e. don't skip the full RPATH for the build tree
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+
+## when building, don't use the install RPATH already
+## (but later on when installing)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
+## add the automatically determined parts of the RPATH
+## which point to directories outside the build tree to the install RPATH
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-# 5) With the advent of shared libraries in GEOS, one needs to symlink install/lib in an experiment
+## the RPATH to be used when installing, but only if it's not a system directory
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+if("${isSystemDir}" STREQUAL "-1")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif("${isSystemDir}" STREQUAL "-1")
+
+
+# 4) With the advent of shared libraries in GEOS, one needs to symlink install/lib in an experiment
 #    or use this command
 ecbuild_warn(
    "Setting ENABLE_RELATIVE_RPATHS to FALSE.\n"
