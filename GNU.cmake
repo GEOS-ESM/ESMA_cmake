@@ -1,5 +1,5 @@
-if (CMAKE_Fortran_COMPILER_VERSION VERSION_LESS 9.3)
-  message(FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be at least 9.4!")
+if (CMAKE_Fortran_COMPILER_VERSION VERSION_LESS 9.2)
+  message(FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be at least 9.2!")
 endif()
 
 set (FOPT0 "-O0")
