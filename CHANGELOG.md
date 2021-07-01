@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.5.1] - 2021-Jul-01
+
+### Fixed
+
+- Fixed rpath handling on macOS.
+
 ## [3.5.0] - 2021-Jun-08
 
 ### Changed
