@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.5.2] - 2021-Jul-14
+
+### Fixed
+
+- Changes to `esma_add_f2pyX_module` macros in handling the `python -c 'import foo_'` tests. Adds `LD_LIBRARY_PATH` to it. Still does not fix all problems.
+
 ## [3.5.1] - 2021-Jul-01
 
 ### Fixed
