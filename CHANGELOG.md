@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Changed the Release flags for the Intel Compiler to be the Vectorized flags. Testing shows it is zero-diff and faster.
+
 ### Fixed
 ### Removed
 ### Added
