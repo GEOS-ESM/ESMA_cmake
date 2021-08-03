@@ -174,24 +174,35 @@ macro (add_f2py_module _name)
      file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.f2py_f2cmap "{'real':{'':'double'},'integer':{'':'long'},'real*8':{'':'double'},'complex':{'':'complex_double'}}")
   endif()
 
+  # Debugging f2py is a lot easier if you don't quiet it, but we do not
+  # want all the f2py output when building normally as it is *very*
+  # verbose. So this turns out the f2py verboseness when building for Debug
+  if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
+    set (F2PY_QUIET "--quiet")
+    # Note: Need to use a "list" like this because of CMake. If it
+    #       was a single string, CMake would add a backslash between
+    #       them: "&>\ /dev/null"
+    set (REDIRECT_TO_DEV_NULL "&>" "/dev/null")
+  endif ()
+
   # Define the command to generate the Fortran to Python interface module. The
   # output will be a shared library that can be imported by python.
   if ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
     add_custom_command(OUTPUT "${_name}${F2PY_SUFFIX}"
-      COMMAND ${F2PY_EXECUTABLE} --quiet -m ${_name}
+      COMMAND ${F2PY_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
-              ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} &> /dev/null
+              ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
       DEPENDS ${add_f2py_module_SOURCES}
       COMMENT "[F2PY] Building Fortran to Python interface module ${_name}")
   else ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
     add_custom_command(OUTPUT "${_name}${F2PY_SUFFIX}"
-      COMMAND ${F2PY_EXECUTABLE} --quiet -m ${_name} -h ${_name}.pyf
+      COMMAND ${F2PY_EXECUTABLE} ${F2PY_QUIET} -m ${_name} -h ${_name}.pyf
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
-              --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs} &> /dev/null
-      COMMAND ${F2PY_EXECUTABLE} --quiet -m ${_name}
+              --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
+      COMMAND ${F2PY_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
               -c "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}/${_name}.pyf"
-              ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} &> /dev/null
+              ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} ${REDIRECT_TO_DEV_NULL}
       DEPENDS ${add_f2py_module_SOURCES}
       COMMENT "[F2PY] Building Fortran to Python interface module ${_name}")
   endif ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )

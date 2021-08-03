@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.4.5] - 2021-Aug-03
+
+### Changed
+
+- If building `CMAKE_BUILD_TYPE=Debug` the f2py steps are now more verbose to aid in debugging
+
 ## [3.4.4] - 2021-Jul-14
 
 ### Fixed
