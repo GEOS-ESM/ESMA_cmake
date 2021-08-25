@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.5.4] - 2021-Aug-25
+
+### Added
+
 - Added `esma_cpack.cmake` to allow for creating tarballs of code with `make package_source` or `make dist`
 
 ## [3.5.3] - 2021-Aug-03
