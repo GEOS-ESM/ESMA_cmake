@@ -172,12 +172,17 @@ if (Baselibs_FOUND)
 
   set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
 
-  set (INC_FMS ${BASEDIR}/include/FMS)
-  set (LIB_FMS ${BASEDIR}/lib/libFMS.a)
-
-  set (FMS_LIBRARIES ${LIB_FMS} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES})
-
   # Create targets
+  # - NetCDF C
+  add_library(NetCDF::NetCDF_C STATIC IMPORTED)
+  set_target_properties(NetCDF::NetCDF_C PROPERTIES
+    IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdf.a
+    INTERFACE_INCLUDE_DIRECTORIES "${INC_NETCDF}"
+    INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
+    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+    )
+  set(NetCDF_C_FOUND TRUE CACHE BOOL "NetCDF C Found" FORCE)
+
   # - NetCDF Fortran
   add_library(NetCDF::NetCDF_Fortran STATIC IMPORTED)
   set_target_properties(NetCDF::NetCDF_Fortran PROPERTIES
@@ -188,15 +193,37 @@ if (Baselibs_FOUND)
     )
   set(NetCDF_Fortran_FOUND TRUE CACHE BOOL "NetCDF Fortran Found" FORCE)
 
-  # - FMS
-  add_library(FMS::FMS STATIC IMPORTED)
-  set_target_properties(FMS::FMS PROPERTIES
-    IMPORTED_LOCATION ${BASEDIR}/lib/libFMS.a
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_FMS}"
-    INTERFACE_LINK_LIBRARIES  "${FMS_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
-    )
-  set(FMS_FOUND TRUE CACHE BOOL "FMS Found" FORCE)
+  # - fms_r4
+  set (inc_fms_r4 ${BASEDIR}/FMS/include_r4)
+  set (lib_fms_r4 ${BASEDIR}/FMS/lib/libfms_r4.a)
+  set (fms_libraries_r4 ${lib_fms_r4} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES})
+  add_library(FMS::fms_r4 STATIC IMPORTED)
+  set_target_properties(FMS::fms_r4 PROPERTIES
+    IMPORTED_LOCATION ${lib_fms_r4}
+    INCLUDE_DIRECTORIES "${inc_fms_r4}"
+    INTERFACE_INCLUDE_DIRECTORIES "${inc_fms_r4}"
+    INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
+    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/FMS/lib"
+  )
+  set(FMS_R4_FOUND TRUE CACHE BOOL "fms_r4 Found" FORCE)
+
+  # - fms_r8
+  set (inc_fms_r8 ${BASEDIR}/FMS/include_r8)
+  set (lib_fms_r8 ${BASEDIR}/FMS/lib/libfms_r8.a)
+  set (fms_libraries_r8 ${lib_fms_r8} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES})
+  add_library(FMS::fms_r8 STATIC IMPORTED)
+  set_target_properties(FMS::fms_r8 PROPERTIES
+    IMPORTED_LOCATION ${lib_fms_r8}
+    INCLUDE_DIRECTORIES "${inc_fms_r8}"
+    INTERFACE_INCLUDE_DIRECTORIES "${inc_fms_r8}"
+    INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
+    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/FMS/lib"
+  )
+  set(FMS_R8_FOUND TRUE CACHE BOOL "fms_r8 Found" FORCE)
+
+  if (FMS_R4_FOUND AND FMS_R8_FOUND)
+    set(FMS_FOUND TRUE CACHE BOOL "FMS Found" FORCE)
+  endif ()
 
   # - ESMF
   add_library(esmf STATIC IMPORTED)
