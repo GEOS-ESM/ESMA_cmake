@@ -196,7 +196,6 @@ if (Baselibs_FOUND)
   # - fms_r4
   set (inc_fms_r4 ${BASEDIR}/FMS/include_r4)
   set (lib_fms_r4 ${BASEDIR}/FMS/lib/libfms_r4.a)
-  set (fms_libraries_r4 ${lib_fms_r4} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES})
   add_library(FMS::fms_r4 STATIC IMPORTED)
   set_target_properties(FMS::fms_r4 PROPERTIES
     IMPORTED_LOCATION ${lib_fms_r4}
@@ -210,7 +209,6 @@ if (Baselibs_FOUND)
   # - fms_r8
   set (inc_fms_r8 ${BASEDIR}/FMS/include_r8)
   set (lib_fms_r8 ${BASEDIR}/FMS/lib/libfms_r8.a)
-  set (fms_libraries_r8 ${lib_fms_r8} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES})
   add_library(FMS::fms_r8 STATIC IMPORTED)
   set_target_properties(FMS::fms_r8 PROPERTIES
     IMPORTED_LOCATION ${lib_fms_r8}
