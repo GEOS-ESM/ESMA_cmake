@@ -204,6 +204,7 @@ if (Baselibs_FOUND)
     INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/FMS/lib"
   )
+  add_library(fms_r4 ALIAS FMS::fms_r4)
   set(FMS_R4_FOUND TRUE CACHE BOOL "fms_r4 Found" FORCE)
 
   # - fms_r8
@@ -217,6 +218,7 @@ if (Baselibs_FOUND)
     INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/FMS/lib"
   )
+  add_library(fms_r8 ALIAS FMS::fms_r8)
   set(FMS_R8_FOUND TRUE CACHE BOOL "fms_r8 Found" FORCE)
 
   if (FMS_R4_FOUND AND FMS_R8_FOUND)
