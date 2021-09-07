@@ -9,11 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 ### Fixed
-
-- Added `librt` and `libdl` to the `ESMF_LIBRARIES`
-
 ### Removed
 ### Added
+
+## [3.5.5] - 2021-Sep-07
+
+### Fixed
+
+- Added `librt` and `libdl` to the `ESMF_LIBRARIES`
 
 ## [3.5.4] - 2021-Aug-25
 
