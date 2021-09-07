@@ -7,7 +7,7 @@ macro (new_esma_generate_automatic_code
 
   find_file (generator
     NAME mapl_acg.pl
-    PATHS ${esma_include}/MAPL_Base ${esma_etc}/MAPL)
+    PATHS ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL)
 
   add_custom_command (
     OUTPUT ${rcs}
@@ -59,7 +59,7 @@ macro (esma_generate_gmi_code target type)
 
   find_file (generator
     NAME mapl_acg.pl
-    PATHS ${esma_include}/MAPL_Base ${esma_etc}/MAPL)
+    PATHS ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL)
 
   add_custom_command (
     #    TARGET ${this}
@@ -85,7 +85,7 @@ macro (esma_generate_automatic_code this name destination flags)
 
   find_file (generator
     NAME mapl_acg.pl
-    PATHS ${esma_include}/MAPL_Base ${esma_etc}/MAPL)
+    PATHS ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL)
 
   add_custom_command (
     OUTPUT ${name}_ExportSpec___.h ${name}_GetPointer___.h ${name}_History___.rc
