@@ -52,6 +52,7 @@ include(esma_latex)
 
 ### macOS ###
 
+list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/operating_system")
 if (APPLE)
   include(osx_extras)
 endif ()
