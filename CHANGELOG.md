@@ -9,13 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated some MAPL references in the stub and ACG code
+- Refactored ESMA_cmake
 
 ### Fixed
 ### Removed
 ### Added
 
 ## [3.5.5] - 2021-Sep-07
+
+### Changed
+
+- Updated some MAPL references in the stub and ACG code
 
 ### Fixed
 
