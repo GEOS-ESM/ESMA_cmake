@@ -8,14 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-
-- Updated some MAPL references in the stub and ACG code
-
 ### Fixed
+
+- Prevent build or install directories from having a comma (due to -Wl issue)
+
 ### Removed
 ### Added
 
 ## [3.5.5] - 2021-Sep-07
+
+### Changed
+
+- Updated some MAPL references in the stub and ACG code
 
 ### Fixed
 

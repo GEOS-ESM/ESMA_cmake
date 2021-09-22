@@ -8,6 +8,24 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     message(STATUS "*** Override with -DCMAKE_INSTALL_PREFIX=<path>.")
 endif()
 
+# There is an issue with CMake, make, and directories with commas 
+# in the path. CMake can add -Wl linker options to the makefiles and
+# Wl options take comma-separated lists. Until it can be figured out 
+# how (or if) CMake can generate quoted arguments to -Wl, we prevent
+# either build or install directories with a comma in the path
+if ("${CMAKE_BINARY_DIR}" MATCHES "^.*[,].*$")
+  message(FATAL_ERROR
+    "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}\n"
+    "GEOS does not allow directory paths with commas. Please change your build path"
+    )
+endif ()
+if ("${CMAKE_INSTALL_PREFIX}" MATCHES "^.*[,].*$")
+  message(FATAL_ERROR
+    "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}\n"
+    "GEOS does not allow directory paths with commas. Please change your install path"
+    )
+endif ()
+
 # Bring in ecbuild
 if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/ecbuild")
   list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/ecbuild/cmake")
