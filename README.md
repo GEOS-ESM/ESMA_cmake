@@ -44,3 +44,13 @@ The rest of the GEOS-ESM CMake configuration files are contained in subdirectori
 * `ecbuild`
 
   There is a final "hidden" subdirectory that ESMA_cmake expects. This is a checkout of ecbuild which is an underlying framework for most of ESMA_cmake.  This is brought in as a subdirectory via `mepo` from `components.yaml` files in fixtures. 
+
+## Contributing
+
+Please check out our [contributing guidelines](CONTRIBUTING.md).
+
+## License
+
+All files are currently licensed under the Apache-2.0 license, see [`LICENSE`](LICENSE).
+
+Previously, the code was licensed under the [NASA Open Source Agreement, Version 1.3](LICENSE-NOSA).
