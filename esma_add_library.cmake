@@ -35,7 +35,7 @@ macro (esma_add_library this)
 
   # Subdirs must exist and should be configured prior to subcomponents.
   foreach (subdir ${ARGS_SUBDIRS})
-    add_subdirectory(${subdir})
+    esma_add_subdirectory(${subdir})
   endforeach()
 
   # Handle deprecated
