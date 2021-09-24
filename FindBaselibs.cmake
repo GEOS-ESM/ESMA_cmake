@@ -136,6 +136,8 @@ if (Baselibs_FOUND)
     endif()
   else ()
     execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.so OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=librt.so OUTPUT_VARIABLE rt OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libdl.so OUTPUT_VARIABLE dl OUTPUT_STRIP_TRAILING_WHITESPACE)
   endif ()
 
   # With Baselibs 6.2.5, we can now link to the ESMF dynamic library on macOS
@@ -170,7 +172,7 @@ if (Baselibs_FOUND)
   # We also need to append the pthread flag at link time
   list(APPEND NETCDF_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 
-  set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${stdcxx} ${libgcc})
+  set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${rt} ${stdcxx} ${dl} ${libgcc})
 
   # Create targets
   # - NetCDF C
