@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-### Fixed
 
 - `esma_add_subdirectory` now uses the new `esma_mepo_style`
+
+### Fixed
+
 - Prevent build or install directories from having a comma (due to -Wl issue)
 
 ### Removed
