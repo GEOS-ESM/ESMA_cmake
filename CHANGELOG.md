@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+### Fixed
+### Removed
+### Added
+
+## [3.5.6] - 2021-Sep-24
+
+### Changed
 
 - `esma_add_subdirectory` now uses the new `esma_mepo_style`
 
