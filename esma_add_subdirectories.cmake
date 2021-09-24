@@ -5,40 +5,34 @@
 # We allow nested repositories to have leading or trailing "@" in their
 # name which is disregarded for everything except path.
 
-function  (esma_add_subdirectory dir)
+function  (esma_add_subdirectory dir) # optional "rename" argument
 
   set (options)
-  set (oneValueArgs FOUND)
+  set (oneValueArgs FOUND RENAME)
   set (multiValueArgs)
   cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-  string(REPLACE "@" "" dir_ ${dir})
+#  string(REPLACE "@" "" dir_ ${dir})
 
-  foreach(d ${dir_} "@${dir_}" "${dir}@")
-    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${d})
-      add_subdirectory (${d})
-      if (ARGS_FOUND)
-	set (${ARGS_FOUND} TRUE PARENT_SCOPE)
-      endif()
-      return()
-    endif()
-  endforeach()
+   esma_mepo_style(${dir} mepo_dir FOUND found)
+   if (found)
+     add_subdirectory (${mepo_dir} ${ARGS_RENAME})
+   endif ()
 
-  # dir not found
-  if (ARGS_FOUND)
-    set (${ARGS_FOUND} FALSE PARENT_SCOPE)
-  else ()
+   if (ARGS_FOUND)
+     set(${ARGS_FOUND} ${found} PARENT_SCOPE)
+   else ()
     # The below should be changed to ecbuild_error() once the FOUND option
     # is propagated through client code.
-    ecbuild_info("Directory not found ${dir} (possibly sparse checkout)")
-  endif()
+    ecbuild_debug("Directory not found ${dir} (possibly sparse checkout)")
+  endif ()
 
 endfunction (esma_add_subdirectory)
 
 function (esma_add_subdirectories dirs)
   set (dirs_ ${dirs} ${ARGN})
     ecbuild_debug ("esma_add_subdirectories:  ${dirs}")
-  foreach (subdir ${dirs_})
+    foreach (subdir ${dirs_})
     esma_add_subdirectory(${subdir})
   endforeach()
 endfunction (esma_add_subdirectories)
