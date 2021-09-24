@@ -22,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Prevent build or install directories from having a comma (due to -Wl issue)
 
-### Removed
 ### Added
 
 - New function `esma_mepo_style` which searches for a directory under
