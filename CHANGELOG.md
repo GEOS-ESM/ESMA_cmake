@@ -15,6 +15,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.5.6] - 2021-Sep-24
+
+### Changed
+
+- `esma_add_subdirectory` now uses the new `esma_mepo_style`
+
+### Fixed
+
+- Prevent build or install directories from having a comma (due to -Wl issue)
+
+### Added
+
+- New function `esma_mepo_style` which searches for a directory under
+  any mepo style option and returns a variable filled in accordingly.
+  It can optionally return a bool FOUND argument.  Throws an ecbuild error
+  if dir is not found and FOUND argument is not used.
+
+## [3.5.5] - 2021-Sep-07
+
+### Changed
+
+- Updated some MAPL references in the stub and ACG code
+
+### Fixed
+
+- Added `librt` and `libdl` to the `ESMF_LIBRARIES` on Linux.
+
+## [3.5.4] - 2021-Aug-25
+
+### Added
+
+- Added `esma_cpack.cmake` to allow for creating tarballs of code with `make package_source` or `make dist`
+
 ## [3.5.3] - 2021-Aug-03
 
 ### Changed

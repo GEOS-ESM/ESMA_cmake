@@ -3,7 +3,7 @@ macro (esma_create_stub_component srcs module)
 
   find_file (stub_generator
     NAME mapl_stub.pl
-    PATHS ${MAPL_SOURCE_DIR}/MAPL_Base ${esma_etc}/MAPL)
+    PATHS ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL)
 
   add_custom_command (
     OUTPUT ${module}.F90
