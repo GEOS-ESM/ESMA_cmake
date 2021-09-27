@@ -96,7 +96,15 @@ find_package (OpenMP)
 
 # Threading support
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
-set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+
+## Turns out with NAG on Linux, this generates '-pthread' which
+## NAG cannot handle. So we set to FALSE in that case
+if(UNIX AND CMAKE_Fortran_COMPILER_ID MATCHES "NAG")
+  set(THREADS_PREFER_PTHREAD_FLAG FALSE)
+else()
+  set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+endif()
+
 find_package(Threads REQUIRED)
 
 # Position independent code
