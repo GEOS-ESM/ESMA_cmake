@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.5.7] - 2021-Sep-27
+
+### Fixed
+
+- Fix pthreads use on Linux with NAG compiler
+
 ## [3.5.6] - 2021-Sep-24
 
 ### Changed
