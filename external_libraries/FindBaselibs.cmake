@@ -1,4 +1,3 @@
-set (BASEDIR "" CACHE PATH "Path to installed baselibs")
 set (Baselibs_FOUND FALSE CACHE BOOL "Baselibs Found")
 
 # We want to detect if BASEDIR is set in the environment (but not on the command line)
@@ -57,6 +56,7 @@ if (BASEDIR)
       "${EXTRA_TEXT}but a good path does not seem to exist. Please check your input"
       )
   endif ()
+  set (BASEDIR "${BASEDIR}" CACHE PATH "Path to installed baselibs")
 else ()
   message (STATUS "WARNING: BASEDIR not specified. Please use cmake ... -DBASEDIR=<path>.")
 endif ()
