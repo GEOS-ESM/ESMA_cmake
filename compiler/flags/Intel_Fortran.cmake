@@ -94,4 +94,4 @@ set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -q
 set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${USE_SVML} ${NOOLD_MAXMINLOC}")
 
 # Common variables for every compiler
-include(GenericCompiler)
+include(Generic_Fortran)
