@@ -171,4 +171,4 @@ set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${AL
 
 
 # Common variables for every compiler
-include(GenericCompiler)
+include(Generic_Fortran)
