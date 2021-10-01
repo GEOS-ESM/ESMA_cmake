@@ -72,13 +72,20 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
 # ------------
-set (GEOS_Fortran_Release_Flags "${FOPT3} ${DEBINFO} ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS}")
-set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTENCY}")
+#set (GEOS_Fortran_Release_Flags "${FOPT3} ${DEBINFO} ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS}")
+#set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTENCY}")
+
+# NOTE It was found that the Vectorizing Flags gave better performance with the same results in testing.
+#      So we keep the old flags commented out for now for historical purposes until all of GEOS can
+#      transition to Vect is Release (there are CMakeLists.txt files through GEOS referring to Vect)
 
 # GEOS Vectorize
 # --------------
 set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
 set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC}")
+
+set (GEOS_Fortran_Release_Flags  "${GEOS_Fortran_Vect_Flags}")
+set (GEOS_Fortran_Release_FPE_Flags "${GEOS_Fortran_Vect_FPE_Flags}")
 
 # GEOS Aggressive
 # ---------------
