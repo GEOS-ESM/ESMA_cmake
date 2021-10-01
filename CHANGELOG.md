@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Refactored ESMA_cmake
-- Changed the Release flags for the Intel Compiler to be the Vectorized flags. Testing shows it is zero-diff and faster.
+- Changed the Release flags for the Intel Compiler to be the Vectorized flags. Testing shows it is zero-diff and faster, however we
+  are moving the minor version number as a signal of "just in case"
 
 ### Fixed
 
