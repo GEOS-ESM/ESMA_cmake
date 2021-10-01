@@ -55,7 +55,7 @@ if(F2PY2_EXECUTABLE)
    if (NOT F2PY2_SUFFIX)
       include(try_f2py2_compile)
       try_f2py2_compile(
-         ${CMAKE_CURRENT_LIST_DIR}/check_compiler_support/test.F90
+         ${CMAKE_CURRENT_LIST_DIR}/test.F90
          DETECT_F2PY2_SUFFIX
          )
    endif ()
