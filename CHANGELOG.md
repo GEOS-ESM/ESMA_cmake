@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed the Release flags for the Intel Compiler to be the Vectorized flags. Testing shows it is zero-diff and faster.
 
 ### Fixed
+
+- Cache BASEDIR when a valid path is found 
+
 ### Removed
 ### Added
 
