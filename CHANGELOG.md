@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+### Fixed
+### Removed
+### Added
+
+## [3.6.0] - 2021-Oct-01
+
+### Changed
 
 - Refactored ESMA_cmake
 - Changed the Release flags for the Intel Compiler to be the Vectorized flags. Testing shows it is zero-diff and faster.
@@ -15,9 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Cache BASEDIR when a valid path is found 
-
-### Removed
-### Added
 
 ## [3.5.7] - 2021-Sep-27
 
