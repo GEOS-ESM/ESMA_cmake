@@ -8,15 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+### Fixed
+### Removed
+### Added
+
+## [3.6.1] - 2021-Oct-05
+
+### Changed
 
 - Created a new set of flags for Intel that mimic the old non-vectorized Release flags
 
 ### Fixed
 
 - Fix issue with `tests` target due to bad refactor
-
-### Removed
-### Added
 
 ## [3.6.0] - 2021-Oct-01
 
