@@ -58,7 +58,12 @@ if (BASEDIR)
   endif ()
   set (BASEDIR "${BASEDIR}" CACHE PATH "Path to installed baselibs")
 else ()
-  message (STATUS "WARNING: BASEDIR not specified. Please use cmake ... -DBASEDIR=<path>.")
+  ecbuild_warn(
+    "BASEDIR not specified.\n"
+    "If you wish to use Baselibs, please use:\n"
+    "   cmake ... -DBASEDIR=<path-to-Baselibs>\n"
+    "or set BASEDIR in your environment.\n\n"
+    "Note that building GEOS-ESM code without Baselibs is unsupported.")
 endif ()
 
 if (ESMA_SDF)

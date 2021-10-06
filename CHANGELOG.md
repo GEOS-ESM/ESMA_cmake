@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.6.2] - 2021-Oct-06
+
+### Changed
+
+- Changed the warning for missing Basedir to be more prominent
+
 ## [3.6.1] - 2021-Oct-05
 
 ### Changed
