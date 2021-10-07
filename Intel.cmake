@@ -72,8 +72,11 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
 # ------------
-set (GEOS_Fortran_Release_Flags "${FOPT3} ${DEBINFO} ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS}")
-set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTENCY}")
+set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO} ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS}")
+set (GEOS_Fortran_NoVect_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTENCY}")
+
+set (GEOS_Fortran_Release_Flags "${GEOS_Fortran_NoVect_Flags}")
+set (GEOS_Fortran_Release_FPE_Flags "${GEOS_Fortran_NoVect_FPE_Flags}")
 
 # GEOS Vectorize
 # --------------

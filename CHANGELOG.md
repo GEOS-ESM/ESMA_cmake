@@ -12,6 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.5.8] - 2021-Oct-07
+
+### Changed
+
+- Changed the warning for missing Basedir to be more prominent
+
+### Added
+
+- Added the novect flag aliases (from 3.6.2)
+
 ## [3.5.7] - 2021-Sep-27
 
 ### Fixed

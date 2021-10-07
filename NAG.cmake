@@ -29,6 +29,13 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 set (GEOS_Fortran_Release_Flags "-O3 -g")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
+# Create a NoVectorize version for consistency. No difference from Release for NAG
+
+# GEOS NoVectorize
+# ----------------
+set (GEOS_Fortran_NoVect_Flags  "${GEOS_Fortran_Release_Flags}")
+set (GEOS_Fortran_NoVect_FPE_Flags "${GEOS_Fortran_Release_FPE_Flags}")
+
 # GEOS Vectorize
 # --------------
 # Until good options can be found, make vectorize equal common flags
