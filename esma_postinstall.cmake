@@ -1,0 +1,9 @@
+execute_process(
+  COMMAND make package_source
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} 
+  COMMAND_ECHO STDOUT
+  )
+file(
+  INSTALL ${CMAKE_PROJECT_NAME}.tar.gz 
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/src
+  )
