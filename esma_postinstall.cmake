@@ -1,5 +1,5 @@
 execute_process(
-  COMMAND make package_source
+  COMMAND ${CMAKE_COMMAND} --build ${CMAKE_CURRENT_BINARY_DIR} --target package_source
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} 
   COMMAND_ECHO STDOUT
   )
