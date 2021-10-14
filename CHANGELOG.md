@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added `esma_postinstall.cmake` script for tarring up code post install
 
+## [3.6.3] - 2021-Oct-14
+
+### Fixed
+
+- Fixed bug in caching `BASEDIR`
+
 ## [3.6.2] - 2021-Oct-06
 
 ### Changed
