@@ -56,7 +56,7 @@ if (BASEDIR)
       "${EXTRA_TEXT}but a good path does not seem to exist. Please check your input"
       )
   endif ()
-  set (BASEDIR "${BASEDIR}" CACHE PATH "Path to installed baselibs")
+  set (BASEDIR "${BASEDIR}" CACHE PATH "Path to installed baselibs" FORCE)
 else ()
   ecbuild_warn(
     "BASEDIR not specified.\n"
