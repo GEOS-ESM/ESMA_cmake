@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.6.4] - 2021-Oct-15
+
+### Added
+
 - Added `esma_postinstall.cmake` script for tarring up code post install
 
 ## [3.6.3] - 2021-Oct-14
