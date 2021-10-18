@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.6.5] - 2021-Oct-18
+
+### Added
+
+- Added warp nodes as NCCS nodes
+
 ## [3.6.4] - 2021-Oct-15
 
 ### Added

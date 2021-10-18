@@ -4,7 +4,7 @@
 # called BUILD_SITE. If it didn't, we could use
 # site_name(BUILD_SITE) as they do
 
-if (${BUILD_SITE} MATCHES "discover*" OR ${BUILD_SITE} MATCHES "borg*")
+if (${BUILD_SITE} MATCHES "discover*" OR ${BUILD_SITE} MATCHES "borg*" OR ${BUILD_SITE} MATCHES "warp*")
    set (DETECTED_SITE "NCCS")
 elseif (${BUILD_SITE} MATCHES "pfe" OR ${BUILD_SITE} MATCHES "r[0-9]*i[0-9]*n[0-9]*" OR ${BUILD_SITE} MATCHES "r[0-9]*c[0-9]*t[0-9]*n[0-9]*")
    set (DETECTED_SITE "NAS")
