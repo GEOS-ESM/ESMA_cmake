@@ -15,8 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
-- Added EditorConfig file
-
 ## [3.6.5] - 2021-Oct-18
 
 ### Added

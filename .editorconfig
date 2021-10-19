@@ -1,27 +1,29 @@
-# Global Editor Config for MAPL
-#
-# This is an ini style configuration. See http://editorconfig.org/ for more information on this file.
-#
-# Top level editor config.
+# EditorConfig file. For more info, please see:
+# https://EditorConfig.org
+
+# top-most EditorConfig file
 root = true
 
-# Always use Unix style new lines with new line ending on every file and trim whitespace
-[*]
-end_of_line = lf
-insert_final_newline = true
+# All files should have a final newline and not have trailing whitespace
+# but we need to explicitly enumerate files we care about to prevent random junk
+# from being linted
+
+[{CMakeLists.txt, *.cmake}]
+indent_style = space
+indent_size = 2
 trim_trailing_whitespace = true
+max_line_length = 132
+insert_final_newline = true
 
-# Python: PEP8 defines 4 spaces for indentation
-[*.py]
-indent_style = space
-indent_size = 4
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
+charset = utf-8
+insert_final_newline = true
 
-# YAML format, 2 spaces
-[{*.yaml,*.yml}]
-indent_style = space
-indent_size = 2
-
-# CMake (from KitWare: https://github.com/Kitware/CMake/blob/master/.editorconfig)
-[{CMakeLists.txt,*.cmake,*.rst}]
+[*.{yml,yaml,json}]
 indent_style = space
 indent_size = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
