@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.4.7] - 2021-Oct-19
+
+### Fixed
+
+- Attempt to detect SSL library path and use that with f2py
+
 ## [3.4.6] - 2021-Sep-23
 
 ### Added

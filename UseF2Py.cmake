@@ -137,6 +137,22 @@ macro (add_f2py_module _name)
      if (_lib MATCHES "esmf\.a")
         set (_lib esmf)
      endif ()
+
+     # Tests on Calculon showed that the wrong libssl (from python) was being linked to
+     # This code tries to insert in the system SSL path. Might not always work but its
+     # seems to
+     if(NOT APPLE)
+       if(_lib STREQUAL "ssl")
+          find_package(OpenSSL REQUIRED)
+          if(OPENSSL_FOUND)
+             get_filename_component(OPENSSL_LIBRARY_DIR "${OPENSSL_SSL_LIBRARY}" DIRECTORY)
+             list(APPEND _lib_opts "-L${OPENSSL_LIBRARY_DIR}")
+          else()
+             message(FATAL_ERROR "SSL REQUIRED for but not found")
+          endif()
+       endif()
+     endif()
+
      list(APPEND _lib_opts "-l${_lib}")
   endforeach(_lib)
 
