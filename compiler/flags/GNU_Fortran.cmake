@@ -146,6 +146,13 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 set (GEOS_Fortran_Release_Flags "${FOPT3} -march=${GNU_TARGET_ARCH} -mtune=generic -funroll-loops ${DEBINFO}")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
+# Create a NoVectorize version for consistency. No difference from Release for GNU
+
+# GEOS NoVectorize
+# ----------------
+set (GEOS_Fortran_NoVect_Flags  "${GEOS_Fortran_Release_Flags}")
+set (GEOS_Fortran_NoVect_FPE_Flags "${GEOS_Fortran_Release_FPE_Flags}")
+
 # GEOS Vectorize
 # --------------
 # NOTE: gfortran does get a benefit from vectorization, but the resulting code
@@ -171,4 +178,4 @@ set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${AL
 
 
 # Common variables for every compiler
-include(GenericCompiler)
+include(Generic_Fortran)

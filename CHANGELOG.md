@@ -18,6 +18,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.6.5] - 2021-Oct-18
+
+### Added
+
+- Added warp nodes as NCCS nodes
+
+## [3.6.4] - 2021-Oct-15
+
+### Added
+
+- Added `esma_postinstall.cmake` script for tarring up code post install
+
+## [3.6.3] - 2021-Oct-14
+
+### Fixed
+
+- Fixed bug in caching `BASEDIR`
+
+## [3.6.2] - 2021-Oct-06
+
+### Changed
+
+- Changed the warning for missing Basedir to be more prominent
+
+## [3.6.1] - 2021-Oct-05
+
+### Changed
+
+- Created a new set of flags for Intel that mimic the old non-vectorized Release flags
+
+### Fixed
+
+- Fix issue with `tests` target due to bad refactor
+
+## [3.6.0] - 2021-Oct-01
+
+### Changed
+
+- Refactored ESMA_cmake
+- Changed the Release flags for the Intel Compiler to be the Vectorized flags. Testing shows it is zero-diff and faster, however we
+  are moving the minor version number as a signal of "just in case"
+
+### Fixed
+
+- Cache BASEDIR when a valid path is found 
+
+## [3.5.7] - 2021-Sep-27
+
+### Fixed
+
+- Fix pthreads use on Linux with NAG compiler
 
 ## [3.5.6] - 2021-Sep-24
 
