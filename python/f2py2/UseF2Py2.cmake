@@ -40,14 +40,14 @@ macro (add_f2py2_module _name)
   else ()
     set (_only "")
   endif()
-    
+
   # Sanity checks.
   if(add_f2py2_module_SOURCES MATCHES "^$")
     message(FATAL_ERROR "add_f2py2_module: no source files specified")
   endif(add_f2py2_module_SOURCES MATCHES "^$")
 
   # Get the compiler-id and map it to compiler vendor as used by f2py2.
-  # Currently, we only check for GNU, but this can easily be extended. 
+  # Currently, we only check for GNU, but this can easily be extended.
   # Cache the result, so that we only need to check once.
   if(NOT F2PY2_FCOMPILER)
     if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
@@ -154,6 +154,22 @@ macro (add_f2py2_module _name)
      if (NOT _lib MATCHES "^.*framework$")
        list(APPEND _lib_opts "-l${_lib}")
      endif ()
+
+     # Tests on Calculon showed that the wrong libssl (from python)
+     # was being linked to This code tries to insert in the system SSL
+     # path. Might not always work but it seems to
+     if(NOT APPLE)
+       if(_lib STREQUAL "ssl")
+          find_package(OpenSSL REQUIRED)
+          if(OPENSSL_FOUND)
+             get_filename_component(OPENSSL_LIBRARY_DIR "${OPENSSL_SSL_LIBRARY}" DIRECTORY)
+             list(APPEND _lib_opts "-L${OPENSSL_LIBRARY_DIR}")
+          else()
+             message(FATAL_ERROR "SSL REQUIRED for but not found")
+          endif()
+       endif()
+     endif()
+
   endforeach(_lib)
 
   if ( ${add_f2py2_module_USE_MPI})
@@ -222,7 +238,7 @@ macro (add_f2py2_module _name)
       DEPENDS ${add_f2py2_module_SOURCES}
       COMMENT "[F2PY2] Building Fortran to Python2 interface module ${_name}")
   endif ( "${add_f2py2_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
-  
+
 
 
   # Add a custom target <name> to trigger the generation of the python module.
