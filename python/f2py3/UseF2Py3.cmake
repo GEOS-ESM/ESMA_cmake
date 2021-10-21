@@ -20,36 +20,36 @@
 # +-----------------------------------------------------------------------------+
 
 ## -----------------------------------------------------------------------------
-## Macro to generate a Python2 interface module from one or more Fortran sources
+## Macro to generate a Python3 interface module from one or more Fortran sources
 ##
-## Usage: add_f2py2_module(<module-name> SOURCES <src1>..<srcN> DESTINATION <install-dir> ONLY <list>)
+## Usage: add_f2py3_module(<module-name> SOURCES <src1>..<srcN> DESTINATION <install-dir> ONLY <list>)
 ##
-macro (add_f2py2_module _name)
+macro (add_f2py3_module _name)
 
   # Parse arguments.
   set (options USE_MPI USE_OPENMP DOUBLE_PRECISION)
   set (oneValueArgs DESTINATION)
   set (multiValueArgs SOURCES ONLY LIBRARIES INCLUDEDIRS)
-  cmake_parse_arguments(add_f2py2_module "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+  cmake_parse_arguments(add_f2py3_module "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
-  set(only_list ${add_f2py2_module_ONLY})
+  set(only_list ${add_f2py3_module_ONLY})
   if (only_list)
      set(_only "only:")
-     list(APPEND _only ${add_f2py2_module_ONLY})
+     list(APPEND _only ${add_f2py3_module_ONLY})
      list(APPEND _only ":")
   else ()
     set (_only "")
   endif()
-    
-  # Sanity checks.
-  if(add_f2py2_module_SOURCES MATCHES "^$")
-    message(FATAL_ERROR "add_f2py2_module: no source files specified")
-  endif(add_f2py2_module_SOURCES MATCHES "^$")
 
-  # Get the compiler-id and map it to compiler vendor as used by f2py2.
-  # Currently, we only check for GNU, but this can easily be extended. 
+  # Sanity checks.
+  if(add_f2py3_module_SOURCES MATCHES "^$")
+    message(FATAL_ERROR "add_f2py3_module: no source files specified")
+  endif(add_f2py3_module_SOURCES MATCHES "^$")
+
+  # Get the compiler-id and map it to compiler vendor as used by f2py3.
+  # Currently, we only check for GNU, but this can easily be extended.
   # Cache the result, so that we only need to check once.
-  if(NOT F2PY2_FCOMPILER)
+  if(NOT F2PY3_FCOMPILER)
     if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
       if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
         set(_fcompiler "gnu95")
@@ -59,69 +59,69 @@ macro (add_f2py2_module _name)
     elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
       set(_fcompiler "intelem")
     else(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-      set(_fcompiler "F2PY2_FCOMPILER-NOTFOUND")
+      set(_fcompiler "F2PY3_FCOMPILER-NOTFOUND")
     endif(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-    set(F2PY2_FCOMPILER ${_fcompiler} CACHE STRING
-      "F2PY2: Fortran compiler type by vendor" FORCE)
-    if(NOT F2PY2_FCOMPILER)
-      message(STATUS "[F2PY2]: Could not determine Fortran compiler type. "
+    set(F2PY3_FCOMPILER ${_fcompiler} CACHE STRING
+      "F2PY3: Fortran compiler type by vendor" FORCE)
+    if(NOT F2PY3_FCOMPILER)
+      message(STATUS "[F2PY3]: Could not determine Fortran compiler type. "
                      "Troubles ahead!")
-    endif(NOT F2PY2_FCOMPILER)
-  endif(NOT F2PY2_FCOMPILER)
+    endif(NOT F2PY3_FCOMPILER)
+  endif(NOT F2PY3_FCOMPILER)
 
-  # Set f2py2 compiler options: compiler vendor and path to Fortran77/90 compiler.
-  if(F2PY2_FCOMPILER)
+  # Set f2py3 compiler options: compiler vendor and path to Fortran77/90 compiler.
+  if(F2PY3_FCOMPILER)
 
-     set(F2PY2_Fortran_FLAGS)
+     set(F2PY3_Fortran_FLAGS)
 
      ###########################################################################
      # # If you really want to pass in the flags used by the rest of the model #
      # # this is how. But I don't think we want to do this                     #
      # if (CMAKE_BUILD_TYPE MATCHES Release)                                   #
-     #    set(F2PY2_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_RELEASE})               #
+     #    set(F2PY3_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_RELEASE})               #
      # elseif(CMAKE_BUILD_TYPE MATCHES Debug)                                  #
-     #    set(F2PY2_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_DEBUG})                 #
+     #    set(F2PY3_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_DEBUG})                 #
      # endif()                                                                 #
-     # separate_arguments(F2PY2_Fortran_FLAGS)                                  #
+     # separate_arguments(F2PY3_Fortran_FLAGS)                                  #
      ###########################################################################
 
-    if (${add_f2py2_module_USE_OPENMP})
-       list(APPEND F2PY2_Fortran_FLAGS ${OpenMP_Fortran_FLAGS})
+    if (${add_f2py3_module_USE_OPENMP})
+       list(APPEND F2PY3_Fortran_FLAGS ${OpenMP_Fortran_FLAGS})
     endif()
 
-    if (${add_f2py2_module_DOUBLE_PRECISION})
+    if (${add_f2py3_module_DOUBLE_PRECISION})
        string(REPLACE " " ";" tmp ${FREAL8})
        foreach (flag ${tmp})
-          list(APPEND F2PY2_Fortran_FLAGS ${tmp})
+          list(APPEND F2PY3_Fortran_FLAGS ${tmp})
        endforeach ()
     endif()
 
-    #message(STATUS "${_name} F2PY2_Fortran_FLAGS ${F2PY2_Fortran_FLAGS}")
+    #message(STATUS "${_name} F2PY3_Fortran_FLAGS ${F2PY3_Fortran_FLAGS}")
 
-    set(_fcompiler_opts "--fcompiler=${F2PY2_FCOMPILER}")
-    list(APPEND _fcompiler_opts "--f77exec=${CMAKE_Fortran_COMPILER}" "--f77flags='${F2PY2_Fortran_FLAGS}'")
+    set(_fcompiler_opts "--fcompiler=${F2PY3_FCOMPILER}")
+    list(APPEND _fcompiler_opts "--f77exec=${CMAKE_Fortran_COMPILER}" "--f77flags='${F2PY3_Fortran_FLAGS}'")
     if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
-       list(APPEND _fcompiler_opts "--f90exec=${CMAKE_Fortran_COMPILER}" "--f90flags='${F2PY2_Fortran_FLAGS}'")
+       list(APPEND _fcompiler_opts "--f90exec=${CMAKE_Fortran_COMPILER}" "--f90flags='${F2PY3_Fortran_FLAGS}'")
     endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
-  endif(F2PY2_FCOMPILER)
+  endif(F2PY3_FCOMPILER)
 
   # Make the source filenames absolute.
   set(_abs_srcs)
-  foreach(_src ${add_f2py2_module_SOURCES})
+  foreach(_src ${add_f2py3_module_SOURCES})
     get_filename_component(_abs_src ${_src} ABSOLUTE)
     list(APPEND _abs_srcs ${_abs_src})
-  endforeach(_src ${add_f2py2_module_SOURCES})
+  endforeach(_src ${add_f2py3_module_SOURCES})
 
   # Get a list of the include directories.
-  # The f2py2 --include_paths option, used when generating a signature file,
-  # needs a colon-separated list. The f2py2 -I option, used when compiling
+  # The f2py3 --include_paths option, used when generating a signature file,
+  # needs a colon-separated list. The f2py3 -I option, used when compiling
   # the sources, must be repeated for every include directory.
   #get_directory_property(_inc_dirs INCLUDE_DIRECTORIES)
 
   set(_inc_opts)
   set(_lib_opts)
   set(_inc_dirs)
-  foreach(_dir ${add_f2py2_module_INCLUDEDIRS})
+  foreach(_dir ${add_f2py3_module_INCLUDEDIRS})
     list(APPEND _inc_opts "-I${_dir}")
     list(APPEND _lib_opts "-L${_dir}")
     list(APPEND _inc_dirs "${_dir}")
@@ -129,7 +129,7 @@ macro (add_f2py2_module _name)
   string(REPLACE ";" ":" _inc_paths "${_inc_dirs}")
 
   set(_libs_opts)
-  foreach(_lib ${add_f2py2_module_LIBRARIES})
+  foreach(_lib ${add_f2py3_module_LIBRARIES})
      # MAT This is hacky, but so is this whole code
      #     On darwin, esmf is a full path libesmf.a and
      #     not esmf_fullylinked. For now, if libesmf.a
@@ -138,7 +138,7 @@ macro (add_f2py2_module _name)
         set (_lib esmf)
      endif ()
 
-     # For some reason, -pthread screws up f2py2, but it's not defined on
+     # For some reason, -pthread screws up f2py3, but it's not defined on
      # all systems (macOS + GCC at least), so, if it is set and it's passed in, skip
      #
      # NOTE: This can't be done in one a-and-b test because CMake will not do:
@@ -150,13 +150,29 @@ macro (add_f2py2_module _name)
        endif ()
      endif ()
 
-     # It also seems like f2py2 cannot handle XCode Frameworks
+     # It also seems like f2py3 cannot handle XCode Frameworks
      if (NOT _lib MATCHES "^.*framework$")
        list(APPEND _lib_opts "-l${_lib}")
      endif ()
+
+     # Tests on Calculon showed that the wrong libssl (from python)
+     # was being linked to This code tries to insert in the system SSL
+     # path. Might not always work but it seems to
+     if(NOT APPLE)
+       if(_lib STREQUAL "ssl")
+          find_package(OpenSSL REQUIRED)
+          if(OPENSSL_FOUND)
+             get_filename_component(OPENSSL_LIBRARY_DIR "${OPENSSL_SSL_LIBRARY}" DIRECTORY)
+             list(APPEND _lib_opts "-L${OPENSSL_LIBRARY_DIR}")
+          else()
+             message(FATAL_ERROR "SSL REQUIRED for but not found")
+          endif()
+       endif()
+     endif()
+
   endforeach(_lib)
 
-  if ( ${add_f2py2_module_USE_MPI})
+  if ( ${add_f2py3_module_USE_MPI})
      foreach (lib ${MPI_Fortran_LIBRARIES})
         get_filename_component(lib_dir ${lib} DIRECTORY)
         list(APPEND _lib_opts "-L${lib_dir}")
@@ -168,7 +184,7 @@ macro (add_f2py2_module _name)
      endforeach ()
   endif ()
 
-  if ( ${add_f2py2_module_USE_OPENMP})
+  if ( ${add_f2py3_module_USE_OPENMP})
      foreach (lib ${OpenMP_Fortran_LIBRARIES})
         get_filename_component(lib_dir ${lib} DIRECTORY)
         list(APPEND _lib_opts "-L${lib_dir}")
@@ -180,14 +196,14 @@ macro (add_f2py2_module _name)
      endforeach()
   endif ()
 
-  # This is an ugly hack but the MAM optics f2py2 required it. The
+  # This is an ugly hack but the MAM optics f2py3 required it. The
   # fortran is compiled -r8 but python doesn't know that. Thus, you have
   # to let python know that "real" is actually "double". The way to do
   # this according to the internet is to add a dotfile with this junk in
   # it to allow for this. It's possible it's not correct, but it seem to
   # let things run
-  if(${add_f2py2_module_DOUBLE_PRECISION})
-     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.f2py2_f2cmap "{'real':{'':'double'},'integer':{'':'long'},'real*8':{'':'double'},'complex':{'':'complex_double'}}")
+  if(${add_f2py3_module_DOUBLE_PRECISION})
+     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.f2py3_f2cmap "{'real':{'':'double'},'integer':{'':'long'},'real*8':{'':'double'},'complex':{'':'complex_double'}}")
   endif()
 
   # Debugging f2py is a lot easier if you don't quiet it, but we do not
@@ -201,39 +217,39 @@ macro (add_f2py2_module _name)
     set (REDIRECT_TO_DEV_NULL "&>" "/dev/null")
   endif ()
 
-  # Define the command to generate the Fortran to Python2 interface module. The
+  # Define the command to generate the Fortran to Python3 interface module. The
   # output will be a shared library that can be imported by python.
-  if ( "${add_f2py2_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
-    add_custom_command(OUTPUT "${_name}${F2PY2_SUFFIX}"
-      COMMAND ${F2PY2_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
-              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py2-${_name}"
+  if ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
+    add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
+      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
+              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
               ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
-      DEPENDS ${add_f2py2_module_SOURCES}
-      COMMENT "[F2PY2] Building Fortran to Python2 interface module ${_name}")
-  else ( "${add_f2py2_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
-    add_custom_command(OUTPUT "${_name}${F2PY2_SUFFIX}"
-      COMMAND ${F2PY2_EXECUTABLE} ${F2PY_QUIET} -m ${_name} -h ${_name}.pyf
-              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py2-${_name}"
+      DEPENDS ${add_f2py3_module_SOURCES}
+      COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
+  else ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
+    add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
+      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name} -h ${_name}.pyf
+              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
               --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
-      COMMAND ${F2PY2_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
-              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py2-${_name}"
-              -c "${CMAKE_CURRENT_BINARY_DIR}/f2py2-${_name}/${_name}.pyf"
+      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
+              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
+              -c "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}/${_name}.pyf"
               ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} ${REDIRECT_TO_DEV_NULL}
-      DEPENDS ${add_f2py2_module_SOURCES}
-      COMMENT "[F2PY2] Building Fortran to Python2 interface module ${_name}")
-  endif ( "${add_f2py2_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
-  
+      DEPENDS ${add_f2py3_module_SOURCES}
+      COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
+  endif ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
+
 
 
   # Add a custom target <name> to trigger the generation of the python module.
-  add_custom_target(${_name} ALL DEPENDS "${_name}${F2PY2_SUFFIX}")
+  add_custom_target(${_name} ALL DEPENDS "${_name}${F2PY3_SUFFIX}")
 
-  if(NOT (add_f2py2_module_DESTINATION MATCHES "^$" OR add_f2py2_module_DESTINATION MATCHES ";"))
+  if(NOT (add_f2py3_module_DESTINATION MATCHES "^$" OR add_f2py3_module_DESTINATION MATCHES ";"))
     # Install the python module
-    install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/${_name}${F2PY2_SUFFIX}"
-            DESTINATION ${add_f2py2_module_DESTINATION})
-  endif(NOT (add_f2py2_module_DESTINATION MATCHES "^$" OR add_f2py2_module_DESTINATION MATCHES ";"))
+    install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/${_name}${F2PY3_SUFFIX}"
+            DESTINATION ${add_f2py3_module_DESTINATION})
+  endif(NOT (add_f2py3_module_DESTINATION MATCHES "^$" OR add_f2py3_module_DESTINATION MATCHES ";"))
 
 
-endmacro (add_f2py2_module)
+endmacro (add_f2py3_module)
 

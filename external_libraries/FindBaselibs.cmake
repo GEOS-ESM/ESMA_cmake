@@ -1,4 +1,3 @@
-set (BASEDIR "" CACHE PATH "Path to installed baselibs")
 set (Baselibs_FOUND FALSE CACHE BOOL "Baselibs Found")
 
 # We want to detect if BASEDIR is set in the environment (but not on the command line)
@@ -57,8 +56,14 @@ if (BASEDIR)
       "${EXTRA_TEXT}but a good path does not seem to exist. Please check your input"
       )
   endif ()
+  set (BASEDIR "${BASEDIR}" CACHE PATH "Path to installed baselibs" FORCE)
 else ()
-  message (STATUS "WARNING: BASEDIR not specified. Please use cmake ... -DBASEDIR=<path>.")
+  ecbuild_warn(
+    "BASEDIR not specified.\n"
+    "If you wish to use Baselibs, please use:\n"
+    "   cmake ... -DBASEDIR=<path-to-Baselibs>\n"
+    "or set BASEDIR in your environment.\n\n"
+    "Note that building GEOS-ESM code without Baselibs is unsupported.")
 endif ()
 
 if (ESMA_SDF)

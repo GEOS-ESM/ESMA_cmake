@@ -12,6 +12,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.6.6] - 2021-Oct-21
+
+### Fixed
+
+- Attempt to detect SSL library path and use that with f2py
+
+## [3.6.5] - 2021-Oct-18
+
+### Added
+
+- Added warp nodes as NCCS nodes
+
+## [3.6.4] - 2021-Oct-15
+
+### Added
+
+- Added `esma_postinstall.cmake` script for tarring up code post install
+
+## [3.6.3] - 2021-Oct-14
+
+### Fixed
+
+- Fixed bug in caching `BASEDIR`
+
+## [3.6.2] - 2021-Oct-06
+
+### Changed
+
+- Changed the warning for missing Basedir to be more prominent
+
+## [3.6.1] - 2021-Oct-05
+
+### Changed
+
+- Created a new set of flags for Intel that mimic the old non-vectorized Release flags
+
+### Fixed
+
+- Fix issue with `tests` target due to bad refactor
+
+## [3.6.0] - 2021-Oct-01
+
+### Changed
+
+- Refactored ESMA_cmake
+- Changed the Release flags for the Intel Compiler to be the Vectorized flags. Testing shows it is zero-diff and faster, however we
+  are moving the minor version number as a signal of "just in case"
+
+### Fixed
+
+- Cache BASEDIR when a valid path is found
+
 ## [3.5.7] - 2021-Sep-27
 
 ### Fixed
@@ -101,12 +153,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Previous option `CPP_DEBUG_<target` has now been replaced with a
   more fine-grained combination of cmake variables: `XFLAGS` and
   `XFLAGS_SOURCES`.   To use
-  
+
   ```
   $cmake .. -DXFLAGS="foo bar=7 DEBUG" -DXFLAGS_SOURCES="<file1> <file2>"
   $ make
   ```
-  
+
   NOTE: This change requires checking for specified sources in every
   directory (or rather in those that use `esma_set_this()` and thus
   add some overhead to cmake.  We may later decide to implement a
@@ -156,7 +208,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added new `ESMA_USE_GFE_NAMESPACE` which defaults to `OFF`. If you set this to `ON`, you must then use the new GFE namespace style in CMake, e.g., `gftl` ==> `GFTL::gftl`. 
+- Added new `ESMA_USE_GFE_NAMESPACE` which defaults to `OFF`. If you set this to `ON`, you must then use the new GFE namespace style in CMake, e.g., `gftl` ==> `GFTL::gftl`.
 
 ## [3.3.7] - 2021-03-09
 
@@ -343,7 +395,7 @@ due to the need for yaFyaml and pFlogger
 - Added macro to add a post-build check availability of Python modules
   Use: `esma_check_python_module(<module>)`
 - Added option is `esma_add_library() to use SHARED
-	
+
 ## [2.2.1] - 2020-03-27
 
 ### Changed

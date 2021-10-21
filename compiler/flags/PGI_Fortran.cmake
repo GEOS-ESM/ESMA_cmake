@@ -40,6 +40,13 @@ set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # NOTE: No idea how to handle GPU with CMake
 
+# Create a NoVectorize version for consistency. No difference from Release for PGI
+
+# GEOS NoVectorize
+# ----------------
+set (GEOS_Fortran_NoVect_Flags  "${GEOS_Fortran_Release_Flags}")
+set (GEOS_Fortran_NoVect_FPE_Flags "${GEOS_Fortran_Release_FPE_Flags}")
+
 # GEOS Vectorize
 # --------------
 # Until good options can be found, make vectorize equal common flags
@@ -53,6 +60,6 @@ set (GEOS_Fortran_Aggressive_Flags ${GEOS_Fortran_Release_Flags})
 set (GEOS_Fortran_Aggressive_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 
 # Common variables for every compiler
-include(GenericCompiler)
+include(Generic_Fortran)
 
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DpgiFortran")
