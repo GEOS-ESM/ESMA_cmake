@@ -133,6 +133,7 @@ commands:
       - run:
           name: "Mepo checkout ESMA_cmake branch"
           command: |
+            cd ${CIRCLE_WORKING_DIRECTORY}/<< parameters.repo >>
             mepo checkout ${CIRCLE_BRANCH} cmake
             if [ "${CIRCLE_BRANCH}" != "develop" ] && [ "${CIRCLE_BRANCH}" != "main" ]
             then
