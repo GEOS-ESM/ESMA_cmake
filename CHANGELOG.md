@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove `find_package()` calls for GFE libraries from `FindBaselibs.cmake`
 
+### Changed
+
+- Updated CI to use both gfortran and Intel, and Baselibs 6.2.8
+
 ## [3.6.6] - 2021-Oct-21
 
 ### Fixed
