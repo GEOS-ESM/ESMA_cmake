@@ -151,7 +151,8 @@ jobs:
       - run:
           name: "ESMA_cmake branch"
           command: echo ${CIRCLE_BRANCH}
-      - versions
+      - versions:
+          compiler: << parameters.compiler >>
       - checkout_fixture:
           repo: GEOSgcm
       - mepoclone:
