@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+- Add FMS as a library rather than part of Baselibs
+
 ## [3.6.6] - 2021-Oct-21
 
 ### Fixed
