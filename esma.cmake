@@ -47,6 +47,13 @@ include (ecbuild_system NO_POLICY_SCOPE)
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/compiler")
 include (esma_compiler)
 
+### External Libraries Support ###
+
+list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external_libraries")
+include(math_libraries)
+include(FindBaselibs)
+find_package(GitInfo)
+
 ### ESMA Support ###
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/esma_support")
@@ -104,13 +111,6 @@ option (ESMA_USE_GFE_NAMESPACE "use cmake namespace with GFE projects" ON)
 
 set (XFLAGS "" CACHE STRING "List of extra FPP options that will be passed to select source files.")
 set (XFLAGS_SOURCES "" CACHE STRING "List of sources to which XFLAGS will be applied.")
-
-### External Libraries Support ###
-
-list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external_libraries")
-include(math_libraries)
-include(FindBaselibs)
-find_package(GitInfo)
 
 # On install, print 'Installing' but not 'Up-to-date' messages.
 set (CMAKE_INSTALL_MESSAGE LAZY)
