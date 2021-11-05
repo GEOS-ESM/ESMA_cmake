@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.7.1] - 2021-Nov-05
+
+### Fixed
+
+- Call `FindBaselibs.cmake` earlier in sequence. This sets the `CMAKE_PREFIX_PATH` before any `find_package()` calls for Baselibs libraries (i.e., GFE)
+
 ## [3.7.0] - 2021-Nov-02
 
 ### Removed
