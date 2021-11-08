@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.7.2] - 2021-Nov-08
+
+### Fixed
+
+- Move finding of OpenMP, MPI, and Threads above `FindBaselibs`. This was interfering with f2py...for some reason.
+
 ## [3.7.1] - 2021-Nov-05
 
 ### Fixed
