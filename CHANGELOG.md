@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Changed the default vectorization flag for Intel Fortran from `-xCORE-AVX2` to `-march=core-avx2`. This change allows GEOS to run on both Intel and AMD EPYC chips at NAS without need for another build
+
 ### Fixed
 ### Removed
 ### Added
