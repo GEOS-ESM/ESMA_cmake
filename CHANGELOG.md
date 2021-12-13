@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.7.3] - 2021-Dec-13
+
+### Fixed
+
+- Fix for `FindGitInfo` if in a git-stripped distribution
+
 ## [3.7.2] - 2021-Nov-08
 
 ### Fixed
