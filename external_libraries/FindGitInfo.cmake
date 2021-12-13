@@ -83,10 +83,13 @@ if(GIT_FOUND)
        WORKING_DIRECTORY ${dir}
        ERROR_VARIABLE GIT_error
        OUTPUT_VARIABLE ${prefix}_WC_REVISION_HASH
-       OUTPUT_STRIP_TRAILING_WHITESPACE)
+       OUTPUT_STRIP_TRAILING_WHITESPACE
+       ERROR_QUIET)
     set(${prefix}_WC_REVISION ${${prefix}_WC_REVISION_HASH})
     if(NOT ${GIT_error} EQUAL 0)
-      message(SEND_ERROR "Command \"${GIT_EXECUTBALE} rev-parse --verify -q --short=7 HEAD\" in directory ${dir} failed with output:\n${GIT_error}")
+      # We could be in a git-stripped tarball, so here we provide a "way out"
+      message(WARNING "Command \"${GIT_EXECUTABLE} rev-parse --verify -q --short=7 HEAD\" in directory ${dir} failed with output:\n${GIT_error}")
+      set(${prefix}_WC_LATEST_TAG "")
     else(NOT ${GIT_error} EQUAL 0)
       execute_process(COMMAND ${GIT_EXECUTABLE} name-rev ${${prefix}_WC_REVISION_HASH}
          WORKING_DIRECTORY ${dir}
