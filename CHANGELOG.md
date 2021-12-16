@@ -12,6 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.8.0] - 2021-Dec-16
+
+### Changed
+
+- Changed the default vectorization flag for Intel Fortran from
+`-xCORE-AVX2` to `-march=core-avx2`. This change allows GEOS to run
+on both Intel and AMD EPYC chips at NAS without need for another
+build.
+  - This change is non-zero-diff on Intel chips
+  - The Intel/AMD "run on both" is only valid on TOSS
+  - See https://github.com/GEOS-ESM/ESMA_cmake/issues/240 for more information
+
 ## [3.7.3] - 2021-Dec-13
 
 ### Fixed
