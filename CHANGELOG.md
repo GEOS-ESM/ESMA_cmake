@@ -23,6 +23,7 @@ on both Intel and AMD EPYC chips at NAS without need for another
 build.
   - This change is non-zero-diff on Intel chips
   - The Intel/AMD "run on both" is only valid on TOSS
+  - See https://github.com/GEOS-ESM/ESMA_cmake/issues/240 for more information
 
 ## [3.7.3] - 2021-Dec-13
 
