@@ -8,11 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Compress CircleCI artifacts
+
 ### Fixed
 ### Removed
 ### Added
 
-## [3.8.0] - 2021-Dec-16
+## [3.8.0] - 2021-12-16
 
 ### Changed
 
@@ -24,25 +27,25 @@ build.
   - The Intel/AMD "run on both" is only valid on TOSS
   - See https://github.com/GEOS-ESM/ESMA_cmake/issues/240 for more information
 
-## [3.7.3] - 2021-Dec-13
+## [3.7.3] - 2021-12-13
 
 ### Fixed
 
 - Fix for `FindGitInfo` if in a git-stripped distribution
 
-## [3.7.2] - 2021-Nov-08
+## [3.7.2] - 2021-11-08
 
 ### Fixed
 
 - Move finding of OpenMP, MPI, and Threads above `FindBaselibs`. This was interfering with f2py...for some reason.
 
-## [3.7.1] - 2021-Nov-05
+## [3.7.1] - 2021-11-05
 
 ### Fixed
 
 - Call `FindBaselibs.cmake` earlier in sequence. This sets the `CMAKE_PREFIX_PATH` before any `find_package()` calls for Baselibs libraries (i.e., GFE)
 
-## [3.7.0] - 2021-Nov-02
+## [3.7.0] - 2021-11-02
 
 ### Removed
 
@@ -52,37 +55,37 @@ build.
 
 - Updated CI to use both gfortran and Intel, and Baselibs 6.2.8
 
-## [3.6.6] - 2021-Oct-21
+## [3.6.6] - 2021-10-21
 
 ### Fixed
 
 - Attempt to detect SSL library path and use that with f2py
 
-## [3.6.5] - 2021-Oct-18
+## [3.6.5] - 2021-10-18
 
 ### Added
 
 - Added warp nodes as NCCS nodes
 
-## [3.6.4] - 2021-Oct-15
+## [3.6.4] - 2021-10-15
 
 ### Added
 
 - Added `esma_postinstall.cmake` script for tarring up code post install
 
-## [3.6.3] - 2021-Oct-14
+## [3.6.3] - 2021-10-14
 
 ### Fixed
 
 - Fixed bug in caching `BASEDIR`
 
-## [3.6.2] - 2021-Oct-06
+## [3.6.2] - 2021-10-06
 
 ### Changed
 
 - Changed the warning for missing Basedir to be more prominent
 
-## [3.6.1] - 2021-Oct-05
+## [3.6.1] - 2021-10-05
 
 ### Changed
 
@@ -92,7 +95,7 @@ build.
 
 - Fix issue with `tests` target due to bad refactor
 
-## [3.6.0] - 2021-Oct-01
+## [3.6.0] - 2021-10-01
 
 ### Changed
 
@@ -104,13 +107,13 @@ build.
 
 - Cache BASEDIR when a valid path is found
 
-## [3.5.7] - 2021-Sep-27
+## [3.5.7] - 2021-09-27
 
 ### Fixed
 
 - Fix pthreads use on Linux with NAG compiler
 
-## [3.5.6] - 2021-Sep-24
+## [3.5.6] - 2021-09-24
 
 ### Changed
 
@@ -127,7 +130,7 @@ build.
   It can optionally return a bool FOUND argument.  Throws an ecbuild error
   if dir is not found and FOUND argument is not used.
 
-## [3.5.5] - 2021-Sep-07
+## [3.5.5] - 2021-09-07
 
 ### Changed
 
@@ -137,32 +140,32 @@ build.
 
 - Added `librt` and `libdl` to the `ESMF_LIBRARIES` on Linux.
 
-## [3.5.4] - 2021-Aug-25
+## [3.5.4] - 2021-08-25
 
 ### Added
 
 - Added `esma_cpack.cmake` to allow for creating tarballs of code with `make package_source` or `make dist`
 
-## [3.5.3] - 2021-Aug-03
+## [3.5.3] - 2021-08-03
 
 ### Changed
 
 - If building `CMAKE_BUILD_TYPE=Debug` the f2py steps are now more verbose to aid in debugging
 
 
-## [3.5.2] - 2021-Jul-14
+## [3.5.2] - 2021-07-14
 
 ### Fixed
 
 - Changes to `esma_add_f2pyX_module` macros in handling the `python -c 'import foo_'` tests. Adds `LD_LIBRARY_PATH` to it. Still does not fix all problems.
 
-## [3.5.1] - 2021-Jul-01
+## [3.5.1] - 2021-07-01
 
 ### Fixed
 
 - Fixed rpath handling on macOS.
 
-## [3.5.0] - 2021-Jun-08
+## [3.5.0] - 2021-06-08
 
 ### Changed
 
@@ -170,19 +173,19 @@ build.
 - On Linux, link to `libesmf.so` rather than `libesmf_fullylinked.so` per advice of ESMF developers.
 - On macOS, link to `libesmf.dylib` rather than `libesmf.a`. This requires Baselibs v6.2.5 as that has a bug fix for ESMF dylib handling
 
-## [3.4.5] - 2021-Aug-03
+## [3.4.5] - 2021-08-03
 
 ### Changed
 
 - If building `CMAKE_BUILD_TYPE=Debug` the f2py steps are now more verbose to aid in debugging
 
-## [3.4.4] - 2021-Jul-14
+## [3.4.4] - 2021-07-14
 
 ### Fixed
 
 - Changes to `esma_add_f2pyX_module` macros in handling the `python -c 'import foo_'` tests. Adds `LD_LIBRARY_PATH` to it. Still does not fix all problems.
 
-## [3.4.3] - 2021-Jun-04
+## [3.4.3] - 2021-06-04
 
 ### Changed
 
