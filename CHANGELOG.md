@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+- Add NVHPC Compiler Flag file
+
 ## [3.8.0] - 2021-12-16
 
 ### Changed
