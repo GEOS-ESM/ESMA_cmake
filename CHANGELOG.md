@@ -8,11 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+### Fixed
+### Removed
+### Added
+
+## [3.9.0] - 2022-02-01
+
+### Changed
 
 - Compress CircleCI artifacts
 
-### Fixed
-### Removed
 ### Added
 
 - Add NVHPC Compiler Flag file
