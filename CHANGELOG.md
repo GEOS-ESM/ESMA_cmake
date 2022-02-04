@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.10.0] - 2022-02-04
+
+### Added
+
+- Add `FindESMF.cmake` package. Used for Spack builds not Baselibs builds
+
 ## [3.9.0] - 2022-02-01
 
 ### Changed
