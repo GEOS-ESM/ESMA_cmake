@@ -84,6 +84,7 @@ find_package(Threads REQUIRED)
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external_libraries")
 include(math_libraries)
 include(FindBaselibs)
+include(DetermineSite)
 find_package(GitInfo)
 
 ### ESMA Support ###

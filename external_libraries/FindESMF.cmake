@@ -127,9 +127,11 @@ find_package_handle_standard_args(
 
 ## If ESMF is found create imported library target
 if(ESMF_FOUND)
-  add_library(esmf ${_library_type} IMPORTED)
-  set_target_properties(esmf PROPERTIES
-    IMPORTED_LOCATION "${ESMF_LIBRARY_LOCATION}"
-    INTERFACE_INCLUDE_DIRECTORIES "${ESMF_F90COMPILEPATHS}"
-    INTERFACE_LINK_LIBRARIES "${ESMF_INTERFACE_LINK_LIBRARIES}")
+  if (NOT TARGET esmf)
+    add_library(esmf ${_library_type} IMPORTED)
+    set_target_properties(esmf PROPERTIES
+      IMPORTED_LOCATION "${ESMF_LIBRARY_LOCATION}"
+      INTERFACE_INCLUDE_DIRECTORIES "${ESMF_F90COMPILEPATHS}"
+      INTERFACE_LINK_LIBRARIES "${ESMF_INTERFACE_LINK_LIBRARIES}")
+  endif()
 endif()

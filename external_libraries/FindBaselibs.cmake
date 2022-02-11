@@ -196,7 +196,4 @@ if (Baselibs_FOUND)
   set(BASEDIR_WITHOUT_ARCH ${BASEDIR_WITHOUT_ARCH} CACHE STRING "BASEDIR without arch")
   mark_as_advanced(BASEDIR_WITHOUT_ARCH)
 
-  # Set the site variable
-  include(DetermineSite)
-
 endif()
