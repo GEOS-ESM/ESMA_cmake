@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+- Add `protex` script
+
 ## [3.10.0] - 2022-02-04
 
 ### Added

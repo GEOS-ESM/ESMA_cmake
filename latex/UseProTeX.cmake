@@ -1,1 +1,3 @@
-set (protex_exe ${CMAKE_SOURCE_DIR}/config/protex)
+message(STATUS "In UseProTeX CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+message(STATUS "In UseProTeX ESMA_CMAKE_DIR: ${ESMA_CMAKE_DIR}")
+set (protex_exe ${ESMA_CMAKE_DIR}/protex)
