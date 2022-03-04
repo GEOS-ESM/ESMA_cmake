@@ -6,6 +6,9 @@ if (NOT ImageMagick_FOUND)
 endif ()
 
 find_package(LATEX)
+
+# UseLATEX is from https://gitlab.kitware.com/kmorel/UseLATEX
+
 # These are all the bits of LaTeX that UseLATEX needs. As it's confusing
 # how LATEX_FOUND from find_package(LATEX) is set, we test all the bits
 # that UseLATEX requires
