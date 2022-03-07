@@ -8,14 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-
-- Compress CircleCI artifacts
-
 ### Fixed
 ### Removed
 ### Added
 
 - Add FMS as a library rather than part of Baselibs
+
+## [3.10.0] - 2022-02-04
+
+### Added
+
+- Add `FindESMF.cmake` package. Used for Spack builds not Baselibs builds
+
+## [3.9.0] - 2022-02-01
+
+### Changed
+
+- Compress CircleCI artifacts
+
+### Added
+
+- Add NVHPC Compiler Flag file
 
 ## [3.8.0] - 2021-12-16
 
