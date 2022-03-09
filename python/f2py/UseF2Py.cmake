@@ -199,10 +199,22 @@ macro (add_f2py_module _name)
   if ( ${add_f2py_module_USE_NETCDF})
     if (Baselibs_FOUND)
 
+      # include dirs
       foreach(_dir ${INC_NETCDF})
         list(APPEND _inc_opts "-I${_dir}")
       endforeach()
+
+      # libraries
+      list(APPEND _lib_opts "-L${BASEDIR}/lib")
       foreach(_lib ${NETCDF_LIBRARIES})
+
+        # Need to handle -pthread as we do above
+        if (CMAKE_THREAD_LIBS_INIT)
+          if (_lib STREQUAL "${CMAKE_THREAD_LIBS_INIT}")
+            continue()
+          endif ()
+        endif ()
+
         list(APPEND _lib_opts "-l${_lib}")
       endforeach()
 
