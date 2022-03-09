@@ -27,7 +27,7 @@
 macro (add_f2py3_module _name)
 
   # Parse arguments.
-  set (options USE_MPI USE_OPENMP DOUBLE_PRECISION)
+  set (options USE_MPI USE_OPENMP USE_NETCDF DOUBLE_PRECISION)
   set (oneValueArgs DESTINATION)
   set (multiValueArgs SOURCES ONLY LIBRARIES INCLUDEDIRS)
   cmake_parse_arguments(add_f2py3_module "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
@@ -194,6 +194,27 @@ macro (add_f2py3_module _name)
         set(short_lib_name "${CMAKE_MATCH_1}")
         list(APPEND _lib_opts "-l${short_lib_name}")
      endforeach()
+  endif ()
+
+  if ( ${add_f2py3_module_USE_NETCDF})
+    if (Baselibs_FOUND)
+
+      foreach(_dir ${INC_NETCDF})
+        list(APPEND _inc_opts "-I${_dir}")
+      endforeach()
+      foreach(_lib ${NETCDF_LIBRARIES})
+        list(APPEND _lib_opts "-l${_lib}")
+      endforeach()
+
+    else()
+
+      foreach(_dir ${NetCDF_Fortran_INCLUDE_DIRS})
+        list(APPEND _inc_opts "-I${_dir}")
+      endforeach()
+
+      list(APPEND _lib_opts "${NetCDF_Fortran_LIBRARY}")
+
+    endif()
   endif ()
 
   # This is an ugly hack but the MAM optics f2py3 required it. The

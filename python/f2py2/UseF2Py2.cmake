@@ -215,19 +215,8 @@ macro (add_f2py2_module _name)
       list(APPEND _lib_opts "${NetCDF_Fortran_LIBRARY}")
 
     endif()
-
-     foreach (lib ${OpenMP_Fortran_LIBRARIES})
-        get_filename_component(lib_dir ${lib} DIRECTORY)
-        list(APPEND _lib_opts "-L${lib_dir}")
-
-        get_filename_component(lib_name ${lib} NAME)
-        string(REGEX MATCH "lib(.*)(${CMAKE_SHARED_LIBRARY_SUFFIX}|${CMAKE_STATIC_LIBRARY_SUFFIX})" BOBO ${lib_name})
-        set(short_lib_name "${CMAKE_MATCH_1}")
-        list(APPEND _lib_opts "-l${short_lib_name}")
-     endforeach()
   endif ()
 
-  # This is an ugly hack but the MAM optics f2py2 required it. The
   # This is an ugly hack but the MAM optics f2py2 required it. The
   # fortran is compiled -r8 but python doesn't know that. Thus, you have
   # to let python know that "real" is actually "double". The way to do
