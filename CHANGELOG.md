@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Various changes to support building GEOS with Spack
+  - Edit to FindESMF.cmake file
+  - Move `include(DetermineSite)
+  - Fix for finding ecbuild cmake files
+  - Fixes for f2py scripts
+
 ### Fixed
 ### Removed
 ### Added
