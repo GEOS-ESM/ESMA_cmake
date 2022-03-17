@@ -12,13 +12,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.12.0] - 2022-03-17
+
+### Removed
+
+- Remove `PGI.cmake` file as NVHPC is the correct file for now. Add symlink
+
+### Added
+
+- Added preliminary support for GNU on M1 Macs
+
 ## [3.11.0] - 2022-03-10
 
 ### Changed
 
 - Various changes to support building GEOS with Spack
   - Edit to FindESMF.cmake file
-  - Move `include(DetermineSite)
+  - Move `include(DetermineSite)`
   - Fix for finding ecbuild cmake files
   - Fixes for f2py scripts
 
