@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Fixed
 ### Removed
+### Added
+
+## [3.12.0] - 2022-03-17
+
+### Removed
 
 - Remove `PGI.cmake` file as NVHPC is the correct file for now. Add symlink
 
