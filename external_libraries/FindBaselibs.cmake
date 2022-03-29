@@ -112,7 +112,6 @@ if (Baselibs_FOUND)
   add_definitions(-DHAS_NETCDF3)
   add_definitions(-DH5_HAVE_PARALLEL)
   add_definitions(-DNETCDF_NEED_NF_MPIIO)
-  add_definitions(-DHAS_NETCDF3)
   #------------------------------------------------------------------
 
   set (INC_HDF5 ${BASEDIR}/include/hdf5)
@@ -238,7 +237,18 @@ if (Baselibs_FOUND)
   set(BASEDIR_WITHOUT_ARCH ${BASEDIR_WITHOUT_ARCH} CACHE STRING "BASEDIR without arch")
   mark_as_advanced(BASEDIR_WITHOUT_ARCH)
 
-  # Set the site variable
-  include(DetermineSite)
+else ()
+
+  find_package(NetCDF REQUIRED Fortran)
+  add_definitions(-DHAS_NETCDF4)
+  add_definitions(-DHAS_NETCDF3)
+  add_definitions(-DNETCDF_NEED_NF_MPIIO)
+
+  find_package(HDF5 REQUIRED)
+  if(HDF5_IS_PARALLEL)
+     add_definitions(-DH5_HAVE_PARALLEL)
+  endif()
+
+  find_package(ESMF MODULE REQUIRED)
 
 endif()
