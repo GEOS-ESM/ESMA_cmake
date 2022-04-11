@@ -61,9 +61,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 ### MPI Support ###
 
-# Only invoked from Fortran sources in GEOS-5,  But some BASEDIR packages use MPI from C/C++.
-set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
-find_package (MPI REQUIRED)
+# MPI is now found in FindBaselibs
 
 ### Threading ###
 

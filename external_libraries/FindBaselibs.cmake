@@ -14,6 +14,7 @@ endif ()
 # In CMake this is CMAKE_HOST_SYSTEM_NAME
 
 if (BASEDIR)
+  
   # First, what if we have a BASEDIR/lib, let's make sure it's like we want
   # That is, it has ARCH and it's the *right* ARCH!
   if (IS_DIRECTORY ${BASEDIR}/lib)
@@ -71,6 +72,10 @@ if (ESMA_SDF)
 endif ()
 
 if (Baselibs_FOUND)
+
+  # For now require MPI with Baselibs
+  set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
+  find_package(MPI REQUIRED)
 
   link_directories (${BASEDIR}/lib)
 
@@ -197,16 +202,24 @@ if (Baselibs_FOUND)
 
 else ()
 
-  find_package(NetCDF REQUIRED Fortran)
-  add_definitions(-DHAS_NETCDF4)
-  add_definitions(-DHAS_NETCDF3)
-  add_definitions(-DNETCDF_NEED_NF_MPIIO)
+  # These should be in each fixture
 
-  find_package(HDF5 REQUIRED)
-  if(HDF5_IS_PARALLEL)
-     add_definitions(-DH5_HAVE_PARALLEL)
-  endif()
-
-  find_package(ESMF MODULE REQUIRED)
+  ###########################################
+  # # For now require MPI with Baselibs     #
+  # set(MPI_DETERMINE_LIBRARY_VERSION TRUE) #
+  # find_package(MPI REQUIRED)              #
+  #                                         #
+  # find_package(NetCDF REQUIRED Fortran)   #
+  # add_definitions(-DHAS_NETCDF4)          #
+  # add_definitions(-DHAS_NETCDF3)          #
+  # add_definitions(-DNETCDF_NEED_NF_MPIIO) #
+  #                                         #
+  # find_package(HDF5 REQUIRED)             #
+  # if(HDF5_IS_PARALLEL)                    #
+  #    add_definitions(-DH5_HAVE_PARALLEL)  #
+  # endif()                                 #
+  #                                         #
+  # find_package(ESMF MODULE REQUIRED)      #
+  ###########################################
 
 endif()
