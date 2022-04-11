@@ -12,7 +12,7 @@ macro (try_f2py3_compile file var)
    file(MAKE_DIRECTORY ${_f2py3_check_bindir})
 
    execute_process(
-      COMMAND ${F2PY3_EXECUTABLE} -m test_ -c ${file}
+      COMMAND ${F2PY3_EXECUTABLE} -m test_ -c ${file} --fcompiler=${F2PY3_FCOMPILER}
       WORKING_DIRECTORY ${_f2py3_check_bindir}
       RESULT_VARIABLE result
       OUTPUT_QUIET
