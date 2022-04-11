@@ -8,7 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Changed how f2py handles Fortran compiler detection
+
 ### Fixed
+
+- Fix bug in f2py testing
+
 ### Removed
 ### Added
 

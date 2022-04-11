@@ -50,6 +50,28 @@ if(F2PY3_EXECUTABLE)
       set(F2PY3_VERSION_PATCH "${CMAKE_MATCH_5}")
    endif()
 
+   # Get the compiler-id and map it to compiler vendor as used by f2py3.
+   # Currently, we only check for GNU, but this can easily be extended.
+   # Cache the result, so that we only need to check once.
+   if(NOT F2PY3_FCOMPILER)
+     if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
+       if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+         set(_fcompiler "gnu95")
+       else(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+         set(_fcompiler "gnu")
+       endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+     elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
+       set(_fcompiler "intelem")
+     endif()
+
+     set(F2PY3_FCOMPILER ${_fcompiler} CACHE STRING
+       "F2PY3: Fortran compiler type by vendor" FORCE)
+
+     if(NOT F2PY3_FCOMPILER)
+       message(FATAL_ERROR "[F2PY3]: Could not determine Fortran compiler type. ")
+     endif(NOT F2PY3_FCOMPILER)
+   endif(NOT F2PY3_FCOMPILER)
+
    # Now we need to test if we can actually use f2py and what its suffix is
 
    if (NOT F2PY3_SUFFIX)
@@ -66,11 +88,11 @@ endif ()
 # all listed variables are TRUE
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(F2PY3
-   REQUIRED_VARS F2PY3_EXECUTABLE F2PY3_SUFFIX
+   REQUIRED_VARS F2PY3_EXECUTABLE F2PY3_SUFFIX F2PY3_FCOMPILER
    VERSION_VAR F2PY3_VERSION_STRING
    )
 
-mark_as_advanced(F2PY3_EXECUTABLE F2PY3_SUFFIX)
+mark_as_advanced(F2PY3_EXECUTABLE F2PY3_SUFFIX F2PY3_FCOMPILER)
 
 if (F2PY3_FOUND)
    include(UseF2Py3)
