@@ -51,42 +51,42 @@ set (ALLOW_BOZ "")
 # With GCC 10...
 if (CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10)
 
-   # First for the argument mismatch
-   option(MISMATCH_IS_ERROR "Argument mismatches are errors, not warnings" OFF)
-   if (NOT MISMATCH_IS_ERROR)
-      ecbuild_warn (
-         "Argument mismatches will be treated as *warnings* and not *errors*. "
-         "Per the gfortran 10 man page:\n"
-         "Some code contains calls to external procedures which \n"
-         "mismatches between the calls and the procedure definition, \n"
-         "or with mismatches between different calls.  Such code is \n"
-         "non-conforming, and will usually be flagged wi1th an error. \n"
-         "This options degrades the error to a warning, which can \n"
-         "only be disabled by disabling all warnings vial -w.  Only a \n"
-         "single occurrence per argument is flagged by this warning. \n"
-         "-fallow-argument-mismatch is implied by -std=legacy.\n"
-         "Using this option is *strongly* discouraged.  It is possible to \n"
-         "provide standard-conforming code which allows different types \n"
-         "of arguments by using an explicit interface and TYPE(*).")
-      set (MISMATCH "-fallow-argument-mismatch")
-   endif ()
+  # First for the argument mismatch
+  option(MISMATCH_IS_ERROR "Argument mismatches are errors, not warnings" OFF)
+  if (NOT MISMATCH_IS_ERROR)
+    ecbuild_warn (
+      "Argument mismatches will be treated as *warnings* and not *errors*. "
+      "Per the gfortran 10 man page:\n"
+      "Some code contains calls to external procedures which \n"
+      "mismatches between the calls and the procedure definition, \n"
+      "or with mismatches between different calls.  Such code is \n"
+      "non-conforming, and will usually be flagged wi1th an error. \n"
+      "This options degrades the error to a warning, which can \n"
+      "only be disabled by disabling all warnings vial -w.  Only a \n"
+      "single occurrence per argument is flagged by this warning. \n"
+      "-fallow-argument-mismatch is implied by -std=legacy.\n"
+      "Using this option is *strongly* discouraged.  It is possible to \n"
+      "provide standard-conforming code which allows different types \n"
+      "of arguments by using an explicit interface and TYPE(*).")
+    set (MISMATCH "-fallow-argument-mismatch")
+  endif ()
 
-   # Then for BOZ constants
-   option(INVALID_BOZ_IS_ERROR "Use of invalid BOZ constants are errors, not warnings" OFF)
-   if (NOT INVALID_BOZ_IS_ERROR)
-      ecbuild_warn(
-         "Invalid use of BOZ literal constants will be treated as *warnings* and not as *errors*. "
-         "Per the GCC 10 release notes:\n"
-         "The handling of a BOZ literal constant has been reworked \n"
-         "to provide better conformance to the Fortran 2008 and 2018 \n"
-         "standards. In these Fortran standards, a BOZ literal constant is a \n"
-         "typeless and kindless entity. As a part of the rework, documented \n"
-         "and undocumented extensions to the Fortran standard now emit \n"
-         "errors during compilation. Some of these extensions are permitted \n"
-         "with the -fallow-invalid-boz, where the error is degraded to a \n"
-         "warning and the code is compiled as with older gfortran.")
-      set (ALLOW_BOZ "-fallow-invalid-boz")
-   endif ()
+  # Then for BOZ constants
+  option(INVALID_BOZ_IS_ERROR "Use of invalid BOZ constants are errors, not warnings" OFF)
+  if (NOT INVALID_BOZ_IS_ERROR)
+    ecbuild_warn(
+      "Invalid use of BOZ literal constants will be treated as *warnings* and not as *errors*. "
+      "Per the GCC 10 release notes:\n"
+      "The handling of a BOZ literal constant has been reworked \n"
+      "to provide better conformance to the Fortran 2008 and 2018 \n"
+      "standards. In these Fortran standards, a BOZ literal constant is a \n"
+      "typeless and kindless entity. As a part of the rework, documented \n"
+      "and undocumented extensions to the Fortran standard now emit \n"
+      "errors during compilation. Some of these extensions are permitted \n"
+      "with the -fallow-invalid-boz, where the error is degraded to a \n"
+      "warning and the code is compiled as with older gfortran.")
+    set (ALLOW_BOZ "-fallow-invalid-boz")
+  endif ()
 endif ()
 
 #set (BIG_ENDIAN "-fconvert=swap") # This doesn't seem to work at the moment
@@ -112,19 +112,27 @@ set (NO_RANGE_CHECK "-fno-range-check")
 cmake_host_system_information(RESULT proc_decription QUERY PROCESSOR_DESCRIPTION)
 
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
-   set (GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
-   set (GNU_NATIVE_ARCH ${GNU_TARGET_ARCH})
+  set (GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
+  set (GNU_NATIVE_ARCH ${GNU_TARGET_ARCH})
+elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL arm64 )
+  # For now the only arm64 we have tested is Apple M1. This
+  # might need to be revisited for M1 Max/Ultra and M2+.
+  # Also, fail if a Linux Arm64
+  if (APPLE)
+    set (GNU_TARGET_ARCH "armv8-a")
+    set (GNU_NATIVE_ARCH "native")
+  endif ()
 elseif (${proc_decription} MATCHES "EPYC")
-   set (GNU_TARGET_ARCH "znver2")
-   set (GNU_NATIVE_ARCH "native")
-   set (NO_FMA "-mno-fma")
+  set (GNU_TARGET_ARCH "znver2")
+  set (GNU_NATIVE_ARCH "native")
+  set (NO_FMA "-mno-fma")
 elseif (${proc_decription} MATCHES "Intel")
-   set (GNU_TARGET_ARCH "westmere")
-   set (GNU_NATIVE_ARCH "native")
-   set (PREFER_AVX128 "-mprefer-avx128")
-   set (NO_FMA "-mno-fma")
+  set (GNU_TARGET_ARCH "westmere")
+  set (GNU_NATIVE_ARCH "native")
+  set (PREFER_AVX128 "-mprefer-avx128")
+  set (NO_FMA "-mno-fma")
 else ()
-   message(FATAL_ERROR "Unknown processor. Contact Matt Thompson")
+  message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
 
 ####################################################

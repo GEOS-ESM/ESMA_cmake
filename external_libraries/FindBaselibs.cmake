@@ -112,7 +112,6 @@ if (Baselibs_FOUND)
   add_definitions(-DHAS_NETCDF3)
   add_definitions(-DH5_HAVE_PARALLEL)
   add_definitions(-DNETCDF_NEED_NF_MPIIO)
-  add_definitions(-DHAS_NETCDF3)
   #------------------------------------------------------------------
 
   set (INC_HDF5 ${BASEDIR}/include/hdf5)
@@ -120,15 +119,6 @@ if (Baselibs_FOUND)
   set (INC_HDF ${BASEDIR}/include/hdf)
   set (INC_ESMF ${BASEDIR}/include/esmf)
 
-  find_package(GFTL REQUIRED)
-  find_package(GFTL_SHARED REQUIRED)
-  find_package(FARGPARSE QUIET)
-  find_package(YAFYAML REQUIRED)
-
-  option(BUILD_WITH_PFLOGGER "use pFlogger" ON)
-  if (BUILD_WITH_PFLOGGER)
-    find_package(PFLOGGER REQUIRED)
-  endif()
   # Need to do a bit of kludgy stuff here to allow Fortran linker to
   # find standard C and C++ libraries used by ESMF.
   # _And_ ESMF uses libc++ on some configs and libstdc++ on others.
@@ -205,7 +195,18 @@ if (Baselibs_FOUND)
   set(BASEDIR_WITHOUT_ARCH ${BASEDIR_WITHOUT_ARCH} CACHE STRING "BASEDIR without arch")
   mark_as_advanced(BASEDIR_WITHOUT_ARCH)
 
-  # Set the site variable
-  include(DetermineSite)
+else ()
+
+  find_package(NetCDF REQUIRED Fortran)
+  add_definitions(-DHAS_NETCDF4)
+  add_definitions(-DHAS_NETCDF3)
+  add_definitions(-DNETCDF_NEED_NF_MPIIO)
+
+  find_package(HDF5 REQUIRED)
+  if(HDF5_IS_PARALLEL)
+     add_definitions(-DH5_HAVE_PARALLEL)
+  endif()
+
+  find_package(ESMF MODULE REQUIRED)
 
 endif()

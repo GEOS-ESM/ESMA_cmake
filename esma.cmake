@@ -35,6 +35,10 @@ elseif (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/@ecbuild")
   list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/@ecbuild/cmake")
 elseif (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/ecbuild@")
   list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/ecbuild@/cmake")
+elseif (ESMA_ECBUILD_DIR)
+  if (IS_DIRECTORY ${ESMA_ECBUILD_DIR}/cmake)
+    list(APPEND CMAKE_MODULE_PATH "${ESMA_ECBUILD_DIR}/cmake")
+  endif()
 else ()
   find_package(ecbuild REQUIRED)
 endif()
@@ -46,6 +50,42 @@ include (ecbuild_system NO_POLICY_SCOPE)
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/compiler")
 include (esma_compiler)
+
+### OpenMP ###
+
+find_package (OpenMP)
+
+### Position independent code ###
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+### MPI Support ###
+
+# Only invoked from Fortran sources in GEOS-5,  But some BASEDIR packages use MPI from C/C++.
+set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
+find_package (MPI REQUIRED)
+
+### Threading ###
+
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+
+## Turns out with NAG on Linux, this generates '-pthread' which
+## NAG cannot handle. So we set to FALSE in that case
+if(UNIX AND CMAKE_Fortran_COMPILER_ID MATCHES "NAG")
+  set(THREADS_PREFER_PTHREAD_FLAG FALSE)
+else()
+  set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+endif()
+
+find_package(Threads REQUIRED)
+
+### External Libraries Support ###
+
+list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external_libraries")
+include(math_libraries)
+include(FindBaselibs)
+include(DetermineSite)
+find_package(GitInfo)
 
 ### ESMA Support ###
 
@@ -69,48 +109,12 @@ if (APPLE)
   include(osx_extras)
 endif ()
 
-### OpenMP ###
-
-find_package (OpenMP)
-
-### Threading ###
-
-set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
-
-## Turns out with NAG on Linux, this generates '-pthread' which
-## NAG cannot handle. So we set to FALSE in that case
-if(UNIX AND CMAKE_Fortran_COMPILER_ID MATCHES "NAG")
-  set(THREADS_PREFER_PTHREAD_FLAG FALSE)
-else()
-  set(THREADS_PREFER_PTHREAD_FLAG TRUE)
-endif()
-
-find_package(Threads REQUIRED)
-
-### Position independent code ###
-
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-### MPI Support ###
-
-# Only invoked from Fortran sources in GEOS-5,  But some BASEDIR packages use MPI from C/C++.
-set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
-find_package (MPI REQUIRED)
-
-
 option (ESMA_ALLOW_DEPRECATED "suppress warnings about deprecated features" ON)
 # Temporary option for transition purposes.
 option (ESMA_USE_GFE_NAMESPACE "use cmake namespace with GFE projects" ON)
 
 set (XFLAGS "" CACHE STRING "List of extra FPP options that will be passed to select source files.")
 set (XFLAGS_SOURCES "" CACHE STRING "List of sources to which XFLAGS will be applied.")
-
-### External Libraries Support ###
-
-list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external_libraries")
-include(math_libraries)
-include(FindBaselibs)
-find_package(GitInfo)
 
 # On install, print 'Installing' but not 'Up-to-date' messages.
 set (CMAKE_INSTALL_MESSAGE LAZY)

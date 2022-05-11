@@ -27,7 +27,7 @@
 macro (add_f2py_module _name)
 
   # Parse arguments.
-  set (options USE_MPI USE_OPENMP DOUBLE_PRECISION)
+  set (options USE_MPI USE_OPENMP USE_NETCDF DOUBLE_PRECISION)
   set (oneValueArgs DESTINATION)
   set (multiValueArgs SOURCES ONLY LIBRARIES INCLUDEDIRS)
   cmake_parse_arguments(add_f2py_module "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
@@ -46,64 +46,39 @@ macro (add_f2py_module _name)
     message(FATAL_ERROR "add_f2py_module: no source files specified")
   endif(add_f2py_module_SOURCES MATCHES "^$")
 
-  # Get the compiler-id and map it to compiler vendor as used by f2py.
-  # Currently, we only check for GNU, but this can easily be extended.
-  # Cache the result, so that we only need to check once.
-  if(NOT F2PY_FCOMPILER)
-    if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-      if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
-        set(_fcompiler "gnu95")
-      else(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
-        set(_fcompiler "gnu")
-      endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
-    elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-      set(_fcompiler "intelem")
-    else(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-      set(_fcompiler "F2PY_FCOMPILER-NOTFOUND")
-    endif(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-    set(F2PY_FCOMPILER ${_fcompiler} CACHE STRING
-      "F2PY: Fortran compiler type by vendor" FORCE)
-    if(NOT F2PY_FCOMPILER)
-      message(STATUS "[F2PY]: Could not determine Fortran compiler type. "
-                     "Troubles ahead!")
-    endif(NOT F2PY_FCOMPILER)
-  endif(NOT F2PY_FCOMPILER)
-
   # Set f2py compiler options: compiler vendor and path to Fortran77/90 compiler.
-  if(F2PY_FCOMPILER)
 
-     set(F2PY_Fortran_FLAGS)
+  set(F2PY_Fortran_FLAGS)
 
-     ###########################################################################
-     # # If you really want to pass in the flags used by the rest of the model #
-     # # this is how. But I don't think we want to do this                     #
-     # if (CMAKE_BUILD_TYPE MATCHES Release)                                   #
-     #    set(F2PY_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_RELEASE})               #
-     # elseif(CMAKE_BUILD_TYPE MATCHES Debug)                                  #
-     #    set(F2PY_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_DEBUG})                 #
-     # endif()                                                                 #
-     # separate_arguments(F2PY_Fortran_FLAGS)                                  #
-     ###########################################################################
+  ###########################################################################
+  # # If you really want to pass in the flags used by the rest of the model #
+  # # this is how. But I don't think we want to do this                     #
+  # if (CMAKE_BUILD_TYPE MATCHES Release)                                   #
+  #    set(F2PY_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_RELEASE})               #
+  # elseif(CMAKE_BUILD_TYPE MATCHES Debug)                                  #
+  #    set(F2PY_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_DEBUG})                 #
+  # endif()                                                                 #
+  # separate_arguments(F2PY_Fortran_FLAGS)                                  #
+  ###########################################################################
 
-    if (${add_f2py_module_USE_OPENMP})
-       list(APPEND F2PY_Fortran_FLAGS ${OpenMP_Fortran_FLAGS})
-    endif()
+  if (${add_f2py_module_USE_OPENMP})
+     list(APPEND F2PY_Fortran_FLAGS ${OpenMP_Fortran_FLAGS})
+  endif()
 
-    if (${add_f2py_module_DOUBLE_PRECISION})
-       string(REPLACE " " ";" tmp ${FREAL8})
-       foreach (flag ${tmp})
-          list(APPEND F2PY_Fortran_FLAGS ${tmp})
-       endforeach ()
-    endif()
+  if (${add_f2py_module_DOUBLE_PRECISION})
+     string(REPLACE " " ";" tmp ${FREAL8})
+     foreach (flag ${tmp})
+        list(APPEND F2PY_Fortran_FLAGS ${tmp})
+     endforeach ()
+  endif()
 
-    #message(STATUS "${_name} F2PY_Fortran_FLAGS ${F2PY_Fortran_FLAGS}")
+  #message(STATUS "${_name} F2PY_Fortran_FLAGS ${F2PY_Fortran_FLAGS}")
 
-    set(_fcompiler_opts "--fcompiler=${F2PY_FCOMPILER}")
-    list(APPEND _fcompiler_opts "--f77exec=${CMAKE_Fortran_COMPILER}" "--f77flags='${F2PY_Fortran_FLAGS}'")
-    if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
-       list(APPEND _fcompiler_opts "--f90exec=${CMAKE_Fortran_COMPILER}" "--f90flags='${F2PY_Fortran_FLAGS}'")
-    endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
-  endif(F2PY_FCOMPILER)
+  set(_fcompiler_opts "--fcompiler=${F2PY_FCOMPILER}")
+  list(APPEND _fcompiler_opts "--f77exec=${CMAKE_Fortran_COMPILER}" "--f77flags='${F2PY_Fortran_FLAGS}'")
+  if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+     list(APPEND _fcompiler_opts "--f90exec=${CMAKE_Fortran_COMPILER}" "--f90flags='${F2PY_Fortran_FLAGS}'")
+  endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
 
   # Make the source filenames absolute.
   set(_abs_srcs)
@@ -194,6 +169,39 @@ macro (add_f2py_module _name)
         set(short_lib_name "${CMAKE_MATCH_1}")
         list(APPEND _lib_opts "-l${short_lib_name}")
      endforeach()
+  endif ()
+
+  if ( ${add_f2py_module_USE_NETCDF})
+    if (Baselibs_FOUND)
+
+      # include dirs
+      foreach(_dir ${INC_NETCDF})
+        list(APPEND _inc_opts "-I${_dir}")
+      endforeach()
+
+      # libraries
+      list(APPEND _lib_opts "-L${BASEDIR}/lib")
+      foreach(_lib ${NETCDF_LIBRARIES})
+
+        # Need to handle -pthread as we do above
+        if (CMAKE_THREAD_LIBS_INIT)
+          if (_lib STREQUAL "${CMAKE_THREAD_LIBS_INIT}")
+            continue()
+          endif ()
+        endif ()
+
+        list(APPEND _lib_opts "-l${_lib}")
+      endforeach()
+
+    else()
+
+      foreach(_dir ${NetCDF_Fortran_INCLUDE_DIRS})
+        list(APPEND _inc_opts "-I${_dir}")
+      endforeach()
+
+      list(APPEND _lib_opts "${NetCDF_Fortran_LIBRARY}")
+
+    endif()
   endif ()
 
   # This is an ugly hack but the MAM optics f2py required it. The
