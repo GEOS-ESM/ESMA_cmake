@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Changes to support non-MPI and non-Baselibs builds
-   - Move `find_package(MPI REQUIRED)` code in `FindBaselibs.cmake` only if Baselibs found
+   - Move `find_package(MPI)` code in `FindBaselibs.cmake` only if Baselibs found
    - Remove code if not using Baselibs; should be placed in each fixture/directory
 
 ### Fixed
