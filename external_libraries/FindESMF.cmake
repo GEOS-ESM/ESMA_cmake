@@ -90,20 +90,22 @@ if(EXISTS ${ESMFMKFILE})
   endforeach()
   set(ESMF_F90COMPILEPATHS ${tmp})
 
-  # Look for static library, if not found try dynamic library
-  find_library(esmf_lib NAMES libesmf.a PATHS ${ESMF_LIBSDIR})
+  # Look for dynamic library, if not found try static library
+  # Also, prefer libesmf.so/dylib to the esmf_fullylinked library
+  #find_library(esmf_lib NAMES libesmf${CMAKE_SHARED_LIBRARY_SUFFIX} esmf_fullylinked PATHS ${ESMF_LIBSDIR})
+  find_library(esmf_lib NAMES esmf esmf_fullylinked PATHS ${ESMF_LIBSDIR})
   if(esmf_lib MATCHES "esmf_lib-NOTFOUND")
     unset(esmf_lib)
-    message(STATUS "Static ESMF library not found, searching for dynamic library instead")
-    find_library(esmf_lib NAMES esmf_fullylinked libesmf.so PATHS ${ESMF_LIBSDIR})
+    message(STATUS "Dynamic ESMF library not found, searching for static library instead")
+    find_library(esmf_lib NAMES libesmf.a PATHS ${ESMF_LIBSDIR})
     if(esmf_lib MATCHES "esmf_lib-NOTFOUND")
       unset(esmf_lib)
       message(STATUS "Neither the dynamic nor the static ESMF library was found")
     else()
-      set(_library_type SHARED)
+      set(_library_type STATIC)
     endif()
   else()
-    set(_library_type STATIC)
+    set(_library_type SHARED)
   endif()
 
   string(STRIP "${ESMF_F90ESMFLINKRPATHS} ${ESMF_F90ESMFLINKPATHS} ${ESMF_F90LINKPATHS} ${ESMF_F90LINKLIBS} ${ESMF_F90LINKOPTS}" ESMF_INTERFACE_LINK_LIBRARIES)
