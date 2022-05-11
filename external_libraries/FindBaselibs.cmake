@@ -75,7 +75,7 @@ if (Baselibs_FOUND)
 
   # For now require MPI with Baselibs
   set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
-  find_package(MPI REQUIRED)
+  find_package(MPI QUIET)
 
   link_directories (${BASEDIR}/lib)
 
@@ -115,8 +115,10 @@ if (Baselibs_FOUND)
 
   add_definitions(-DHAS_NETCDF4)
   add_definitions(-DHAS_NETCDF3)
-  add_definitions(-DH5_HAVE_PARALLEL)
-  add_definitions(-DNETCDF_NEED_NF_MPIIO)
+  if (MPI_FOUND)
+    add_definitions(-DH5_HAVE_PARALLEL)
+    add_definitions(-DNETCDF_NEED_NF_MPIIO)
+  endif ()
   #------------------------------------------------------------------
 
   set (INC_HDF5 ${BASEDIR}/include/hdf5)
