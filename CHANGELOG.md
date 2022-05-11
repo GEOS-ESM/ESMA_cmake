@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changes to support non-MPI and non-Baselibs builds
    - Move `find_package(MPI REQUIRED)` code in `FindBaselibs.cmake` only if Baselibs found
    - Remove code if not using Baselibs; should be placed in each fixture/directory
+- Moved to use `find_package(ESMF)` for even use with Baselibs. This allows GEOS to more smoothly accept changes in ESMF builds by basing off of `esmf.mk`.
+- Changed `FindESMF.cmake` to prefer `SHARED` libraries over `STATIC` to match how ESMF-in-Baselibs worked before moving to `find_package`
 
 ### Fixed
 ### Removed

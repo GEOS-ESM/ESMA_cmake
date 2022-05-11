@@ -122,7 +122,6 @@ if (Baselibs_FOUND)
   set (INC_HDF5 ${BASEDIR}/include/hdf5)
   set (INC_NETCDF ${BASEDIR}/include/netcdf)
   set (INC_HDF ${BASEDIR}/include/hdf)
-  set (INC_ESMF ${BASEDIR}/include/esmf)
 
   # Need to do a bit of kludgy stuff here to allow Fortran linker to
   # find standard C and C++ libraries used by ESMF.
@@ -140,22 +139,13 @@ if (Baselibs_FOUND)
     execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libdl.so OUTPUT_VARIABLE dl OUTPUT_STRIP_TRAILING_WHITESPACE)
   endif ()
 
-  # With Baselibs 6.2.5, we can now link to the ESMF dynamic library on macOS
-  set (ESMF_LIBRARY esmf)
-  # Now set the suffix. Note that unfortunately CMAKE_SHARED_MODULE_SUFFIX doesn't
-  # quite do what we want (sets .so on macOS here), so we say "dylib" or "so"
-  if (APPLE)
-    set (ESMF_LIBRARY_SUFFIX "dylib")
+  if (NOT EXISTS ${BASEDIR}/lib/esmf.mk)
+    message (FATAL_ERROR "Cannot find ${ESMFMKFILE}")
   else ()
-    set (ESMF_LIBRARY_SUFFIX "so")
+    set (ESMFMKFILE "${BASEDIR}/lib/esmf.mk" CACHE PATH "Path to esmf.mk file" FORCE)
+    message(STATUS "ESMFMKFILE: ${ESMFMKFILE}")
   endif ()
-  set (ESMF_LIBRARY_PATH ${BASEDIR}/lib/lib${ESMF_LIBRARY}.${ESMF_LIBRARY_SUFFIX})
-
-  if (NOT EXISTS ${ESMF_LIBRARY_PATH})
-    message (FATAL_ERROR "Cannot find ${ESMF_LIBRARY_PATH}")
-  else ()
-    message(STATUS "ESMF_LIBRARY_PATH: ${ESMF_LIBRARY_PATH}")
-  endif ()
+  find_package(ESMF MODULE REQUIRED)
 
   set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
 
@@ -172,9 +162,17 @@ if (Baselibs_FOUND)
   # We also need to append the pthread flag at link time
   list(APPEND NETCDF_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 
-  set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${rt} ${stdcxx} ${dl} ${libgcc})
-
   # Create targets
+  # - NetCDF C
+  add_library(NetCDF::NetCDF_C STATIC IMPORTED)
+  set_target_properties(NetCDF::NetCDF_C PROPERTIES
+    IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdf.a
+    INTERFACE_INCLUDE_DIRECTORIES "${INC_NETCDF}"
+    INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
+    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+    )
+  set(NetCDF_C_FOUND TRUE CACHE BOOL "NetCDF C Found" FORCE)
+
   # - NetCDF Fortran
   add_library(NetCDF::NetCDF_Fortran STATIC IMPORTED)
   set_target_properties(NetCDF::NetCDF_Fortran PROPERTIES
@@ -184,16 +182,6 @@ if (Baselibs_FOUND)
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
   set(NetCDF_Fortran_FOUND TRUE CACHE BOOL "NetCDF Fortran Found" FORCE)
-
-  # - ESMF
-  add_library(esmf STATIC IMPORTED)
-  set_target_properties(esmf PROPERTIES
-    IMPORTED_LOCATION ${ESMF_LIBRARY_PATH}
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_ESMF}"
-    INTERFACE_LINK_LIBRARIES  "${ESMF_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
-    )
-  set(esmf_FOUND TRUE CACHE BOOL "ESMF Found" FORCE)
 
   # BASEDIR.rc file does not have the arch
   string(REPLACE "/${CMAKE_SYSTEM_NAME}" "" BASEDIR_WITHOUT_ARCH ${BASEDIR})
