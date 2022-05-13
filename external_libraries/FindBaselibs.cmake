@@ -126,21 +126,38 @@ if (Baselibs_FOUND)
        set (stdcxx libc++.dylib)
     else () # assume gcc
       execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.dylib OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
-      execute_process (COMMAND ${CMAKE_C_COMPILER} --print-file-name=libgcc.a OUTPUT_VARIABLE libgcc OUTPUT_STRIP_TRAILING_WHITESPACE)
+      execute_process (COMMAND ${CMAKE_C_COMPILER}   --print-file-name=libgcc.a        OUTPUT_VARIABLE libgcc OUTPUT_STRIP_TRAILING_WHITESPACE)
     endif()
   else ()
     execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.so OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=librt.so OUTPUT_VARIABLE rt OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libdl.so OUTPUT_VARIABLE dl OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=librt.so     OUTPUT_VARIABLE rt     OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libdl.so     OUTPUT_VARIABLE dl     OUTPUT_STRIP_TRAILING_WHITESPACE)
   endif ()
 
+  # ------------
+  # ESMF Library
+  # ------------
+
+  # First we look for esmf.mk which is required for use by FindESMF.cmake
   if (NOT EXISTS ${BASEDIR}/lib/esmf.mk)
+    # If we don't find it, die.
     message (FATAL_ERROR "Cannot find ${ESMFMKFILE}")
   else ()
+    # If we do find ESMF, then we set the ESMFMKFILE variable
     set (ESMFMKFILE "${BASEDIR}/lib/esmf.mk" CACHE PATH "Path to esmf.mk file" FORCE)
     message(STATUS "ESMFMKFILE: ${ESMFMKFILE}")
+
+    # Now, let us use the FindESMF.cmake that ESMF itself includes and installs
+    list (APPEND CMAKE_MODULE_PATH "${BASEDIR}/include/esmf")
+    find_package(ESMF MODULE REQUIRED)
+
+    # Finally, we add an alias since GEOS (at the moment) uses esmf not ESMF for the target
+    add_library(esmf ALIAS ESMF)
   endif ()
-  find_package(ESMF MODULE REQUIRED)
+
+  # ------
+  # NetCDF
+  # ------
 
   set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
 
@@ -196,5 +213,6 @@ else ()
   endif()
 
   find_package(ESMF MODULE REQUIRED)
+  add_library(esmf ALIAS ESMF)
 
 endif()
