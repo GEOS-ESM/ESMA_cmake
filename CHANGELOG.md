@@ -14,6 +14,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add FMS as a library rather than part of Baselibs
 
+## [3.15.0] - 2022-05-16
+
+### Changed
+
+- Changes to use the `FindESMF.cmake` module directly from ESMF build.
+- Add ALIAS library for `ESMF` due to historical use of `esmf` in GEOS
+
+### Removed
+
+- Removed `FindESMF.cmake` to prefer using the version from ESMF itself. Note that `CMAKE_MODULE_PATH` for Baselibs users is
+  automatically appended. Users of ESMA_cmake that don't use Baselibs, will need to append their own.
+
+## [3.14.0] - 2022-05-13
+
+### Changed
+
+- Moved to use `find_package(ESMF)` for even use with Baselibs. This allows GEOS to more smoothly accept changes in ESMF builds by basing off of `esmf.mk`.
+- Changed `FindESMF.cmake` to prefer `SHARED` libraries over `STATIC` to match how ESMF-in-Baselibs worked before moving to `find_package`
+- Changes to support non-Baselibs builds
+   - Move `find_package(MPI)` code in `FindBaselibs.cmake` only if Baselibs found
+   - Remove code if not using Baselibs; should be placed in each fixture/directory
+
 ## [3.13.0] - 2022-04-11
 
 ### Changed

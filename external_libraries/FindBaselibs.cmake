@@ -14,6 +14,7 @@ endif ()
 # In CMake this is CMAKE_HOST_SYSTEM_NAME
 
 if (BASEDIR)
+  
   # First, what if we have a BASEDIR/lib, let's make sure it's like we want
   # That is, it has ARCH and it's the *right* ARCH!
   if (IS_DIRECTORY ${BASEDIR}/lib)
@@ -72,6 +73,10 @@ endif ()
 
 if (Baselibs_FOUND)
 
+  # For now require MPI with Baselibs
+  set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
+  find_package(MPI)
+
   link_directories (${BASEDIR}/lib)
 
   # Add path to GFE packages
@@ -117,7 +122,6 @@ if (Baselibs_FOUND)
   set (INC_HDF5 ${BASEDIR}/include/hdf5)
   set (INC_NETCDF ${BASEDIR}/include/netcdf)
   set (INC_HDF ${BASEDIR}/include/hdf)
-  set (INC_ESMF ${BASEDIR}/include/esmf)
 
   # Need to do a bit of kludgy stuff here to allow Fortran linker to
   # find standard C and C++ libraries used by ESMF.
@@ -127,30 +131,38 @@ if (Baselibs_FOUND)
        set (stdcxx libc++.dylib)
     else () # assume gcc
       execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.dylib OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
-      execute_process (COMMAND ${CMAKE_C_COMPILER} --print-file-name=libgcc.a OUTPUT_VARIABLE libgcc OUTPUT_STRIP_TRAILING_WHITESPACE)
+      execute_process (COMMAND ${CMAKE_C_COMPILER}   --print-file-name=libgcc.a        OUTPUT_VARIABLE libgcc OUTPUT_STRIP_TRAILING_WHITESPACE)
     endif()
   else ()
     execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.so OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=librt.so OUTPUT_VARIABLE rt OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libdl.so OUTPUT_VARIABLE dl OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=librt.so     OUTPUT_VARIABLE rt     OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libdl.so     OUTPUT_VARIABLE dl     OUTPUT_STRIP_TRAILING_WHITESPACE)
   endif ()
 
-  # With Baselibs 6.2.5, we can now link to the ESMF dynamic library on macOS
-  set (ESMF_LIBRARY esmf)
-  # Now set the suffix. Note that unfortunately CMAKE_SHARED_MODULE_SUFFIX doesn't
-  # quite do what we want (sets .so on macOS here), so we say "dylib" or "so"
-  if (APPLE)
-    set (ESMF_LIBRARY_SUFFIX "dylib")
-  else ()
-    set (ESMF_LIBRARY_SUFFIX "so")
-  endif ()
-  set (ESMF_LIBRARY_PATH ${BASEDIR}/lib/lib${ESMF_LIBRARY}.${ESMF_LIBRARY_SUFFIX})
+  # ------------
+  # ESMF Library
+  # ------------
 
-  if (NOT EXISTS ${ESMF_LIBRARY_PATH})
-    message (FATAL_ERROR "Cannot find ${ESMF_LIBRARY_PATH}")
+  # First we look for esmf.mk which is required for use by FindESMF.cmake
+  if (NOT EXISTS ${BASEDIR}/lib/esmf.mk)
+    # If we don't find it, die.
+    message (FATAL_ERROR "Cannot find ${ESMFMKFILE}")
   else ()
-    message(STATUS "ESMF_LIBRARY_PATH: ${ESMF_LIBRARY_PATH}")
+    # If we do find ESMF, then we set the ESMFMKFILE variable
+    set (ESMFMKFILE "${BASEDIR}/lib/esmf.mk" CACHE PATH "Path to esmf.mk file" FORCE)
+    message(STATUS "ESMFMKFILE: ${ESMFMKFILE}")
+
+    # Now, let us use the FindESMF.cmake that ESMF itself includes and installs
+    list (APPEND CMAKE_MODULE_PATH "${BASEDIR}/include/esmf")
+    find_package(ESMF MODULE REQUIRED)
+
+    # Finally, we add an alias since GEOS (at the moment) uses esmf not ESMF for the target
+    add_library(esmf ALIAS ESMF)
   endif ()
+
+  # ------
+  # NetCDF
+  # ------
 
   set (NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
 
@@ -166,8 +178,6 @@ if (Baselibs_FOUND)
 
   # We also need to append the pthread flag at link time
   list(APPEND NETCDF_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
-
-  set (ESMF_LIBRARIES ${ESMF_LIBRARY} ${NETCDF_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_CXX_LIBRARIES} ${rt} ${stdcxx} ${dl} ${libgcc})
 
   # Create targets
   # - NetCDF C
@@ -222,16 +232,6 @@ if (Baselibs_FOUND)
     set(FMS_FOUND TRUE CACHE BOOL "FMS Found" FORCE)
   endif ()
 
-  # - ESMF
-  add_library(esmf STATIC IMPORTED)
-  set_target_properties(esmf PROPERTIES
-    IMPORTED_LOCATION ${ESMF_LIBRARY_PATH}
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_ESMF}"
-    INTERFACE_LINK_LIBRARIES  "${ESMF_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
-    )
-  set(esmf_FOUND TRUE CACHE BOOL "ESMF Found" FORCE)
-
   # BASEDIR.rc file does not have the arch
   string(REPLACE "/${CMAKE_SYSTEM_NAME}" "" BASEDIR_WITHOUT_ARCH ${BASEDIR})
   set(BASEDIR_WITHOUT_ARCH ${BASEDIR_WITHOUT_ARCH} CACHE STRING "BASEDIR without arch")
@@ -239,16 +239,25 @@ if (Baselibs_FOUND)
 
 else ()
 
-  find_package(NetCDF REQUIRED Fortran)
-  add_definitions(-DHAS_NETCDF4)
-  add_definitions(-DHAS_NETCDF3)
-  add_definitions(-DNETCDF_NEED_NF_MPIIO)
+  # These should be in each fixture
 
-  find_package(HDF5 REQUIRED)
-  if(HDF5_IS_PARALLEL)
-     add_definitions(-DH5_HAVE_PARALLEL)
-  endif()
-
-  find_package(ESMF MODULE REQUIRED)
+  ###########################################
+  # # For now require MPI with Baselibs     #
+  # set(MPI_DETERMINE_LIBRARY_VERSION TRUE) #
+  # find_package(MPI)                       #
+  #                                         #
+  # find_package(NetCDF REQUIRED Fortran)   #
+  # add_definitions(-DHAS_NETCDF4)          #
+  # add_definitions(-DHAS_NETCDF3)          #
+  # add_definitions(-DNETCDF_NEED_NF_MPIIO) #
+  #                                         #
+  # find_package(HDF5 REQUIRED)             #
+  # if(HDF5_IS_PARALLEL)                    #
+  #    add_definitions(-DH5_HAVE_PARALLEL)  #
+  # endif()                                 #
+  #                                         #
+  # find_package(ESMF MODULE REQUIRED)      #
+  # add_library(esmf ALIAS ESMF).           #
+  ###########################################
 
 endif()
