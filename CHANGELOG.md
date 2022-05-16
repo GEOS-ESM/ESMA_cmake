@@ -8,8 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Changes to use the `FindESMF.cmake` module directly from ESMF build.
+- Add ALIAS library for `ESMF` due to historical use of `esmf` in GEOS
+
 ### Fixed
 ### Removed
+
+- Removed `FindESMF.cmake` to prefer using the version from ESMF itself. Note that `CMAKE_MODULE_PATH` for Baselibs users is
+  automatically appended. Users of ESMA_cmake that don't use Baselibs, will need to append their own.
+
 ### Added
 
 ## [3.14.0] - 2022-05-13
