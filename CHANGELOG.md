@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.15.1] - 2022-05-16
+
+### Fixed
+
+- Add dependency to MPI for ESMF when building with ESMF built within Baselibs.
+
 ## [3.15.0] - 2022-05-16
 
 ### Changed
