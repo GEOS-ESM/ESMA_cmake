@@ -20,7 +20,7 @@ set (OPTREPORT5 "")
 
 set (FREAL8 "-fdefault-real-8 -fdefault-double-8")
 set (FINT8 "-fdefault-integer-8")
-
+set (UNUSED_DUMMY "-Wno-unused-dummy-argument")
 set (PP    "-cpp")
 
 # GCC 10 changed behavior in how it handles Fortran. To wit:
@@ -141,7 +141,7 @@ add_definitions(-D__GFORTRAN__)
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags "-ffree-line-length-none ${NO_RANGE_CHECK} -Wno-missing-include-dirs ${TRACEBACK}")
+set (common_Fortran_flags "-ffree-line-length-none ${NO_RANGE_CHECK} -Wno-missing-include-dirs ${TRACEBACK} ${UNUSED_DUMMY}" )
 set (common_Fortran_fpe_flags "-ffpe-trap=zero,overflow ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
 # GEOS Debug

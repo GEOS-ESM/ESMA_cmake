@@ -9,4 +9,10 @@ include (esma_find_python3_module)
 include (esma_check_python3_module)
 include (esma_add_f2py3_module)
 
-option(USE_F2PY "Turn on F2PY builds" ON)
+# Note f2py (-> distutils) does seem to support nagfor as an fcompiler, but
+# testing with it did not work. For now, just don't do any f2py if using NAG
+if (CMAKE_Fortran_COMPILER_ID MATCHES "NAG")
+  option(USE_F2PY "Turn on F2PY builds" OFF)
+else ()
+  option(USE_F2PY "Turn on F2PY builds" ON)
+endif ()

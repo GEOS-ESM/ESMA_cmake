@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- NAG Fortran flags no longer have `-dusty` by default.
+- GNU Fortran flag added to disable warnings about unused dummy arguments.  (Not terribly useful, though as at least one other compiler lacks such a flag. So we still need the `_UNUSED_DUMMY` fpp macro.)
+- Explicitly made `USE_F2PY=OFF` the default for NAG.
+
 ### Fixed
 ### Removed
 ### Added
