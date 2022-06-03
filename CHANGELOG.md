@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.16.0] - 2022-06-03
+
+### Changed
+
+- NAG Fortran flags no longer have `-dusty` by default.
+- GNU Fortran flag added to disable warnings about unused dummy arguments.  (Not terribly useful, though as at least one other compiler lacks such a flag. So we still need the `_UNUSED_DUMMY` fpp macro.)
+- Explicitly made `USE_F2PY=OFF` the default for NAG.
+
 ## [3.15.1] - 2022-05-16
 
 ### Fixed

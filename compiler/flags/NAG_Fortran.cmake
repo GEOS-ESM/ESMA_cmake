@@ -9,19 +9,22 @@ set (DUSTY "-dusty")
 set (MISMATCH "-mismatch_all")
 set (DISABLE_FIELD_WIDTH_WARNING)
 set (CRAY_POINTER "")
-set (EXTENDED_SOURCE "-132")
+set (EXTENDED_SOURCE "-132 -w=x95" )
 set (FIXED_SOURCE "-fixed")
+set (UNUSED_DUMMY "-w=uda")
 
 ####################################################
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags)
-set (common_Fortran_fpe_flags "${DUSTY}")
+set (common_Fortran_flags ${UNUSED_DUMMY})
+set (common_Fortran_fpe_flags "") # "${DUSTY}")
+#set (common_Fortran_fpe_flags "")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "-O0 -g")# -C=all") # -C=undefined")
+#set (GEOS_Fortran_Debug_Flags "-O0 -g")# -C=all") # -C=undefined")
+set (GEOS_Fortran_Debug_Flags "-O0 -g -C=all -Wp,-P")# -C=all ") # -C=undefined")
 set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
