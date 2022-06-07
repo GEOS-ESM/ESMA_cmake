@@ -7,6 +7,7 @@ set (FOPT1 "-O1")
 set (FOPT2 "-O2")
 set (FOPT3 "-O3")
 set (FOPT4 "-O3")
+set (FOPTFAST "-Ofast")
 set (DEBINFO "-g")
 
 set (FPE0 "")
@@ -117,10 +118,11 @@ if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
 elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL arm64 )
   # For now the only arm64 we have tested is Apple M1. This
   # might need to be revisited for M1 Max/Ultra and M2+.
-  # Also, fail if a Linux Arm64
+  # Also, fail if a Linux Arm64. Testing show GEOS fails 
+  # with -march=native
   if (APPLE)
     set (GNU_TARGET_ARCH "armv8-a")
-    set (GNU_NATIVE_ARCH "native")
+    set (GNU_NATIVE_ARCH ${GNU_TARGET_ARCH})
   endif ()
 elseif (${proc_decription} MATCHES "EPYC")
   set (GNU_TARGET_ARCH "znver2")
@@ -177,8 +179,18 @@ set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 # NOTE2: This uses -march=native so compile on your target architecture!!!
 
 # Options per Jerry DeLisle on GCC Fortran List
-set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=${GNU_NATIVE_ARCH} -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} ${NO_FMA}")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
+if ( APPLE AND ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL arm64 )
+  # For now the only arm64 we have tested is Apple M1. This
+  # might need to be revisited for M1 Max/Ultra and M2+.
+  # Testing has not yet found any aggressive flags better than
+  # the release so for now, use those
+  set (GEOS_Fortran_Aggressive_Flags "${GEOS_Fortran_Release_Flags}")
+  set (GEOS_Fortran_Aggressive_FPE_Flags "${GEOS_Fortran_Release_FPE_Flags}")
+else ()
+  set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=${GNU_NATIVE_ARCH} -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} ${NO_FMA}")
+  set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
+endif ()
+
 
 # Options per Jerry DeLisle on GCC Fortran List with SVML (does not seem to help)
 #set (GEOS_Fortran_Aggressive_Flags "-O2 -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} -mno-fma -mveclibabi=svml")
