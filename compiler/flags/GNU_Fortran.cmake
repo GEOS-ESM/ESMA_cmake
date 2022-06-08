@@ -182,7 +182,7 @@ set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 # NOTE2: This uses -march=native so compile on your target architecture!!!
 
 # Options per Jerry DeLisle on GCC Fortran List
-if ( APPLE AND ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL arm64 )
+if (${proc_description} MATCHES "Apple M1" AND ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "arm64")
   # For now the only arm64 we have tested is Apple M1. This
   # might need to be revisited for M1 Max/Ultra and M2+.
   # Testing has not yet found any aggressive flags better than
