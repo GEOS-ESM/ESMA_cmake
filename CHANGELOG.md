@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update M1 flags on GNU from GEOS testing
+- Also add M1-Rosetta2 flags from @climbfuji
 
 ### Fixed
 ### Removed

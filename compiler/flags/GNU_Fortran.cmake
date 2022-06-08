@@ -110,25 +110,31 @@ set (NO_ALIAS "")
 
 set (NO_RANGE_CHECK "-fno-range-check")
 
-cmake_host_system_information(RESULT proc_decription QUERY PROCESSOR_DESCRIPTION)
+cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
+
+message (STATUS "proc_description: ${proc_description}")
+message (STATUS "CMAKE_HOST_SYSTEM_PROCESSOR: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
   set (GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
   set (GNU_NATIVE_ARCH ${GNU_TARGET_ARCH})
-elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL arm64 )
-  # For now the only arm64 we have tested is Apple M1. This
-  # might need to be revisited for M1 Max/Ultra and M2+.
-  # Also, fail if a Linux Arm64. Testing show GEOS fails 
-  # with -march=native
-  if (APPLE)
+elseif (${proc_description} MATCHES "Apple M1")
+  if (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "arm64")
+    # Testing show GEOS fails with -march=native on M1 in native mode
     set (GNU_TARGET_ARCH "armv8-a")
     set (GNU_NATIVE_ARCH ${GNU_TARGET_ARCH})
+  elseif (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64")
+    # Rosetta2 flags per tests by @climbfuji
+    set (GNU_TARGET_ARCH "westmere")
+    set (GNU_NATIVE_ARCH "native")
+    set (PREFER_AVX128 "-mprefer-avx128")
+    set (NO_FMA "-mno-fma")
   endif ()
-elseif (${proc_decription} MATCHES "EPYC")
+elseif (${proc_description} MATCHES "EPYC")
   set (GNU_TARGET_ARCH "znver2")
   set (GNU_NATIVE_ARCH "native")
   set (NO_FMA "-mno-fma")
-elseif (${proc_decription} MATCHES "Intel")
+elseif (${proc_description} MATCHES "Intel")
   set (GNU_TARGET_ARCH "westmere")
   set (GNU_NATIVE_ARCH "native")
   set (PREFER_AVX128 "-mprefer-avx128")
