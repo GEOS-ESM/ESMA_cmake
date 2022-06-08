@@ -112,9 +112,6 @@ set (NO_RANGE_CHECK "-fno-range-check")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
-message (STATUS "proc_description: ${proc_description}")
-message (STATUS "CMAKE_HOST_SYSTEM_PROCESSOR: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
-
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
   set (GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
   set (GNU_NATIVE_ARCH ${GNU_TARGET_ARCH})
