@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Update GNU Release compile target architecture from `westmere` to `haswell`
+  - This is done as it seems to fix an issue with GCC 12
+
 ### Fixed
 ### Removed
 ### Added
