@@ -12,6 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Added
 
+## [3.17.0] - 2022-06-15
+
+### Changed
+
+- Update GNU Release compile target architecture from `westmere` to `haswell`
+  - This is done as it seems to fix an issue with GCC 12
+  - **NOTE**: This is non-zero-diff for GNU Release
+- Update M1 flags on GNU from GEOS testing
+- Also add M1-Rosetta2 flags from @climbfuji
+
 ## [3.16.0] - 2022-06-03
 
 ### Changed
