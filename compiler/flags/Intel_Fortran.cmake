@@ -98,7 +98,7 @@ set (GEOS_Fortran_Release_FPE_Flags "${GEOS_Fortran_Vect_FPE_Flags}")
 # ---------------
 set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
 #set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} -xSKYLAKE-AVX512 -qopt-zmm-usage=high -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array64byte")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${USE_SVML} -fma ${NOOLD_MAXMINLOC}")
+set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST1} ${USE_SVML} -fma ${NOOLD_MAXMINLOC}")
 
 # Common variables for every compiler
 include(Generic_Fortran)
