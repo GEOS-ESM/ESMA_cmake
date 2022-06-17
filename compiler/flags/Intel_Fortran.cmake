@@ -10,7 +10,10 @@ set (FOPT4 "-O4")
 set (DEBINFO "-g")
 
 set (FPE0 "-fpe0")
+set (FPE1 "-fpe1")
 set (FPE3 "-fpe3")
+set (FP_MODEL_PRECISE "-fp-model precise")
+set (FP_MODEL_EXCEPT "-fp-model except")
 set (FP_MODEL_SOURCE "-fp-model source")
 set (FP_MODEL_STRICT "-fp-model strict")
 set (FP_MODEL_CONSISTENT "-fp-model consistent")
@@ -66,25 +69,25 @@ add_definitions(-DHAVE_SHMEM)
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS}")
-set (common_Fortran_fpe_flags "${FPE0} ${FP_MODEL_SOURCE} ${HEAPARRAYS} ${NOOLD_MAXMINLOC}")
+set (common_Fortran_fpe_flags "${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${FTZ} ${HEAPARRAYS} ${NOOLD_MAXMINLOC}")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check -warn unused -init=snan,arrays -save-temps")
-set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} ${ALIGN_ALL} ${NO_ALIAS} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check -warn unused -init=snan,arrays -save-temps")
+set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${common_Fortran_fpe_flags}")
 
 # GEOS NoVectorize
 # ----------------
-set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO} ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS}")
-set (GEOS_Fortran_NoVect_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTENCY}")
+set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS}")
+set (GEOS_Fortran_NoVect_FPE_Flags "${FPE0} ${common_Fortran_fpe_flags}")
 
 # NOTE It was found that the Vectorizing Flags gave better performance with the same results in testing.
 #      But in case they are needed, we keep the older flags available
 
 # GEOS Vectorize
 # --------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
-set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC}")
+set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${common_Fortran_fpe_flags} ${USE_SVML}")
 
 # GEOS Release
 # ------------
@@ -93,9 +96,9 @@ set (GEOS_Fortran_Release_FPE_Flags "${GEOS_Fortran_Vect_FPE_Flags}")
 
 # GEOS Aggressive
 # ---------------
-set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
 #set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} -xSKYLAKE-AVX512 -qopt-zmm-usage=high -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array64byte")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${USE_SVML} ${NOOLD_MAXMINLOC}")
+set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${USE_SVML} -fma ${NOOLD_MAXMINLOC}")
 
 # Common variables for every compiler
 include(Generic_Fortran)
