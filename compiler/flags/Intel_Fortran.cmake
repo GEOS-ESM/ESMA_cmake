@@ -71,7 +71,7 @@ add_definitions(-DHAVE_SHMEM)
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS}")
-set (common_Fortran_fpe_flags "${FTZ} ${HEAPARRAYS} ${NOOLD_MAXMINLOC}")
+set (common_Fortran_fpe_flags "${FTZ} ${HEAPARRAYS} ${NOOLD_MAXMINLOC} ${ALIGNCOM}")
 
 # GEOS Debug
 # ----------
@@ -91,10 +91,20 @@ set (GEOS_Fortran_NoVect_FPE_Flags "${FPE0} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EX
 set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${FMA} ${USE_SVML} -align array32byte")
 set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags}")
 
+# GEOS Stock
+# --------------
+set (GEOS_Fortran_Stock_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma ${FTZ} -align array32byte")
+set (GEOS_Fortran_Stock_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC} ${ALIGNCOM}")
+
 # GEOS Aggressive
 # ---------------
 set (GEOS_Fortran_Aggressive_Flags "${GEOS_Fortran_Vect_Flags}")
 set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${FP_MODEL_CONSISTENT} ${FP_MODEL_SOURCE} ${common_Fortran_fpe_flags}")
+
+# FV3 Dynamics
+# ---------------
+set (GEOS_Fortran_Dynamics_Flags "${GEOS_Fortran_Vect_Flags} -auto -safe-cray-ptr -qno-opt-dynamic-align -qoverride-limits -qopt-prefetch=3")
+set (GEOS_Fortran_Dynamics_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${FP_MODEL_CONSISTENT} ${FP_MODEL_SOURCE} ${common_Fortran_fpe_flags}")
 
 # Set Release flags
 # -----------------
