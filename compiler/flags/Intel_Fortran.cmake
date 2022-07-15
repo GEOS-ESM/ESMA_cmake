@@ -71,17 +71,17 @@ add_definitions(-DHAVE_SHMEM)
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS}")
-set (common_Fortran_fpe_flags "${FP_MODEL_EXCEPT} ${FTZ} ${HEAPARRAYS} ${NOOLD_MAXMINLOC}")
+set (common_Fortran_fpe_flags "${FTZ} ${HEAPARRAYS} ${NOOLD_MAXMINLOC}")
 
 # GEOS Debug
 # ----------
 set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check -warn unused -init=snan,arrays -save-temps")
-set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_CONSISTENT} ${common_Fortran_fpe_flags}")
+set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags}")
 
 # GEOS NoVectorize
 # ----------------
 set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO}")
-set (GEOS_Fortran_NoVect_FPE_Flags "${FPE0} ${FP_MODEL_CONSISTENT} ${common_Fortran_fpe_flags}")
+set (GEOS_Fortran_NoVect_FPE_Flags "${FPE0} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags}")
 
 # NOTE It was found that the Vectorizing Flags gave better performance with the same results in testing.
 #      But in case they are needed, we keep the older flags available
@@ -89,12 +89,12 @@ set (GEOS_Fortran_NoVect_FPE_Flags "${FPE0} ${FP_MODEL_CONSISTENT} ${common_Fort
 # GEOS Vectorize
 # --------------
 set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${FMA} ${USE_SVML} -align array32byte")
-set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${common_Fortran_fpe_flags}")
+set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags}")
 
 # GEOS Aggressive
 # ---------------
 set (GEOS_Fortran_Aggressive_Flags "${GEOS_Fortran_Vect_Flags}")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${common_Fortran_fpe_flags}")
+set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${FP_MODEL_CONSISTENT} ${FP_MODEL_SOURCE} ${common_Fortran_fpe_flags}")
 
 # Set Release flags
 # -----------------
