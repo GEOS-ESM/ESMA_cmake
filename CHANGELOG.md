@@ -14,6 +14,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add FMS as a library rather than part of Baselibs
 
+## [3.17.0] - 2022-06-15
+
+### Changed
+
+- Update GNU Release compile target architecture from `westmere` to `haswell`
+  - This is done as it seems to fix an issue with GCC 12
+  - **NOTE**: This is non-zero-diff for GNU Release
+- Update M1 flags on GNU from GEOS testing
+- Also add M1-Rosetta2 flags from @climbfuji
+
+## [3.16.0] - 2022-06-03
+
+### Changed
+
+- NAG Fortran flags no longer have `-dusty` by default.
+- GNU Fortran flag added to disable warnings about unused dummy arguments.  (Not terribly useful, though as at least one other compiler lacks such a flag. So we still need the `_UNUSED_DUMMY` fpp macro.)
+- Explicitly made `USE_F2PY=OFF` the default for NAG.
+
+## [3.15.1] - 2022-05-16
+
+### Fixed
+
+- Add dependency to MPI for ESMF when building with ESMF built within Baselibs.
+
 ## [3.15.0] - 2022-05-16
 
 ### Changed

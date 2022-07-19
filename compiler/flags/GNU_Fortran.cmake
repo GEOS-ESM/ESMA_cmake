@@ -7,6 +7,7 @@ set (FOPT1 "-O1")
 set (FOPT2 "-O2")
 set (FOPT3 "-O3")
 set (FOPT4 "-O3")
+set (FOPTFAST "-Ofast")
 set (DEBINFO "-g")
 
 set (FPE0 "")
@@ -20,7 +21,7 @@ set (OPTREPORT5 "")
 
 set (FREAL8 "-fdefault-real-8 -fdefault-double-8")
 set (FINT8 "-fdefault-integer-8")
-
+set (UNUSED_DUMMY "-Wno-unused-dummy-argument")
 set (PP    "-cpp")
 
 # GCC 10 changed behavior in how it handles Fortran. To wit:
@@ -109,25 +110,29 @@ set (NO_ALIAS "")
 
 set (NO_RANGE_CHECK "-fno-range-check")
 
-cmake_host_system_information(RESULT proc_decription QUERY PROCESSOR_DESCRIPTION)
+cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
   set (GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
   set (GNU_NATIVE_ARCH ${GNU_TARGET_ARCH})
-elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL arm64 )
-  # For now the only arm64 we have tested is Apple M1. This
-  # might need to be revisited for M1 Max/Ultra and M2+.
-  # Also, fail if a Linux Arm64
-  if (APPLE)
+elseif (${proc_description} MATCHES "Apple M1")
+  if (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "arm64")
+    # Testing show GEOS fails with -march=native on M1 in native mode
     set (GNU_TARGET_ARCH "armv8-a")
+    set (GNU_NATIVE_ARCH ${GNU_TARGET_ARCH})
+  elseif (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64")
+    # Rosetta2 flags per tests by @climbfuji
+    set (GNU_TARGET_ARCH "westmere")
     set (GNU_NATIVE_ARCH "native")
+    set (PREFER_AVX128 "-mprefer-avx128")
+    set (NO_FMA "-mno-fma")
   endif ()
-elseif (${proc_decription} MATCHES "EPYC")
+elseif (${proc_description} MATCHES "EPYC")
   set (GNU_TARGET_ARCH "znver2")
   set (GNU_NATIVE_ARCH "native")
   set (NO_FMA "-mno-fma")
-elseif (${proc_decription} MATCHES "Intel")
-  set (GNU_TARGET_ARCH "westmere")
+elseif (${proc_description} MATCHES "Intel")
+  set (GNU_TARGET_ARCH "haswell")
   set (GNU_NATIVE_ARCH "native")
   set (PREFER_AVX128 "-mprefer-avx128")
   set (NO_FMA "-mno-fma")
@@ -141,7 +146,7 @@ add_definitions(-D__GFORTRAN__)
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags "-ffree-line-length-none ${NO_RANGE_CHECK} -Wno-missing-include-dirs ${TRACEBACK}")
+set (common_Fortran_flags "-ffree-line-length-none ${NO_RANGE_CHECK} -Wno-missing-include-dirs ${TRACEBACK} ${UNUSED_DUMMY}" )
 set (common_Fortran_fpe_flags "-ffpe-trap=zero,overflow ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
 # GEOS Debug
@@ -177,8 +182,18 @@ set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 # NOTE2: This uses -march=native so compile on your target architecture!!!
 
 # Options per Jerry DeLisle on GCC Fortran List
-set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=${GNU_NATIVE_ARCH} -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} ${NO_FMA}")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
+if (${proc_description} MATCHES "Apple M1" AND ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "arm64")
+  # For now the only arm64 we have tested is Apple M1. This
+  # might need to be revisited for M1 Max/Ultra and M2+.
+  # Testing has not yet found any aggressive flags better than
+  # the release so for now, use those
+  set (GEOS_Fortran_Aggressive_Flags "${GEOS_Fortran_Release_Flags}")
+  set (GEOS_Fortran_Aggressive_FPE_Flags "${GEOS_Fortran_Release_FPE_Flags}")
+else ()
+  set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=${GNU_NATIVE_ARCH} -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} ${NO_FMA}")
+  set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
+endif ()
+
 
 # Options per Jerry DeLisle on GCC Fortran List with SVML (does not seem to help)
 #set (GEOS_Fortran_Aggressive_Flags "-O2 -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} -mno-fma -mveclibabi=svml")

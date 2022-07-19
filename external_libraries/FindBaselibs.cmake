@@ -156,6 +156,10 @@ if (Baselibs_FOUND)
     list (APPEND CMAKE_MODULE_PATH "${BASEDIR}/include/esmf")
     find_package(ESMF MODULE REQUIRED)
 
+    # Also, we know ESMF from Baselibs requires MPI (note that this isn't always true, but
+    # for ESMF built in Baselibs for use in GEOS, it currently is)
+    target_link_libraries(ESMF INTERFACE MPI::MPI_Fortran)
+
     # Finally, we add an alias since GEOS (at the moment) uses esmf not ESMF for the target
     add_library(esmf ALIAS ESMF)
   endif ()
