@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Added support for Baselibs built with netCDF as a shared library
+- Added detection of zstandard support in netCDF
+
 ### Fixed
 ### Removed
 ### Added
