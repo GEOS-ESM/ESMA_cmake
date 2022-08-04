@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Update minimum Fortran compiler versions
+  - Intel 18.0.5
+  - GNU 9.2.0
+  - NAG 7.0
+
 ### Fixed
 
 - Updated the CI to work with latest Baselibs
