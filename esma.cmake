@@ -35,6 +35,10 @@ elseif (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/@ecbuild")
   list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/@ecbuild/cmake")
 elseif (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/ecbuild@")
   list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/ecbuild@/cmake")
+elseif (ESMA_ECBUILD_DIR)
+  if (IS_DIRECTORY ${ESMA_ECBUILD_DIR}/cmake)
+    list(APPEND CMAKE_MODULE_PATH "${ESMA_ECBUILD_DIR}/cmake")
+  endif()
 else ()
   find_package(ecbuild REQUIRED)
 endif()
@@ -57,9 +61,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 ### MPI Support ###
 
-# Only invoked from Fortran sources in GEOS-5,  But some BASEDIR packages use MPI from C/C++.
-set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
-find_package (MPI REQUIRED)
+# MPI is now found in FindBaselibs
 
 ### Threading ###
 
@@ -80,6 +82,7 @@ find_package(Threads REQUIRED)
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external_libraries")
 include(math_libraries)
 include(FindBaselibs)
+include(DetermineSite)
 find_package(GitInfo)
 
 ### ESMA Support ###

@@ -47,16 +47,16 @@ set (USE_SVML "-fimf-use-svml=true")
 
 set (NO_RANGE_CHECK "")
 
-cmake_host_system_information(RESULT proc_decription QUERY PROCESSOR_DESCRIPTION)
-if (${proc_decription} MATCHES "EPYC")
-   set (COREAVX2_FLAG "-march=core-avx2")
-elseif (${proc_decription} MATCHES "Intel")
-   set (COREAVX2_FLAG "-march=core-avx2")
-   # Previous versions of GEOS used this flag, which was not portable
-   # for AMD. Keeping here for a few versions for historical purposes.
-   #set (COREAVX2_FLAG "-xCORE-AVX2")
+cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
+if (${proc_description} MATCHES "EPYC")
+  set (COREAVX2_FLAG "-march=core-avx2")
+elseif (${proc_description} MATCHES "Intel")
+  set (COREAVX2_FLAG "-march=core-avx2")
+  # Previous versions of GEOS used this flag, which was not portable
+  # for AMD. Keeping here for a few versions for historical purposes.
+  #set (COREAVX2_FLAG "-xCORE-AVX2")
 else ()
-   message(FATAL_ERROR "Unknown processor. Contact Matt Thompson")
+  message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
 
 add_definitions(-DHAVE_SHMEM)

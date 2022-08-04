@@ -12,10 +12,90 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `UseLATEX` to version 2.7.2
 
 ### Fixed
+
+- Updated the CI to work with latest Baselibs
+
 ### Removed
 ### Added
 
 - Add `protex` script
+
+## [3.17.0] - 2022-06-15
+
+### Changed
+
+- Update GNU Release compile target architecture from `westmere` to `haswell`
+  - This is done as it seems to fix an issue with GCC 12
+  - **NOTE**: This is non-zero-diff for GNU Release
+- Update M1 flags on GNU from GEOS testing
+- Also add M1-Rosetta2 flags from @climbfuji
+
+## [3.16.0] - 2022-06-03
+
+### Changed
+
+- NAG Fortran flags no longer have `-dusty` by default.
+- GNU Fortran flag added to disable warnings about unused dummy arguments.  (Not terribly useful, though as at least one other compiler lacks such a flag. So we still need the `_UNUSED_DUMMY` fpp macro.)
+- Explicitly made `USE_F2PY=OFF` the default for NAG.
+
+## [3.15.1] - 2022-05-16
+
+### Fixed
+
+- Add dependency to MPI for ESMF when building with ESMF built within Baselibs.
+
+## [3.15.0] - 2022-05-16
+
+### Changed
+
+- Changes to use the `FindESMF.cmake` module directly from ESMF build.
+- Add ALIAS library for `ESMF` due to historical use of `esmf` in GEOS
+
+### Removed
+
+- Removed `FindESMF.cmake` to prefer using the version from ESMF itself. Note that `CMAKE_MODULE_PATH` for Baselibs users is
+  automatically appended. Users of ESMA_cmake that don't use Baselibs, will need to append their own.
+
+## [3.14.0] - 2022-05-13
+
+### Changed
+
+- Moved to use `find_package(ESMF)` for even use with Baselibs. This allows GEOS to more smoothly accept changes in ESMF builds by basing off of `esmf.mk`.
+- Changed `FindESMF.cmake` to prefer `SHARED` libraries over `STATIC` to match how ESMF-in-Baselibs worked before moving to `find_package`
+- Changes to support non-Baselibs builds
+   - Move `find_package(MPI)` code in `FindBaselibs.cmake` only if Baselibs found
+   - Remove code if not using Baselibs; should be placed in each fixture/directory
+
+## [3.13.0] - 2022-04-11
+
+### Changed
+
+- Changed how f2py handles Fortran compiler detection
+- Updated to circleci-tools orb for CI
+
+### Fixed
+
+- Fix bug in f2py testing
+
+## [3.12.0] - 2022-03-17
+
+### Removed
+
+- Remove `PGI.cmake` file as NVHPC is the correct file for now. Add symlink
+
+### Added
+
+- Added preliminary support for GNU on M1 Macs
+
+## [3.11.0] - 2022-03-10
+
+### Changed
+
+- Various changes to support building GEOS with Spack
+  - Edit to FindESMF.cmake file
+  - Move `include(DetermineSite)`
+  - Fix for finding ecbuild cmake files
+  - Fixes for f2py scripts
 
 ## [3.10.0] - 2022-02-04
 
