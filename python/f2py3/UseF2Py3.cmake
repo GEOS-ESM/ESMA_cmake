@@ -175,7 +175,7 @@ macro (add_f2py3_module _name)
     if (Baselibs_FOUND)
 
       # include dirs
-      foreach(_dir ${INC_NETCDF})
+      foreach(_dir ${NETCDF_INCLUDE_DIR})
         list(APPEND _inc_opts "-I${_dir}")
       endforeach()
 

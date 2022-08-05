@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Added support for Baselibs built with netCDF as a shared library
-- Added detection of zstandard support in netCDF
+- Add `NETCDF_INCLUDE_DIR` as alias to `INC_NETCDF` for spack compatibility
 
 ### Fixed
 

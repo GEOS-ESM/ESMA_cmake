@@ -121,6 +121,7 @@ if (Baselibs_FOUND)
 
   set (INC_HDF5 ${BASEDIR}/include/hdf5)
   set (INC_NETCDF ${BASEDIR}/include/netcdf)
+  set (NETCDF_INCLUDE_DIR ${INC_NETCDF})
   set (INC_HDF ${BASEDIR}/include/hdf)
 
   # Need to do a bit of kludgy stuff here to allow Fortran linker to
@@ -195,57 +196,12 @@ if (Baselibs_FOUND)
   endif ()
   message(STATUS "Detected that NetCDF in Baselibs was built as ${NETCDF_LIBRARY_TYPE}")
 
-  if (NETCDF_LIBRARY_TYPE STREQUAL SHARED)
-    # If we build as shared, we have a chance for zstandard support. But older versions
-    # of netcdf don't even have the --has-zstd option, so we must detect for that.
-
-    # First run execute_process to see if the flag even exists (only in netCDF-C v4.9.0 or higher). 
-    # We do this because Cmake will print the usage of nc-config if a bad flag is passed in, but here
-    # we can quiet the output
-    execute_process (
-      COMMAND ${BASEDIR}/bin/nc-config --has-zstd
-      RESULT_VARIABLE NC_CONFIG_HAS_ZSTD_FLAG
-      ERROR_QUIET OUTPUT_QUIET
-      )
-
-    if (NC_CONFIG_HAS_ZSTD_FLAG)
-      # Non zero status code, we are done
-      set(NETCDF_HAS_ZSTD FALSE)
-    else ()
-      # So the flag was accepted, now actually capture the output
-      execute_process (
-        COMMAND ${BASEDIR}/bin/nc-config --has-zstd
-        OUTPUT_VARIABLE NETCDF_BUILT_WITH_ZSTD
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-      # So we returned a zero return code, so the --has-zstd flag was available
-      if (NETCDF_BUILT_WITH_ZSTD STREQUAL "yes")
-        set(NETCDF_HAS_ZSTD TRUE)
-      else ()
-        set(NETCDF_HAS_ZSTD FALSE)
-      endif ()
-    endif ()
-    message(STATUS "Detected NetCDF built with zstd support: ${NETCDF_HAS_ZSTD}")
-
-    # Now do a check that HDF5_PLUGIN_PATH is set and give a warning if not
-    if (NETCDF_HAS_ZSTD AND NOT DEFINED ENV{HDF5_PLUGIN_PATH})
-      message(WARNING 
-        "NetCDF has reported it was built with zstandard support, but you do not have the HDF5_PLUGIN_PATH set\n"
-        "This will lead to runtime failures if zstandard compression is used.\n"
-        )
-    else ()
-      message(STATUS "Detected HDF5_PLUGIN_PATH: $ENV{HDF5_PLUGIN_PATH}")
-    endif ()
-  endif ()
-
-
-
   # Create targets
   # - NetCDF C
   add_library(NetCDF::NetCDF_C ${NETCDF_LIBRARY_TYPE} IMPORTED)
   set_target_properties(NetCDF::NetCDF_C PROPERTIES
     IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdf${NETCDF_LIBRARY_SUFFIX}
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_NETCDF}"
+    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIR}"
     INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
@@ -255,7 +211,7 @@ if (Baselibs_FOUND)
   add_library(NetCDF::NetCDF_Fortran ${NETCDF_LIBRARY_TYPE} IMPORTED)
   set_target_properties(NetCDF::NetCDF_Fortran PROPERTIES
     IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdff${NETCDF_LIBRARY_SUFFIX}
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_NETCDF}"
+    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIR}"
     INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
