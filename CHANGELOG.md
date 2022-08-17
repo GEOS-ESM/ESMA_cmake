@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Updated the CI to work with latest Baselibs
+- Updated the list of files ignored by CPack
 
 ### Removed
 ### Added
