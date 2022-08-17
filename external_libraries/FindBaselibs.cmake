@@ -121,6 +121,7 @@ if (Baselibs_FOUND)
 
   set (INC_HDF5 ${BASEDIR}/include/hdf5)
   set (INC_NETCDF ${BASEDIR}/include/netcdf)
+  set (NETCDF_INCLUDE_DIR ${INC_NETCDF})
   set (INC_HDF ${BASEDIR}/include/hdf)
 
   # Need to do a bit of kludgy stuff here to allow Fortran linker to
@@ -183,22 +184,34 @@ if (Baselibs_FOUND)
   # We also need to append the pthread flag at link time
   list(APPEND NETCDF_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 
+  # Now we try to detect if the netcdf library was linked statically or
+  # dynamically by looking for hdf5 in NETCDF_LIBRARIES. Could be fragile,
+  # but nf-config --flibs for a shared build should never have libhdf5
+  if ("hdf5" IN_LIST NETCDF_LIBRARIES)
+    set(NETCDF_LIBRARY_TYPE STATIC)
+    set(NETCDF_LIBRARY_SUFFIX ${CMAKE_STATIC_LIBRARY_SUFFIX})
+  else ()
+    set(NETCDF_LIBRARY_TYPE SHARED)
+    set(NETCDF_LIBRARY_SUFFIX ${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif ()
+  message(STATUS "Detected that NetCDF in Baselibs was built as ${NETCDF_LIBRARY_TYPE}")
+
   # Create targets
   # - NetCDF C
-  add_library(NetCDF::NetCDF_C STATIC IMPORTED)
+  add_library(NetCDF::NetCDF_C ${NETCDF_LIBRARY_TYPE} IMPORTED)
   set_target_properties(NetCDF::NetCDF_C PROPERTIES
-    IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdf.a
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_NETCDF}"
+    IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdf${NETCDF_LIBRARY_SUFFIX}
+    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIR}"
     INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
   set(NetCDF_C_FOUND TRUE CACHE BOOL "NetCDF C Found" FORCE)
 
   # - NetCDF Fortran
-  add_library(NetCDF::NetCDF_Fortran STATIC IMPORTED)
+  add_library(NetCDF::NetCDF_Fortran ${NETCDF_LIBRARY_TYPE} IMPORTED)
   set_target_properties(NetCDF::NetCDF_Fortran PROPERTIES
-    IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdff.a
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_NETCDF}"
+    IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdff${NETCDF_LIBRARY_SUFFIX}
+    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIR}"
     INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
