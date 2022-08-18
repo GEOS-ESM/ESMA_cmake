@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+- Changed the Apple M1 detection to be "Apple M" in anticipation of M2 machines.
+
 ### Fixed
 
 - Updated the CI to work with latest Baselibs
