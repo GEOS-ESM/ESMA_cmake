@@ -9,15 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Fixed
+
+### Removed
+
+### Added
+
+## [3.18.0] - 2022-08-18
+
+### Changed
+
 - Changed the Apple M1 detection to be "Apple M" in anticipation of M2 machines.
 
 ### Fixed
 
 - Updated the CI to work with latest Baselibs
 - Updated the list of files ignored by CPack
-
-### Removed
-### Added
 
 ## [3.17.0] - 2022-06-15
 
