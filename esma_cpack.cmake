@@ -13,6 +13,12 @@ set(CPACK_SOURCE_IGNORE_FILES
   /.mepo/
   /build.*/
   /install.*/
+  /CVS/
+  .\*.swp
+  .\*.swo
+  .\*~
+  .\*\#
+  \.DS_Store
 )
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}")
 # Note we need to call this again to "overwrite" the CPack done in ecbuild
