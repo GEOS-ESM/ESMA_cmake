@@ -16,13 +16,13 @@ endif()
 if ("${CMAKE_BINARY_DIR}" MATCHES "^.*[,].*$")
   message(FATAL_ERROR
     "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}\n"
-    "We do not allow directory paths with commas. Please change your build path"
+    "GEOS does not allow directory paths with commas. Please change your build path"
     )
 endif ()
 if ("${CMAKE_INSTALL_PREFIX}" MATCHES "^.*[,].*$")
   message(FATAL_ERROR
     "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}\n"
-    "We do not allow directory paths with commas. Please change your install path"
+    "GEOS does not allow directory paths with commas. Please change your install path"
     )
 endif ()
 
