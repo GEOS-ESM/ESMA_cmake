@@ -10,13 +10,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated `UseLATEX` to version 2.7.2
+- 
+### Fixed
+
+### Removed
+
+### Added
+
+- Added check to `esma.cmake` to ensure `CMAKE_INSTALL_PREFIX` is writable
+
+## [3.18.0] - 2022-08-18
+
+### Changed
+
+- Changed the Apple M1 detection to be "Apple M" in anticipation of M2 machines.
 
 ### Fixed
 
 - Updated the CI to work with latest Baselibs
-
-### Removed
-### Added
+- Updated the list of files ignored by CPack
 
 - Add `protex` script
 
