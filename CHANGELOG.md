@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated `UseLATEX` to version 2.7.2
-- 
+
 ### Fixed
 
 ### Removed
@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added check to `esma.cmake` to ensure `CMAKE_INSTALL_PREFIX` is writable
+- Add `protex` script
 
 ## [3.18.0] - 2022-08-18
 
@@ -29,8 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated the CI to work with latest Baselibs
 - Updated the list of files ignored by CPack
-
-- Add `protex` script
 
 ## [3.17.0] - 2022-06-15
 
