@@ -6,23 +6,26 @@ if (NOT ImageMagick_FOUND)
 endif ()
 
 find_package(LATEX)
-# These are all the bits of LaTeX that UseLatex needs. As it's confusing
+
+# UseLATEX is from https://gitlab.kitware.com/kmorel/UseLATEX
+
+# These are all the bits of LaTeX that UseLATEX needs. As it's confusing
 # how LATEX_FOUND from find_package(LATEX) is set, we test all the bits
-# that UseLatex requires
+# that UseLATEX requires
 #
-# Also, UseLatex assumes ImageMagick is installed. While this is always
+# Also, UseLATEX assumes ImageMagick is installed. While this is always
 # nice (and technically required to generate plots with GEOS plotting 
 # utilities, it's not necessary to *build*
 if (LATEX_FOUND AND LATEX_PDFLATEX_FOUND AND LATEX_BIBTEX_FOUND AND LATEX_MAKEINDEX_FOUND AND ImageMagick_FOUND)
    # If they are all found, set LATEX_FOUND to TRUE...
    set (LATEX_FOUND TRUE)
 
-   # ...and then set up for protex and UseLatex
+   # ...and then set up for protex and UseLATEX
    include (UseProTeX)
    set (protex_flags -g -b -f)
 
    set (LATEX_COMPILER pdflatex)
-   include (UseLatex)
+   include (UseLATEX)
 else ()
    set (LATEX_FOUND FALSE)
 endif ()
