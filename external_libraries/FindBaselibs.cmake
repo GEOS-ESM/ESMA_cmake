@@ -236,6 +236,10 @@ if (Baselibs_FOUND)
     set(FMS_FOUND TRUE CACHE BOOL "FMS Found" FORCE)
   endif ()
 
+  if (FMS_FOUND)
+    set (FMS_DIR ${BASEDIR}/FMS CACHE PATH "Path to FMS" FORCE)
+  endif ()
+
   # BASEDIR.rc file does not have the arch
   string(REPLACE "/${CMAKE_SYSTEM_NAME}" "" BASEDIR_WITHOUT_ARCH ${BASEDIR})
   set(BASEDIR_WITHOUT_ARCH ${BASEDIR_WITHOUT_ARCH} CACHE STRING "BASEDIR without arch")
