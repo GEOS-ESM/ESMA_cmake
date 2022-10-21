@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added check to `esma.cmake` to ensure `CMAKE_INSTALL_PREFIX` is writable
+- Add FMS as a library rather than part of Baselibs
+- Added `Findlibyaml.cmake` to support FMS with yaml support
+  - FMS with YAML support is controlled by `-DFMS_BUILT_WITH_YAML` as there is no good way to determine how FMS was built
+    after-the-fact. For now the default is `OFF` but this will change in the future
 
 ## [3.18.0] - 2022-08-18
 
@@ -27,8 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated the CI to work with latest Baselibs
 - Updated the list of files ignored by CPack
-
-- Add FMS as a library rather than part of Baselibs
 
 ## [3.17.0] - 2022-06-15
 
