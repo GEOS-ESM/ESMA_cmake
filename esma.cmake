@@ -1,30 +1,8 @@
-# Most users of this software do not (should not?) have permissions to
-# install in the cmake default of /usr/local (or equiv on other os's).
-# Below, the default is changed to a directory within the build tree
-# unless the user explicitly sets CMAKE_INSTALL_PREFIX in the cache.
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "default install path" FORCE )
-    message(STATUS "*** Setting default install prefix to ${CMAKE_INSTALL_PREFIX}.")
-    message(STATUS "*** Override with -DCMAKE_INSTALL_PREFIX=<path>.")
-endif()
+### Check install prefix
 
-# There is an issue with CMake, make, and directories with commas 
-# in the path. CMake can add -Wl linker options to the makefiles and
-# Wl options take comma-separated lists. Until it can be figured out 
-# how (or if) CMake can generate quoted arguments to -Wl, we prevent
-# either build or install directories with a comma in the path
-if ("${CMAKE_BINARY_DIR}" MATCHES "^.*[,].*$")
-  message(FATAL_ERROR
-    "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}\n"
-    "GEOS does not allow directory paths with commas. Please change your build path"
-    )
-endif ()
-if ("${CMAKE_INSTALL_PREFIX}" MATCHES "^.*[,].*$")
-  message(FATAL_ERROR
-    "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}\n"
-    "GEOS does not allow directory paths with commas. Please change your install path"
-    )
-endif ()
+list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/esma_support")
+include (esma_check_install_prefix)
+esma_check_install_prefix()
 
 ### ecbuild Support ###
 
@@ -87,7 +65,7 @@ find_package(GitInfo)
 
 ### ESMA Support ###
 
-list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/esma_support")
+#list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/esma_support")
 include (esma_support)
 
 ### Python ###
