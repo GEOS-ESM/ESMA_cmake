@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added check to `esma.cmake` to ensure `CMAKE_INSTALL_PREFIX` is writable
 - Add `-save-temps` to GNU debug flags
 
+### Changed
+
+- Updated CI and changelog enforcer
+
 ## [3.18.0] - 2022-08-18
 
 ### Changed
