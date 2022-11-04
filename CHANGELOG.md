@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `NETCDF_INCLUDE_DIRS` as alias to `INC_NETCDF` for spack compatibility when using Baselibs
+
 ## [3.19.0] - 2022-10-27
 
 ### Added
