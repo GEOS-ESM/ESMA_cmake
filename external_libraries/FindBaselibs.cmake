@@ -120,7 +120,8 @@ if (Baselibs_FOUND)
   #------------------------------------------------------------------
 
   set (INC_HDF5 ${BASEDIR}/include/hdf5)
-  set (INC_NETCDF ${BASEDIR}/include/netcdf)
+  set (NETCDF_INCLUDE_DIRS ${BASEDIR}/include/netcdf)
+  set (INC_NETCDF ${NETCDF_INCLUDE_DIRS})
   set (INC_HDF ${BASEDIR}/include/hdf)
 
   # Need to do a bit of kludgy stuff here to allow Fortran linker to
@@ -188,7 +189,7 @@ if (Baselibs_FOUND)
   add_library(NetCDF::NetCDF_C STATIC IMPORTED)
   set_target_properties(NetCDF::NetCDF_C PROPERTIES
     IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdf.a
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_NETCDF}"
+    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIRS}"
     INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
@@ -198,7 +199,7 @@ if (Baselibs_FOUND)
   add_library(NetCDF::NetCDF_Fortran STATIC IMPORTED)
   set_target_properties(NetCDF::NetCDF_Fortran PROPERTIES
     IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdff.a
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_NETCDF}"
+    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIRS}"
     INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
