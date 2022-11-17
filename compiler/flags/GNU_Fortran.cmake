@@ -115,6 +115,9 @@ cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTIO
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
   set (GNU_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
   set (GNU_NATIVE_ARCH ${GNU_TARGET_ARCH})
+elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
+  set (GNU_TARGET_ARCH "x86-64")
+  set (GNU_NATIVE_ARCH "native")
 elseif (${proc_description} MATCHES "Apple M")
   if (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "arm64")
     # Testing show GEOS fails with -march=native on M1 in native mode
