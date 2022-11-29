@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [3.20.0] - 2022-11-28
+
+### Fixed
+
+- Added compiler flags for `x86_64` target architecture and `Linux`, when it is missed by `Intel` processor description. Tested for building MAPL/2.22.0 on Ubuntu 22.04 Linux. Ubuntu is running using the UTM virtualizer on MacOS Monterey with x86_64 architecture system.
+
 ## [3.20.0] - 2022-11-09
 
 ### Added
