@@ -45,6 +45,16 @@ set (ALIGN_ALL "-align all")
 set (NO_ALIAS "-fno-alias")
 set (USE_SVML "-fimf-use-svml=true")
 
+# Additional flags for better Standards compliance
+## Set the Standard to be Fortran 2018
+set (STANDARD_F18 "-stand f18")
+## Error out if you try to do if(integer)
+set (ERROR_IF_INTEGER "-diag-error 6188")
+## Error out if you try to set a logical to an integer
+set (ERROR_LOGICAL_SET_TO_INTEGER "-diag-error 6192")
+## Turn off warning #5268 (Extension to standard: The text exceeds right hand column allowed on the line.)
+set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
+
 set (NO_RANGE_CHECK "")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
