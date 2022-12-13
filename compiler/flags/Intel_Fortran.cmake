@@ -53,10 +53,7 @@ set (ERROR_IF_INTEGER "-diag-error 6188")
 ## Error out if you try to set a logical to an integer
 set (ERROR_LOGICAL_SET_TO_INTEGER "-diag-error 6192")
 ## Turn off warning #5268 (Extension to standard: The text exceeds right hand column allowed on the line.)
-set (DISABLE_5268 "-diag-disable 5268")
-
-## Create a omnibus flag for all the flags above
-set (STANDARDS_FLAGS "${STANDARD_F18} ${ERROR_IF_INTEGER} ${ERROR_LOGICAL_SET_TO_INTEGER} ${DISABLE_5268}")
+set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
 
 set (NO_RANGE_CHECK "")
 

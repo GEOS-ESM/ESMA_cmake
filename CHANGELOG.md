@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Moved to use GitHub Actions for label enforcement
-- Add extra flags for Intel Fortran Debug allow for stricter builds (note not enabled by default for all builds)
+- Add extra flags for Intel Fortran to allow for stricter builds
   - `-stand f18` to enable Fortran 2018 Standard compliance
   - `-diag-error 6188` to cause if(integer) to fail
   - `-diag-error 6192` to cause logical set to integer to fail
