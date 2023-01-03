@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [3.24.0] - 2023-01-03
+
+### Changed
+
+- Updated label-enforcer to v3 and added custom message
+
 ## [3.23.0] - 2023-01-03
 
 ### Changed
