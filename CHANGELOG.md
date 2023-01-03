@@ -9,11 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated CI to Baselibs 7.7
-
 ### Fixed
 
 ### Removed
+
+### Added
+
+## [3.23.0] - 2023-01-03
+
+### Changed
+
+- Updated CI to Baselibs 7.7
 
 ### Added
 
