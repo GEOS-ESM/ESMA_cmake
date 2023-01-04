@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [3.25.0] - 2023-01-04
+
+### Added
+
+- Added detection of AMD Milan chips for GNU flags
+
 ## [3.24.0] - 2023-01-03
 
 ### Changed
