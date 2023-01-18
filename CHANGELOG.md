@@ -15,6 +15,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [3.24.0] - 2023-01-03
+
+### Changed
+
+- Updated label-enforcer to v3 and added custom message
+
+## [3.23.0] - 2023-01-03
+
+### Changed
+
+- Updated CI to Baselibs 7.7
+
+### Added
+
+- Added `IntelLLVM_Fortran.cmake` file
+  - At the moment a copy of `Intel_Fortran.cmake` with `-fp-model source` and `-fp-model consistent` blanked due to [changes with ifx](https://www.intel.com/content/www/us/en/develop/documentation/fortran-compiler-oneapi-dev-guide-and-reference/top/compiler-reference/compiler-options/floating-point-options/fp-model-fp.html)
+
 ## [3.22.0] - 2022-12-13
 
 ### Changed
