@@ -205,17 +205,19 @@ if (Baselibs_FOUND)
     )
   set(NetCDF_Fortran_FOUND TRUE CACHE BOOL "NetCDF Fortran Found" FORCE)
 
-  message(STATUS "NetCDF_LIBRARIES: ${NETCDF_LIBRARIES}")
-
   # ----
   # HDF5
   # ----
 
   # Like above, baselibs does not build HDF5 as CMake so the HDF5::HDF5 target is 
   # not available. So we create it here.
+  # NOTE: This is *very* fragile and mainly creates a target that satisfies the
+  #       needs of GEOS. It is not a general HDF5 target. If you need a general
+  #       HDF5 target, please use the HDF5 CMake build (which we hope to move
+  #       to in the future with spack)
 
   # HDF5_LIBRARIES is a list of libraries that HDF5 needs to link to
-  set (HDF5_LIBRARIES hdf5hl_fortran hdf5_fortran hd5_hl hdf5 sz z m dl)
+  set (HDF5_LIBRARIES hdf5_hl_fortran hdf5_fortran hdf5_hl hdf5 sz z m dl)
   # Create targets
 
   # - HDF5 C
@@ -249,9 +251,9 @@ if (Baselibs_FOUND)
   set(HDF5_Fortran_FOUND TRUE CACHE BOOL "HDF5 Fortran Found" FORCE)
 
   # - HDF5 Fortran HL
-  add_library(hdf5::hdf5_fortran_hl STATIC IMPORTED)
-  set_target_properties(hdf5::hdf5_fortran_hl PROPERTIES
-    IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_fortran_hl.a
+  add_library(hdf5::hdf5_hl_fortran STATIC IMPORTED)
+  set_target_properties(hdf5::hdf5_hl_fortran PROPERTIES
+    IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_hl_fortran.a
     INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
     INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
@@ -260,7 +262,7 @@ if (Baselibs_FOUND)
 
   # Now we make a target that is the "super" HDF5 target
   add_library(HDF5::HDF5 INTERFACE IMPORTED)
-  target_link_libraries(HDF5::HDF5 INTERFACE hdf5::hdf5 hdf5::hdf5_hl hdf5::hdf5_fortran hdf5::hdf5_fortran_hl)
+  target_link_libraries(HDF5::HDF5 INTERFACE hdf5::hdf5 hdf5::hdf5_hl hdf5::hdf5_fortran hdf5::hdf5_hl_fortran)
   set(HDF5_FOUND TRUE CACHE BOOL "HDF5 Found" FORCE)
 
   # BASEDIR.rc file does not have the arch
