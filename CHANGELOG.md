@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [3.25.0] - 2023-02-17
+
+### Added
+
+- Added an `HDF5::HDF5` target to `FindBaselibs.cmake` for compatibility with code that uses `HDF5::HDF5`.
+  - NOTE: This is hack for Baselibs builds until we can move to using Spack for libraries
+
 ## [3.24.0] - 2023-01-03
 
 ### Changed
