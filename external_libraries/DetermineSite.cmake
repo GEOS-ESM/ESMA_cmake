@@ -53,6 +53,9 @@ if (NOT DEFINED DETECTED_SITE OR DETECTED_SITE STREQUAL "UNKNOWN")
   endif ()
 endif ()
 
+# Note: No access to Google Cloud yet but my guess is we do something similar following:
+# https://cloud.google.com/compute/docs/instances/detect-compute-engine
+
 # Finally, if we didn't detect anything, we'll just use the BUILD_SITE
 if (NOT DEFINED DETECTED_SITE OR DETECTED_SITE STREQUAL "UNKNOWN")
   set (DETECTED_SITE ${BUILD_SITE})
