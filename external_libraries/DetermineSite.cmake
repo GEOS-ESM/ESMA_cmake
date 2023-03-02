@@ -11,8 +11,15 @@ set(DETECTED_SITE "UNKNOWN")
 
 if (${BUILD_SITE} MATCHES "discover*" OR ${BUILD_SITE} MATCHES "borg*" OR ${BUILD_SITE} MATCHES "warp*")
   set (DETECTED_SITE "NCCS")
-elseif (${BUILD_SITE} MATCHES "pfe" OR ${BUILD_SITE} MATCHES "r[0-9]*i[0-9]*n[0-9]*" OR ${BUILD_SITE} MATCHES "r[0-9]*c[0-9]*t[0-9]*n[0-9]*")
+# At NAS, if you want to run on Rome, you have to build on Rome due to
+# OS differences. So we make a variable that can let us make the setup
+# scripts aware of this.
+elseif (${BUILD_SITE} MATCHES "pfe" OR ${BUILD_SITE} MATCHES "r[0-9]*i[0-9]*n[0-9]*")
   set (DETECTED_SITE "NAS")
+  set (BUILT_ON_ROME FALSE)
+elseif (${BUILD_SITE} MATCHES "r[0-9]*c[0-9]*t[0-9]*n[0-9]*")
+  set (DETECTED_SITE "NAS")
+  set (BUILT_ON_ROME TRUE)
 elseif (EXISTS /ford1/share/gmao_SIteam AND EXISTS /ford1/local AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   set (DETECTED_SITE "GMAO.desktop")
 endif ()
@@ -63,3 +70,13 @@ endif ()
 
 set(GEOS_SITE ${DETECTED_SITE} CACHE STRING "Detected site for use with GEOS setup scripts")
 message(STATUS "Setting GEOS_SITE to ${GEOS_SITE}")
+
+# Add message to say where we built at NAS
+if (DETECTED_SITE STREQUAL "NAS")
+  if (BUILT_ON_ROME)
+    message(STATUS "Building on AMD Rome nodes at NAS")
+  else()
+    message(STATUS "Building on Intel nodes at NAS")
+ endif()
+endif()
+

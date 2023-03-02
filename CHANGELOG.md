@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Add detection of Azure
+- Change site detection code to distinguish between Rome and non-Rome
+  nodes at NAS (since there is an OS difference between them that has
+  run-time effects)
 
 ### Fixed
 
