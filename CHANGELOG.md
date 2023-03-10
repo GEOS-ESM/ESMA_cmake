@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update Intel Fortran flags
+  - NOTE: This is non-zero-diff for Intel Release and Aggressive builds of GEOS
 
 ## [3.26.0] - 2023-03-03
 
