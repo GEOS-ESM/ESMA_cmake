@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Updated Python detection to use `FIND_STRATEGY VERSION`. This is needed due to mixing of
+  Python 2 and 3 in the same environment.
+
 ### Fixed
 
 ### Removed

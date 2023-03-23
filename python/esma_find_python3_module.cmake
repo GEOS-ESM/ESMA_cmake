@@ -5,6 +5,9 @@
 # Citation: https://cmake.org/pipermail/cmake/2011-January/041666.html
 # Mark Moll
 
+set(Python3_FIND_STRATEGY VERSION)
+find_package(Python3 COMPONENTS Interpreter)
+
 function(esma_find_python3_module module)
   string(TOUPPER ${module} module_upper)
   if(NOT PY3_${module_upper})
