@@ -4,7 +4,6 @@
 cmake_minimum_required(VERSION 3.15)
 
 # Find Python
-set(Python_FIND_STRATEGY VERSION)
 find_package(Python COMPONENTS Interpreter)
 
 # Find Python2
