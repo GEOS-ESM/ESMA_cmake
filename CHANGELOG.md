@@ -15,11 +15,95 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added check to `esma.cmake` to ensure `CMAKE_INSTALL_PREFIX` is writable
 - Add FMS as a library rather than part of Baselibs
 - Added `Findlibyaml.cmake` to support FMS with yaml support
   - FMS with YAML support is controlled by `-DFMS_BUILT_WITH_YAML` as there is no good way to determine how FMS was built
     after-the-fact. For now the default is `OFF` but this will change in the future
+
+## [3.28.0] - 2023-03-23
+
+### Changed
+
+- Updated Python detection to use `FIND_STRATEGY VERSION`. This is needed due to mixing of
+  Python 2 and 3 in the same environment.
+
+## [3.27.0] - 2023-03-10
+
+### Changed
+
+- Update Intel Fortran flags
+  - NOTE: This is non-zero-diff for Intel Release and Aggressive builds of GEOS
+
+## [3.26.0] - 2023-03-03
+
+### Changed
+
+- Add detection of Azure
+- Change site detection code to distinguish between Rome and non-Rome
+  nodes at NAS (since there is an OS difference between them that has
+  run-time effects)
+
+## [3.25.0] - 2023-02-17
+
+### Added
+
+- Added an `HDF5::HDF5` target to `FindBaselibs.cmake` for compatibility with code that uses `HDF5::HDF5`.
+  - NOTE: This is hack for Baselibs builds until we can move to using Spack for libraries
+
+## [3.24.0] - 2023-01-03
+
+### Changed
+
+- Updated label-enforcer to v3 and added custom message
+
+## [3.23.0] - 2023-01-03
+
+### Changed
+
+- Updated CI to Baselibs 7.7
+
+### Added
+
+- Added `IntelLLVM_Fortran.cmake` file
+  - At the moment a copy of `Intel_Fortran.cmake` with `-fp-model source` and `-fp-model consistent` blanked due to [changes with ifx](https://www.intel.com/content/www/us/en/develop/documentation/fortran-compiler-oneapi-dev-guide-and-reference/top/compiler-reference/compiler-options/floating-point-options/fp-model-fp.html)
+
+## [3.22.0] - 2022-12-13
+
+### Changed
+
+- Moved to use GitHub Actions for label enforcement
+- Add extra flags for Intel Fortran to allow for stricter builds
+  - `-stand f18` to enable Fortran 2018 Standard compliance
+  - `-diag-error 6188` to cause if(integer) to fail
+  - `-diag-error 6192` to cause logical set to integer to fail
+  - `-diag-disable 5268` to suppress warning for long source lines (which our macros often make)
+
+## [3.21.0] - 2022-11-28
+
+### Fixed
+
+- Added compiler flags for `x86_64` target architecture and `Linux`, when it is missed by `Intel` processor description. Tested for building MAPL/2.22.0 on Ubuntu 22.04 Linux. Ubuntu is running using the UTM virtualizer on MacOS Monterey with x86_64 architecture system.
+
+### Added
+
+- Added a print for processor description
+
+## [3.20.0] - 2022-11-09
+
+### Added
+
+- Add `NETCDF_INCLUDE_DIRS` as alias to `INC_NETCDF` for spack compatibility when using Baselibs
+
+## [3.19.0] - 2022-10-27
+
+### Added
+
+- Added check to `esma.cmake` to ensure `CMAKE_INSTALL_PREFIX` is writable
+- Add `-save-temps` to GNU debug flags
+
+### Changed
+
+- Updated CI and changelog enforcer
 
 ## [3.18.0] - 2022-08-18
 

@@ -136,6 +136,9 @@ elseif (${proc_description} MATCHES "Intel")
   set (GNU_NATIVE_ARCH "native")
   set (PREFER_AVX128 "-mprefer-avx128")
   set (NO_FMA "-mno-fma")
+elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
+  set (GNU_TARGET_ARCH "x86-64")
+  set (GNU_NATIVE_ARCH "native")
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
@@ -151,7 +154,7 @@ set (common_Fortran_fpe_flags "-ffpe-trap=zero,overflow ${TRACEBACK} ${MISMATCH}
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} -fcheck=all,no-array-temps -finit-real=snan")
+set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} -fcheck=all,no-array-temps -finit-real=snan -save-temps")
 set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release

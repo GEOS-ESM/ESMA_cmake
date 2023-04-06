@@ -31,8 +31,6 @@
 #
 
 # Path to the f2py executable
-find_package(Python COMPONENTS Interpreter)
-
 find_program(F2PY_EXECUTABLE NAMES "f2py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
                                    "f2py-${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
                                    "f2py${Python_VERSION_MAJOR}"

@@ -30,9 +30,7 @@
 #   By default, the module finds the F2PY2 program associated with the installed NumPy package.
 #
 
-# Path to the f2py executable
-find_package(Python2 COMPONENTS Interpreter)
-
+# Path to the f2py2 executable
 find_program(F2PY2_EXECUTABLE NAMES "f2py${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}"
                                    "f2py-${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}"
                                    "f2py${Python2_VERSION_MAJOR}"
