@@ -33,6 +33,10 @@ include (esma_compiler)
 
 find_package (OpenMP)
 
+### OpenACC ###
+
+find_package (OpenACC)
+
 ### Position independent code ###
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
