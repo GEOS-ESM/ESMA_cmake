@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Remove `BUILT_ON_ROME` detection at NAS
+
 ### Fixed
 
 ### Removed
