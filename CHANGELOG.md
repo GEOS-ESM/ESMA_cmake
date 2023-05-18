@@ -7,13 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
 ### Fixed
 
 ### Removed
 
 ### Added
+
+## [3.29.0] - 2023-05-18
+
+### Changed
+
+- Remove `BUILT_ON_ROME` detection at NAS as all nodes are now TOSS4
 
 ## [3.28.0] - 2023-03-23
 
