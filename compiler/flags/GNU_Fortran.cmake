@@ -1,4 +1,4 @@
-if (CMAKE_Fortran_COMPILER_VERSION VERSION_LESS 8.3)
+if (CMAKE_Fortran_COMPILER_VERSION VERSION_LESS 11.3)
   message(FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be at least 8.3!")
 endif()
 
@@ -159,7 +159,7 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
 # ------------
-set (GEOS_Fortran_Release_Flags "${FOPT3} -march=${GNU_TARGET_ARCH} -mtune=generic -funroll-loops ${DEBINFO}")
+set (GEOS_Fortran_Release_Flags "${FOPT2} -march=${GNU_TARGET_ARCH} -mtune=generic -funroll-loops ${DEBINFO}")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # Create a NoVectorize version for consistency. No difference from Release for GNU

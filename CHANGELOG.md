@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+- Changed GNU Release flags to use `-O2` to work around issue at NAS on
+  TOSS4 (see #317)
+- Updated supported GNU flag to 11.3
+
 ## [3.29.0] - 2023-05-18
 
 ### Changed
