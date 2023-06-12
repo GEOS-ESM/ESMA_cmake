@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
 ### Fixed
 
 ### Removed
@@ -19,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `Findlibyaml.cmake` to support FMS with yaml support
   - FMS with YAML support is controlled by `-DFMS_BUILT_WITH_YAML` as there is no good way to determine how FMS was built
     after-the-fact. For now the default is `OFF` but this will change in the future
+
+## [3.29.0] - 2023-05-18
+
+### Changed
+
+- Remove `BUILT_ON_ROME` detection at NAS as all nodes are now TOSS4
 
 ## [3.28.0] - 2023-03-23
 
