@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+## [3.30.0] - 2023-06-23
+
+### Added
+
+- Added `QUIET_DEBUG` option to remove the `-warn unused` flag for Intel and add some common warning suppressions (Intel only at the moment)
+
 ## [3.29.0] - 2023-05-18
 
 ### Changed
