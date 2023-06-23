@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added `QUIET_DEBUG` option to remove the `-warn unused` flag for Intel and add some common warning suppressions (Intel only at the moment)
 
+### Changed
+
+- Updated CI to use Baselibs 7.13.0
+
 ## [3.29.0] - 2023-05-18
 
 ### Changed
