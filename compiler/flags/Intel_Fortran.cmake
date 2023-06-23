@@ -59,6 +59,9 @@ set (ERROR_LOGICAL_SET_TO_INTEGER "-diag-error 6192")
 ## Turn off warning #5268 (Extension to standard: The text exceeds right hand column allowed on the line.)
 set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
 
+## Turn off ifort: warning #10337: option '-fno-builtin' disables '-imf*' option
+set (DISABLE_10337 "-diag-disable 10337")
+
 set (NO_RANGE_CHECK "")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
@@ -75,6 +78,16 @@ endif ()
 
 add_definitions(-DHAVE_SHMEM)
 
+# Make an option to make things quiet during debug builds
+option (QUIET_DEBUG "Suppress excess compiler output during debug builds" OFF)
+if (QUIET_DEBUG)
+  set (WARN_UNUSED "")
+  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_FIELD_WIDTH_WARNING} ${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
+else ()
+  set (WARN_UNUSED "-warn unused")
+  set (SUPPRESS_COMMON_WARNINGS "")
+endif ()
+
 ####################################################
 
 # Common Fortran Flags
@@ -84,8 +97,8 @@ set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC}")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check -warn unused -init=snan,arrays -save-temps")
-set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags}")
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -init=snan,arrays -save-temps")
+set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
 
 # GEOS NoVectorize
 # ----------------
