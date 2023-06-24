@@ -33,9 +33,12 @@ include (esma_compiler)
 
 find_package (OpenMP)
 
-### OpenACC ###
+### GPU Physics ###
 
-find_package (OpenACC)
+option(GPU_PHYSICS "Build GPU ports of Physics components" OFF)
+if (GPU_PHYSICS)
+  find_package (OpenACC)
+endif ()
 
 ### Position independent code ###
 
