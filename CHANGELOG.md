@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added option `GPU_PHYSICS` which defaults to `OFF`. When `ON`, available
+  OpenACC ports of Phsyics routines will be built instead of their original
+  versions.
+
 ### Changed
 
 ## [3.30.0] - 2023-06-23

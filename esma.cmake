@@ -24,6 +24,13 @@ option(BUILD_SHARED_LIBS "Build the shared library" OFF)
 set (ECBUILD_2_COMPAT_VALUE OFF)
 include (ecbuild_system NO_POLICY_SCOPE)
 
+### GPU Physics ###
+
+option(GPU_PHYSICS "Build GPU ports of Physics components" OFF)
+if (GPU_PHYSICS)
+  find_package (OpenACC)
+endif ()
+
 ### Compiler Support ###
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/compiler")
@@ -32,13 +39,6 @@ include (esma_compiler)
 ### OpenMP ###
 
 find_package (OpenMP)
-
-### GPU Physics ###
-
-option(GPU_PHYSICS "Build GPU ports of Physics components" OFF)
-if (GPU_PHYSICS)
-  find_package (OpenACC)
-endif ()
 
 ### Position independent code ###
 
