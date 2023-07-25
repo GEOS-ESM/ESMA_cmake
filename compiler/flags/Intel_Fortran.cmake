@@ -85,7 +85,7 @@ if (QUIET_DEBUG)
   set (SUPPRESS_COMMON_WARNINGS "${DISABLE_FIELD_WIDTH_WARNING} ${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
 else ()
   set (WARN_UNUSED "-warn unused")
-  set (SUPPRESS_COMMON_WARNINGS "")
+  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
 endif ()
 
 ####################################################

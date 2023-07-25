@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+## [3.31.0] - 2023-07-25
+
+### Changed
+
+- Suppress common unneeded warnings with all debug builds with Intel
+  - `warning #5462: Global name too long`
+  - `warning #10337: option '-fno-builtin' disables '-imf*' option`
+
 ## [3.30.0] - 2023-06-23
 
 ### Added
