@@ -112,7 +112,7 @@ set (NO_RANGE_CHECK "-fno-range-check")
 
 set (OPENACC_COMPILE "-fopenacc")
 set (OPENACC_OFFLOAD_TARGETS "-foffload=nvptx-none")
-set (OPENACC_OFFLOAD_OPTIONS "-foffload=-lgfortran -lgomp -lm")
+set (OPENACC_OFFLOAD_OPTIONS "-foffload=-lgfortran -foffload=-lgomp -foffload=-lm")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
