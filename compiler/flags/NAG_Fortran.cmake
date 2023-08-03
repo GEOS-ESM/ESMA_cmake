@@ -13,6 +13,10 @@ set (EXTENDED_SOURCE "-132 -w=x95" )
 set (FIXED_SOURCE "-fixed")
 set (UNUSED_DUMMY "-w=uda")
 
+if (APPLE)
+  option (ESMF_HAS_ACHAR_BUG "ESMF Compatibility issue" ON)
+endif ()
+
 ####################################################
 
 # Common Fortran Flags

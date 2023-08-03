@@ -15,6 +15,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+## [3.31.1] - 2023-08-03
+
+### Fixed
+
+- Fixed a build incompatibity with ESMF that affects `MAPL_Config::SetAttribute*()`
+
+### Changed
+
+- Update CI to use Baselibs default from CircleCI orb
+
 ## [3.31.0] - 2023-07-25
 
 ### Changed
