@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed a build incompatibity with ESMF that affects `MAPL_Config::SetAttribute*()`
-
 ### Removed
 
 ### Added
