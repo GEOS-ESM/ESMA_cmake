@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+## [3.32.0] - 2023-09-01
+
+### Added
+
+- Added support for building with Intel Fortran in Rosetta2 (generic x86_64 processor)
+
 ## [3.31.1] - 2023-08-03
 
 ### Fixed

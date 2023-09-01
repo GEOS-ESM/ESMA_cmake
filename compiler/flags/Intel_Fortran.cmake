@@ -72,6 +72,9 @@ elseif (${proc_description} MATCHES "Intel")
   # Previous versions of GEOS used this flag, which was not portable
   # for AMD. Keeping here for a few versions for historical purposes.
   #set (COREAVX2_FLAG "-xCORE-AVX2")
+elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
+  message(WARNING "Unknown processory type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
+  set (COREAVX2_FLAG "")
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
