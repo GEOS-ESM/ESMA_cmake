@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Modified default flags for NAG to allow more aggressive debug flags.  Mostly this is by using a more specific list of procedures for which interface "mismatch" warnings are suppressed.
 
 ## [3.32.0] - 2023-09-01
 
