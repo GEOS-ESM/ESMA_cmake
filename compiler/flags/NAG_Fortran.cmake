@@ -13,6 +13,7 @@ set (EXTENDED_SOURCE "-132 -w=x95" )
 set (FIXED_SOURCE "-fixed")
 set (SUPPRESS_UNUSED_DUMMY "-w=uda")
 set (F2018 "-f2018")
+set (OPENMP "-not_openmp")
 
 if (APPLE)
   option (ESMF_HAS_ACHAR_BUG "ESMF Compatibility issue" ON)
@@ -22,9 +23,8 @@ endif ()
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags "${F2018} ${MISMATCH}")
-set (common_Fortran_fpe_flags "") # "${DUSTY}")
-#set (common_Fortran_fpe_flags "")
+set (common_Fortran_flags "${F2018} ${MISMATCH} ${OPENMP}")
+set (common_Fortran_fpe_flags "")
 
 # GEOS Debug
 # ----------
