@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Introduced `-not_openmp` flag for NAG to avoid "Questionable" warning messages from compiler about unused openmp constructs.
+
 ## [3.33.0] - 2023-09-05
 
 ### Changed
