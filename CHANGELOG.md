@@ -15,6 +15,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+## [3.35.0] - 2023-10-13
+
+### Added
+
+- Updates for supporting Milan at NCCS
+  - Makes f2py2 only work if python2 is available. If not, all f2py2 is disabled
+  - Add new `BUILT_ON_SLES15` variable since building on SLES15 means running on SLES15
+
+### Changed
+
+- Turn off warning 10121 with Intel Fortran as it is noise
+
 ## [3.34.0] - 2023-09-07
 
 ### Changed
