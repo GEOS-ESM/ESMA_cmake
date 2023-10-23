@@ -110,9 +110,11 @@ set (NO_ALIAS "")
 
 set (NO_RANGE_CHECK "-fno-range-check")
 
-set (OPENACC_COMPILE "-fopenacc")
-set (OPENACC_OFFLOAD_TARGETS "-foffload=nvptx-none")
-set (OPENACC_OFFLOAD_OPTIONS "-foffload=-lgfortran -foffload=-lgomp -foffload=-lm")
+set (OPENACC_OFFLOAD_COMPILE "-fopenacc -foffload=nvptx-none")
+set (OPENACC_OFFLOAD_LIBS "-foffload=nvptx-none=\"-lgfortran -lm\"") # Auto linked for GCC >= 14
+
+set (OPENMP_OFFLOAD_COMPILE "-fopenmp -foffload=nvptx-none")
+set (OPENMP_OFFLOAD_LIBS "-foffload=nvptx-none=\"-lgfortran -lm\"") # Auto linked if linked on host for GCC >= 14
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
@@ -208,8 +210,17 @@ endif ()
 
 # OpenACC flags
 # -------------
-set (GEOS_Fortran_OpenACC_Flags "${OPENACC_COMPILE} ${OPENACC_OFFLOAD_TARGETS}")
-set (GEOS_Fortran_OpenACC_Flags_Offload_Libs "${OPENACC_COMPILE} ${OPENACC_OFFLOAD_OPTIONS} ${OPENACC_OFFLOAD_TARGETS}")
+set (GEOS_Fortran_OpenACC_Offload_Flags "${OPENACC_OFFLOAD_COMPILE}")
+set (GEOS_Fortran_OpenACC_Offload_Flags_Libs "${OPENACC_OFFLOAD_COMPILE} ${OPENACC_OFFLOAD_LIBS}")
+message(STATUS "GEOS_Fortran_OpenACC_Offload_Flags: ${GEOS_Fortran_OpenACC_Offload_Flags}")
+message(STATUS "GEOS_Fortran_OpenACC_Offload_Flags_Libs: ${GEOS_Fortran_OpenACC_Offload_Flags_Libs}")
+
+# OpenMP (offload) flags
+# ----------------------
+set (GEOS_Fortran_OpenMP_Offload_Flags "${OPENMP_OFFLOAD_COMPILE}")
+set (GEOS_Fortran_OpenMP_Offload_Flags_Libs "${OPENMP_OFFLOAD_COMPILE} ${OPENMP_OFFLOAD_LIBS}")
+message(STATUS "GEOS_Fortran_OpenMP_Offload_Flags: ${GEOS_Fortran_OpenMP_Offload_Flags}")
+message(STATUS "GEOS_Fortran_OpenMP_Offload_Flags_Libs: ${GEOS_Fortran_OpenMP_Offload_Flags_Libs}")
 
 # Common variables for every compiler
 include(Generic_Fortran)
