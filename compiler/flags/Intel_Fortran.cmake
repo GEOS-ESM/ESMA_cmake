@@ -78,6 +78,11 @@ elseif (${proc_description} MATCHES "Intel")
 elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
   message(WARNING "Unknown processory type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
   set (COREAVX2_FLAG "")
+  # Once you are in here, you are probably on Rosetta, but not required. 
+  # Still, on Apple Rosetta we also now need to use the ld_classic as the linker
+  if (APPLE)
+    add_link_options("-Wl,-ld_classic")
+  endif ()
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
