@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+## [3.36.0] - 2023-10-26
+
+### Fixed
+
+- Fixes for building with Intel Fortran Classic on macOS on Arm under Clang 15 and Rosetta
+  - Uses `ld_classic` as the linker
+
+### Added
+
+- Add setting `-Wno-implicit-int` when running with `icx`
+
 ## [3.35.0] - 2023-10-13
 
 ### Added
