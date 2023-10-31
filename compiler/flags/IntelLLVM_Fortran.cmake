@@ -18,6 +18,7 @@ set (FP_MODEL_STRICT "-fp-model strict")
 # ifx does not support -fp-model consistent (yet? see https://www.intel.com/content/www/us/en/develop/documentation/fortran-compiler-oneapi-dev-guide-and-reference/top/compiler-reference/compiler-options/floating-point-options/fp-model-fp.html)
 #set (FP_MODEL_CONSISTENT "-fp-model consistent")
 set (FP_MODEL_CONSISTENT "")
+set (FP_MODEL_FAST "-fp-model fast")
 set (FP_MODEL_FAST1 "-fp-model fast=1")
 set (FP_MODEL_FAST2 "-fp-model fast=2")
 
@@ -45,6 +46,7 @@ set (NOOLD_MAXMINLOC "-assume noold_maxminloc")
 set (REALLOC_LHS "-assume realloc_lhs")
 set (ARCH_CONSISTENCY "-fimf-arch-consistency=true")
 set (FTZ "-ftz")
+set (FMA "-fma")
 set (ALIGN_ALL "-align all")
 set (NO_ALIAS "-fno-alias")
 set (USE_SVML "-fimf-use-svml=true")
@@ -59,6 +61,12 @@ set (ERROR_LOGICAL_SET_TO_INTEGER "-diag-error 6192")
 ## Turn off warning #5268 (Extension to standard: The text exceeds right hand column allowed on the line.)
 set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
 
+## Turn off ifort: warning #10337: option '-fno-builtin' disables '-imf*' option
+set (DISABLE_10337 "-diag-disable 10337")
+
+## Turn off ifort: command line warning #10121: overriding '-fp-model precise' with '-fp-model fast'
+set (DISABLE_10121 "-diag-disable 10121")
+
 set (NO_RANGE_CHECK "")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
@@ -69,47 +77,66 @@ elseif (${proc_description} MATCHES "Intel")
   # Previous versions of GEOS used this flag, which was not portable
   # for AMD. Keeping here for a few versions for historical purposes.
   #set (COREAVX2_FLAG "-xCORE-AVX2")
+elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
+  message(WARNING "Unknown processory type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
+  set (COREAVX2_FLAG "")
+  # Once you are in here, you are probably on Rosetta, but not required. 
+  # Still, on Apple Rosetta we also now need to use the ld_classic as the linker
+  if (APPLE)
+    add_link_options("-Wl,-ld_classic")
+  endif ()
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
 
 add_definitions(-DHAVE_SHMEM)
 
+# Make an option to make things quiet during debug builds
+option (QUIET_DEBUG "Suppress excess compiler output during debug builds" OFF)
+if (QUIET_DEBUG)
+  set (WARN_UNUSED "")
+  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_FIELD_WIDTH_WARNING} ${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
+else ()
+  set (WARN_UNUSED "-warn unused")
+  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
+endif ()
+
 ####################################################
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS}")
-set (common_Fortran_fpe_flags "${FPE0} ${FP_MODEL_SOURCE} ${HEAPARRAYS} ${NOOLD_MAXMINLOC}")
+set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS}")
+set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC} ${DISABLE_10121}")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check -warn unused -init=snan,arrays -save-temps")
-set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created,nouninit -fp-stack-check ${WARN_UNUSED} -init=snan,arrays -save-temps")
+set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
 
 # GEOS NoVectorize
 # ----------------
-set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO} ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS}")
-set (GEOS_Fortran_NoVect_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTENCY}")
+set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO}")
+set (GEOS_Fortran_NoVect_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${common_Fortran_fpe_flags}")
 
 # NOTE It was found that the Vectorizing Flags gave better performance with the same results in testing.
 #      But in case they are needed, we keep the older flags available
 
 # GEOS Vectorize
-# --------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
-set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC}")
+# ---------------
+set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${FMA} -align array32byte")
+set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${common_Fortran_fpe_flags}")
 
-# GEOS Release
-# ------------
+# --------------
+
+# Set Release flags
+# -----------------
 set (GEOS_Fortran_Release_Flags  "${GEOS_Fortran_Vect_Flags}")
 set (GEOS_Fortran_Release_FPE_Flags "${GEOS_Fortran_Vect_FPE_Flags}")
 
 # GEOS Aggressive
 # ---------------
-set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
-#set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} -xSKYLAKE-AVX512 -qopt-zmm-usage=high -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array64byte")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${USE_SVML} ${NOOLD_MAXMINLOC}")
+set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${FMA} -align array32byte")
+set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${USE_SVML} ${common_Fortran_fpe_flags}")
 
 # Common variables for every compiler
 include(Generic_Fortran)

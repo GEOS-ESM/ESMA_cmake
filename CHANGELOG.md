@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Updates for ifx support
+  - Updated `IntelLLVM_Fortran.cmake` to match `Intel_Fortran.cmake`
+  - Added `nouninit` to flags because of [this ifx allocatable bug](https://github.com/HPC-Bugs/reproducers/tree/main/compiler/Fortran/ifx/allocatable)  
+
 ## [3.36.0] - 2023-10-26
 
 ### Fixed
