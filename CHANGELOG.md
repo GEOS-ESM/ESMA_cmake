@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+## [3.36.1] - 2023-12-12
+
+### Fixed
+
+- Set `BUILT_ON_SLES15` to `FALSE` if not building on SLES15. Before it was blank
+
 ## [3.36.0] - 2023-10-26
 
 ### Fixed
