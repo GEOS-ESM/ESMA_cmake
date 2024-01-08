@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Fixes for `ifx` compiler
+  - Set `nouninit` for check flags when building with Debug build type
+  - Remove some debug flags that don't exist with `ifx`
+  - Remove `-init=snan` as that causes compiler faults with some MAPL files
+
 ## [3.36.0] - 2023-10-26
 
 ### Fixed
