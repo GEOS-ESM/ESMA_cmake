@@ -16,7 +16,7 @@ set (F2018 "-f2018")
 set (OPENMP "-not_openmp")
 
 if (APPLE)
-  option (ESMF_HAS_ACHAR_BUG "ESMF Compatibility issue" ON)
+  option (ESMF_HAS_ACHAR_BUG "ESMF Compatibility issue" OFF)
 endif ()
 
 ####################################################
