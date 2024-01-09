@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+## [3.37.0] - 2024-01-09
+
+### Changed
+
 - Fixes for `ifx` compiler
   - Set `nouninit` for check flags when building with Debug build type
   - Remove some debug flags that don't exist with `ifx`
@@ -25,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 - The `ESMF_HAS_ACHAR_BUG` CMake option is deprecated and will be removed in a future release
-
 ## [3.36.0] - 2023-10-26
 
 ### Fixed
