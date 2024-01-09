@@ -19,8 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Set `nouninit` for check flags when building with Debug build type
   - Remove some debug flags that don't exist with `ifx`
   - Remove `-init=snan` as that causes compiler faults with some MAPL files
-- For NAG, turn of setting of `ESMF_HAS_ACHAR_BUG` CMake option as it seems
+- For NAG, turn off setting of `ESMF_HAS_ACHAR_BUG` CMake option as it seems
   no longer needed
+
+### Deprecated
+
+- The `ESMF_HAS_ACHAR_BUG` CMake option is deprecated and will be removed in a future release
 
 ## [3.36.0] - 2023-10-26
 
