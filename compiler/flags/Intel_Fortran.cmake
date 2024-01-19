@@ -62,6 +62,9 @@ set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
 ## Turn off ifort: warning #10337: option '-fno-builtin' disables '-imf*' option
 set (DISABLE_10337 "-diag-disable 10337")
 
+## Turn off ifort: command line warning #10121: overriding '-fp-model precise' with '-fp-model fast'
+set (DISABLE_10121 "-diag-disable 10121")
+
 set (NO_RANGE_CHECK "")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
@@ -72,6 +75,14 @@ elseif (${proc_description} MATCHES "Intel")
   # Previous versions of GEOS used this flag, which was not portable
   # for AMD. Keeping here for a few versions for historical purposes.
   #set (COREAVX2_FLAG "-xCORE-AVX2")
+elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
+  message(WARNING "Unknown processory type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
+  set (COREAVX2_FLAG "")
+  # Once you are in here, you are probably on Rosetta, but not required. 
+  # Still, on Apple Rosetta we also now need to use the ld_classic as the linker
+  if (APPLE)
+    add_link_options("-Wl,-ld_classic")
+  endif ()
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
@@ -93,7 +104,7 @@ endif ()
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS}")
-set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC}")
+set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC} ${DISABLE_10121}")
 
 # GEOS Debug
 # ----------

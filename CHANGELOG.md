@@ -15,6 +15,74 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Deprecated
+
+## [3.37.0] - 2024-01-09
+
+### Changed
+
+- Fixes for `ifx` compiler
+  - Set `nouninit` for check flags when building with Debug build type
+  - Remove some debug flags that don't exist with `ifx`
+  - Remove `-init=snan` as that causes compiler faults with some MAPL files
+- For NAG, turn off setting of `ESMF_HAS_ACHAR_BUG` CMake option as it seems
+  no longer needed
+
+### Deprecated
+
+- The `ESMF_HAS_ACHAR_BUG` CMake option is deprecated and will be removed in a future release
+
+## [3.36.0] - 2023-10-26
+
+### Fixed
+
+- Fixes for building with Intel Fortran Classic on macOS on Arm under Clang 15 and Rosetta
+  - Uses `ld_classic` as the linker
+
+### Added
+
+- Add setting `-Wno-implicit-int` when running with `icx`
+
+## [3.35.0] - 2023-10-13
+
+### Added
+
+- Updates for supporting Milan at NCCS
+  - Makes f2py2 only work if python2 is available. If not, all f2py2 is disabled
+  - Add new `BUILT_ON_SLES15` variable since building on SLES15 means running on SLES15
+
+### Changed
+
+- Turn off warning 10121 with Intel Fortran as it is noise
+
+## [3.34.0] - 2023-09-07
+
+### Changed
+
+- Introduced `-not_openmp` flag for NAG to avoid "Questionable" warning messages from compiler about unused openmp constructs.
+
+## [3.33.0] - 2023-09-05
+
+### Changed
+
+- Modified default flags for NAG to allow more aggressive debug flags.  Mostly this is by using a more specific list of procedures for which interface "mismatch" warnings are suppressed.
+
+## [3.32.0] - 2023-09-01
+
+### Added
+
+- Added support for building with Intel Fortran in Rosetta2 (generic x86_64 processor)
+
+## [3.31.1] - 2023-08-03
+
+### Fixed
+
+- Fixed a build incompatibity with ESMF that affects `MAPL_Config::SetAttribute*()`
+
+### Changed
+
+- Update CI to use Baselibs default from CircleCI orb
+
 ## [3.31.0] - 2023-07-25
 
 ### Changed
