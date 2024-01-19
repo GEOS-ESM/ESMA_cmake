@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `FindESMF.cmake` for use with Spack builds of GEOSgcm
+- Added support for Hygon processors with Intel Fortran
 
 ### Changed
 
