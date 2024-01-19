@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added detection of AMD Milan chips for GNU flags
+- Added support for Hygon processors with Intel Fortran
 
 ### Changed
 
