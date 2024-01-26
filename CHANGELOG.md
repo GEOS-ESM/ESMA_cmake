@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Update CI to v2 orb
+
 ### Deprecated
 
 ## [3.38.0] - 2024-01-19
