@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+## [3.39.0] - 2024-02-06
+
+### Added
+
 - Added `ESMF::ESMF` alias for ESMF library
   - Needed to avoid an issue UFS has with MAPL/GOCART
   - Needed for Baselibs builds of MAPL 2.44 and higher as we now move to use `ESMF::ESMF` as the target
@@ -20,8 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update CI to v2 orb
-
-### Deprecated
 
 ## [3.38.0] - 2024-01-19
 
