@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.40.0] - 2024-02-06
+
+### Changed
+
+- Updated `FindESMF.cmake` to the version from ESMF develop branch, commit da8f410. Will be in ESMF 8.6.1+
+  - This provides the `ESMF::ESMF` alias for ESMF library for non-Baselibs builds
+
 ## [3.39.0] - 2024-02-06
 
 ### Added
