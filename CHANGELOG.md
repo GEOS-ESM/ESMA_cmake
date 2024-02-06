@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `ESMF::ESMF` alias for ESMF library
+  - Needed to avoid an issue UFS has with MAPL/GOCART
+  - Needed for Baselibs builds of MAPL 2.44 and higher as we now move to use `ESMF::ESMF` as the target
+
 ### Changed
 
 - Update CI to v2 orb

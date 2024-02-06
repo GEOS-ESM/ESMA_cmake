@@ -163,6 +163,7 @@ if (Baselibs_FOUND)
 
     # Finally, we add an alias since GEOS (at the moment) uses esmf not ESMF for the target
     add_library(esmf ALIAS ESMF)
+    add_library(ESMF::ESMF ALIAS ESMF)
   endif ()
 
   # ------
