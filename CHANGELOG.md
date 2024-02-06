@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `ESMF::ESMF` alias for ESMF library
   - Needed to avoid an issue UFS has with MAPL/GOCART
   - Needed for Baselibs builds of MAPL 2.44 and higher as we now move to use `ESMF::ESMF` as the target
+  - Will be added to `FindESMF.cmake` in a future release of ESMF, so we only add the alias if it doesn't exist
 
 ### Changed
 
