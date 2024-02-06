@@ -163,6 +163,13 @@ if (Baselibs_FOUND)
 
     # Finally, we add an alias since GEOS (at the moment) uses esmf not ESMF for the target
     add_library(esmf ALIAS ESMF)
+
+    # We also add an alias for the target ESMF::ESMF. This will eventually be
+    # added to `FindESMF.cmake` in ESMF, but for now we do it here. To be safe,
+    # we only add the alias if it doesn't already exist.
+    if (NOT TARGET ESMF::ESMF)
+      add_library(ESMF::ESMF ALIAS ESMF)
+    endif ()
   endif ()
 
   # ------
