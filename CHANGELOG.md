@@ -17,9 +17,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update CI to v2 orb
-
 ### Deprecated
+
+## [3.40.0] - 2024-02-06
+
+### Changed
+
+- Updated `FindESMF.cmake` to the version from ESMF develop branch, commit da8f410. Will be in ESMF 8.6.1+
+  - This provides the `ESMF::ESMF` alias for ESMF library for non-Baselibs builds
+
+## [3.39.0] - 2024-02-06
+
+### Added
+
+- Added `ESMF::ESMF` alias for ESMF library
+  - Needed to avoid an issue UFS has with MAPL/GOCART (see https://github.com/GEOS-ESM/MAPL/issues/2569)
+  - Needed for Baselibs builds of MAPL 2.44 and higher as we now move to use `ESMF::ESMF` as the target
+  - Will be added to `FindESMF.cmake` in a future release of ESMF, so we only add the alias if it doesn't exist
+
+### Changed
+
+- Update CI to v2 orb
 
 ## [3.38.0] - 2024-01-19
 
