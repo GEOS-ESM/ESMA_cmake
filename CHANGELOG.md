@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.40.1] - 2024-02-12
+
+### Fixed
+
+- Edit `FindESMF.cmake` to use `ESMF::ESMF` as the primary target and make `ESMF` an alias for `ESMF::ESMF` if it doesn't exist
+
 ## [3.40.0] - 2024-02-06
 
 ### Changed
