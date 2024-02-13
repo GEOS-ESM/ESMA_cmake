@@ -14,7 +14,7 @@ endif ()
 # In CMake this is CMAKE_HOST_SYSTEM_NAME
 
 if (BASEDIR)
-  
+
   # First, what if we have a BASEDIR/lib, let's make sure it's like we want
   # That is, it has ARCH and it's the *right* ARCH!
   if (IS_DIRECTORY ${BASEDIR}/lib)
@@ -164,8 +164,14 @@ if (Baselibs_FOUND)
 
     # Finally, we add aliases since GEOS (at the moment) uses esmf and ESMF for the target
     # instead of ESMF::ESMF (MAPL uses ESMF::ESMF)
-    add_library(ESMF ALIAS ESMF::ESMF)
-    add_library(esmf ALIAS ESMF::ESMF)
+    if (NOT TARGET ESMF)
+      message(STATUS "ESMF alias not found, creating ESMF alias")
+      add_library(ESMF ALIAS ESMF::ESMF)
+    endif ()
+    if (NOT TARGET esmf)
+      message(STATUS "esmf alias not found, creating esmf alias")
+      add_library(esmf ALIAS ESMF::ESMF)
+    endif ()
   endif ()
 
   # ------
