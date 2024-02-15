@@ -30,9 +30,22 @@
 #   By default, the module finds the F2PY2 program associated with the installed NumPy package.
 #
 
-# Path to the f2py executable
-find_package(Python2 COMPONENTS Interpreter)
+# It turns out that on machines where Python2 does not exist, this code will still
+# find plain "f2py" and think that is f2py2. Even if you remove f2py from the find_program
+# call below, it still finds that. So instead, we must disable this code if no Python2
+# interpreter is found.
 
+# Find the Python2 interpreter which must exist else we cannot find f2py2
+find_package(Python2 COMPONENTS Interpreter QUIET)
+
+# If we do not have a Python2 interpreter, we cannot find f2py2 and we are done
+if(NOT Python2_FOUND)
+  message(WARNING "[F2PY2]: Python2 interpreter not found, we will not search for f2py2. This means f2py2 libraries will not be built. Please convert your code to Python3.")
+  set(F2PY2_FOUND FALSE)
+  return()
+endif()
+
+# Path to the f2py2 executable
 find_program(F2PY2_EXECUTABLE NAMES "f2py${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}"
                                    "f2py-${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}"
                                    "f2py${Python2_VERSION_MAJOR}"
