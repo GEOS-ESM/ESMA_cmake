@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Quoted generator expression arguments (see #308)
+
 ### Removed
 
 ### Added
