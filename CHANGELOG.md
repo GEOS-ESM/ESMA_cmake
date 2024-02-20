@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added new `DetermineMPIStack.cmake` file that will detect the MPI Stack being used
+
 ### Changed
 
 ### Deprecated
