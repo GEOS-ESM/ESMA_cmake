@@ -9,9 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Quoted generator expression arguments (see #308)
-
 ### Removed
+
+### Added
+
+### Changed
+
+### Deprecated
+
+## [3.41.0] - 2024-02-20
+
+### Fixed
+
+- Quoted generator expression arguments (see #308)
 
 ### Added
 
@@ -21,10 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Can be overridden by setting `MPI_STACK` to one of the allowed values via `-DMPI_STACK=...`
   - Will also set `MPI_STACK_VERSION` to the version of the stack being used
     - NOTE: This is the version of the *stack* not the version of MPI supported by the stack 
-
-### Changed
-
-### Deprecated
 
 ## [3.40.0] - 2024-02-06
 
