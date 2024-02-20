@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added new `DetermineMPIStack.cmake` file that will detect the MPI Stack being used
+  - The allowed stacks are `openmpi`, `mpich`, `intel`, `mvapich`, `mpt` which will
+    be set in the `MPI_STACK` variable
+    - Can be overridden by setting `MPI_STACK` to one of the allowed values via `-DMPI_STACK=...`
+  - Will also set `MPI_STACK_VERSION` to the version of the stack being used
+    - NOTE: This is the version of the *stack* not the version of MPI supported by the stack 
+
 ### Changed
 
 ### Deprecated
