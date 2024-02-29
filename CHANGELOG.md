@@ -17,11 +17,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-## [3.40.1] - 2024-02-12
+## [3.41.1] - 2024-03-XX
 
 ### Fixed
 
 - Edit `FindESMF.cmake` to use `ESMF::ESMF` as the primary target and make `ESMF` an alias for `ESMF::ESMF` if it doesn't exist
+
+## [3.41.0] - 2024-02-20
+
+### Fixed
+
+- Quoted generator expression arguments (see #308)
+
+### Added
+
+- Added new `DetermineMPIStack.cmake` file that will detect the MPI Stack being used
+  - The allowed stacks are `openmpi`, `mpich`, `intel`, `mvapich`, `mpt` which will
+    be set in the `MPI_STACK` variable
+    - Can be overridden by setting `MPI_STACK` to one of the allowed values via `-DMPI_STACK=...`
+  - Will also set `MPI_STACK_VERSION` to the version of the stack being used
+    - NOTE: This is the version of the *stack* not the version of MPI supported by the stack 
 
 ## [3.40.0] - 2024-02-06
 
