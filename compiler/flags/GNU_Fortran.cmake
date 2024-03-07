@@ -136,7 +136,7 @@ elseif (${proc_description} MATCHES "Hygon")
   # see https://github.com/geoschem/GCHP/issues/391
   # Intel was happy with AVX2, but this test was done with GCC 10
   # Perhaps later versions of GCC would return a different value?
-  # Until then, nocona is definitely save. Pentium 4!
+  # Until then, nocona is definitely safe. Pentium 4!
   set (GNU_TARGET_ARCH "nocona")
   set (GNU_NATIVE_ARCH "native")
   set (NO_FMA "-mno-fma")
