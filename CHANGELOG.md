@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.42.0] - 2024-03-08
+
+### Changed
+
+- Added `-quiet` flag for NAG compilation. This suppresses the compiler banner and the summary line, so that only diagnostic messages will appear.
+
 ## [3.41.0] - 2024-02-20
 
 ### Fixed
