@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added support for Hygon processors with GCC
+
 ### Changed
 
 - Remove passing in `-init=snan,arrays` and `-fpe0` for Debug flags with Intel Fortran Classic `ifort` 2021.10 or higher. This
