@@ -131,11 +131,9 @@ set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inl
 # So we can't depend on anything but the last node of the version string.
 # First we need to extract the last node of the version string
 string(REGEX MATCH "([0-9]+)$" CMAKE_Fortran_COMPILER_VERSION_LAST_NODE ${CMAKE_Fortran_COMPILER_VERSION})
-message(STATUS "CMAKE_Fortran_COMPILER_VERSION_LAST_NODE: ${CMAKE_Fortran_COMPILER_VERSION_LAST_NODE}")
 
 # Now we can compare the last node to see if it is less than 20230609
 if (CMAKE_Fortran_COMPILER_VERSION_LAST_NODE VERSION_LESS 20230609)
-  message(STATUS "Adding -init=snan,arrays to GEOS_Fortran_Debug_Flags")
   set (GEOS_Fortran_Debug_Flags "${GEOS_Fortran_Debug_Flags} ${INIT_SNAN}")
 endif ()
 
@@ -143,7 +141,6 @@ set (GEOS_Fortran_Debug_FPE_Flags "${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${F
 
 # Like above, we can only add ${FPE0} if the version is less than 20230609
 if (CMAKE_Fortran_COMPILER_VERSION_LAST_NODE VERSION_LESS 20230609)
-  message(STATUS "Adding ${FPE0} to GEOS_Fortran_Debug_FPE_Flags")
   set (GEOS_Fortran_Debug_FPE_Flags "${GEOS_Fortran_Debug_FPE_Flags} ${FPE0}")
 endif ()
 
