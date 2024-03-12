@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Avoid bug with GCC and Open MPI 5 by not using `-ffpe-trap=zero` in flags
+
 ### Removed
 
 ### Added

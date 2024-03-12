@@ -58,3 +58,24 @@ endif()
 set(MPI_STACK "${MPI_STACK}" CACHE STRING "MPI_STACK Value")
 set(MPI_STACK_VERSION "${MPI_STACK_VERSION}" CACHE STRING "MPI_STACK_VERSION Value")
 message(STATUS "Using ${MPI_STACK_TYPE} MPI_STACK: ${MPI_STACK}. Version: ${MPI_STACK_VERSION}")
+
+# Testing has show that Open MPI 5.0.0 and later along with GCC 13.2 and later
+# cannot use the -ffpe-trap=zero flag and we sometimes pass in -ffpe-trap=zero,overflow
+# So if we are using Open MPI 5 + GCC 13.2 or later, we need to remove the 'zero,' from the flags
+# We also have to do it with each of the RELEASE, DEBUG, and AGGRESSIVE flags
+
+string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_UPPER)
+message(STATUS "CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE_UPPER} before: ${CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE_UPPER}}")
+
+if (MPI_STACK STREQUAL "openmpi")
+  if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+    if (CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "13.2")
+      if (MPI_STACK_VERSION VERSION_GREATER_EQUAL "5.0.0")
+        message(WARNING "Open MPI 5.0.0 and later along with GCC 13.2 and later cannot use the -ffpe-trap=zero flag. This will be removed from the flags.")
+        string(REPLACE "${TRAP_ZERO}" "" CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE_UPPER} ${CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE_UPPER}})
+      endif()
+    endif()
+  endif()
+endif()
+
+message(STATUS "CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE_UPPER} after: ${CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE_UPPER}}")

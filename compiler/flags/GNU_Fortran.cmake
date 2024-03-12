@@ -110,6 +110,9 @@ set (NO_ALIAS "")
 
 set (NO_RANGE_CHECK "-fno-range-check")
 
+set (TRAP_ZERO "-ffpe-trap=zero")
+set (TRAP_OVERFLOW "-ffpe-trap=overflow")
+
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
@@ -151,7 +154,7 @@ add_definitions(-D__GFORTRAN__)
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "-ffree-line-length-none ${NO_RANGE_CHECK} -Wno-missing-include-dirs ${TRACEBACK} ${UNUSED_DUMMY}" )
-set (common_Fortran_fpe_flags "-ffpe-trap=zero,overflow ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
+set (common_Fortran_fpe_flags "${TRAP_ZERO} ${TRAP_OVERFLOW} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
 # GEOS Debug
 # ----------
