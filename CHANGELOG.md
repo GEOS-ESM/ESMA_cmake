@@ -17,7 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Remove passing in `-init=snan,arrays` and `-fpe0` for Debug flags with Intel Fortran Classic `ifort` 2021.10 or higher. This
+  prevents failures in running `nf90_create` within MAPL (and in standalone)
+
 ### Deprecated
+
+## [3.42.0] - 2024-03-08
+
+### Changed
+
+- Added `-quiet` flag for NAG compilation. This suppresses the compiler banner and the summary line, so that only diagnostic messages will appear.
 
 ## [3.41.0] - 2024-02-20
 
