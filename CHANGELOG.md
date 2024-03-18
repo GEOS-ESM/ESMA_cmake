@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.43.0] - 2024-03-18
+
+### Changed
+
+- Change `make tests` to only do tests labeled with `ESSENTIAL`. Add new `make tests-all` to run all tests.
+
 ## [3.42.0] - 2024-03-08
 
 ### Changed
