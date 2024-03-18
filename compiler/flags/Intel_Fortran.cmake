@@ -48,7 +48,6 @@ set (FMA "-fma")
 set (ALIGN_ALL "-align all")
 set (NO_ALIAS "-fno-alias")
 set (USE_SVML "-fimf-use-svml=true")
-set (INIT_SNAN "-init=snan,arrays")
 
 # Additional flags for better Standards compliance
 ## Set the Standard to be Fortran 2018
@@ -117,32 +116,8 @@ set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC} ${DISABLE_10121}")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -save-temps")
-
-# Testing shows that -init=snan,arrays and -fpe0 causes MAPL test failures with
-# Intel Fortran 2021.10. So we will append the flags only if the version
-# is less than 2021.10. However, we have to check the version in a weird
-# way. For example, Intel ifort 2021.6 is reported by CMake as:
-#   2021.6.0.20220226
-# Intel 2021.10 reports as:
-#   2021.10.0.20230609
-# but Intel ifort 2021.11 is reported by CMake as:
-#   2021.0.0.20231010
-# So we can't depend on anything but the last node of the version string.
-# First we need to extract the last node of the version string
-string(REGEX MATCH "([0-9]+)$" CMAKE_Fortran_COMPILER_VERSION_LAST_NODE ${CMAKE_Fortran_COMPILER_VERSION})
-
-# Now we can compare the last node to see if it is less than 20230609
-if (CMAKE_Fortran_COMPILER_VERSION_LAST_NODE VERSION_LESS 20230609)
-  set (GEOS_Fortran_Debug_Flags "${GEOS_Fortran_Debug_Flags} ${INIT_SNAN}")
-endif ()
-
-set (GEOS_Fortran_Debug_FPE_Flags "${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
-
-# Like above, we can only add ${FPE0} if the version is less than 20230609
-if (CMAKE_Fortran_COMPILER_VERSION_LAST_NODE VERSION_LESS 20230609)
-  set (GEOS_Fortran_Debug_FPE_Flags "${GEOS_Fortran_Debug_FPE_Flags} ${FPE0}")
-endif ()
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -init=snan,arrays -save-temps")
+set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
 
 # GEOS NoVectorize
 # ----------------
