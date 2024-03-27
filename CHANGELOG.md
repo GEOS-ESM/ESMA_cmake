@@ -17,11 +17,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-## [3.41.1] - 2024-03-XX
+## [3.44.0] - 2024-03-XX
 
 ### Fixed
 
 - Edit `FindESMF.cmake` to use `ESMF::ESMF` as the primary target and make `ESMF` an alias for `ESMF::ESMF` if it doesn't exist
+
+## [3.43.0] - 2024-03-18
+
+### Changed
+
+- Change `make tests` to only do tests labeled with `ESSENTIAL`. Add new `make tests-all` to run all tests.
+
+## [3.42.0] - 2024-03-08
+
+### Changed
+
+- Added `-quiet` flag for NAG compilation. This suppresses the compiler banner and the summary line, so that only diagnostic messages will appear.
 
 ## [3.41.0] - 2024-02-20
 
