@@ -63,12 +63,23 @@ set (NO_RANGE_CHECK "")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 if (${proc_description} MATCHES "EPYC")
+  # AMD EPYC processors support AVX2, but only via the -march=core-avx2 flag
+  set (COREAVX2_FLAG "-march=core-avx2")
+elseif (${proc_description} MATCHES "Hygon")
+  # Hygon processors support AVX2, but only via the -march=core-avx2 flag
   set (COREAVX2_FLAG "-march=core-avx2")
 elseif (${proc_description} MATCHES "Intel")
+  # All the Intel processors that GEOS runs on support AVX2, but to be
+  # consistent with the AMD processors, we use the -march=core-avx2 flag
   set (COREAVX2_FLAG "-march=core-avx2")
   # Previous versions of GEOS used this flag, which was not portable
   # for AMD. Keeping here for a few versions for historical purposes.
   #set (COREAVX2_FLAG "-xCORE-AVX2")
+elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
+  # This is a fallback for when the above doesn't work. It should work
+  # for most x86_64 processors, but it is not guaranteed to be optimal.
+  message(WARNING "Unknown processory type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
+  set (COREAVX2_FLAG "")
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
@@ -84,7 +95,7 @@ set (common_Fortran_fpe_flags "${FPE0} ${FP_MODEL_SOURCE} ${HEAPARRAYS} ${NOOLD_
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check -warn unused -init=snan,arrays -save-temps")
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -check all,noarg_temp_created,nouninit -warn unused -save-temps")
 set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS NoVectorize

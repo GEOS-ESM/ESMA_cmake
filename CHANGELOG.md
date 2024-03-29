@@ -9,17 +9,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Set `BUILT_ON_SLES15` to `FALSE` if not building on SLES15. Before it was blank
+
 ### Removed
 
 ### Added
 
 ### Changed
 
-## [3.36.1] - 2023-12-12
+### Deprecated
+
+## [3.43.0] - 2024-03-18
+
+### Changed
+
+- Change `make tests` to only do tests labeled with `ESSENTIAL`. Add new `make tests-all` to run all tests.
+
+## [3.42.0] - 2024-03-08
+
+### Changed
+
+- Added `-quiet` flag for NAG compilation. This suppresses the compiler banner and the summary line, so that only diagnostic messages will appear.
+
+## [3.41.0] - 2024-02-20
 
 ### Fixed
 
-- Set `BUILT_ON_SLES15` to `FALSE` if not building on SLES15. Before it was blank
+- Quoted generator expression arguments (see #308)
+
+### Added
+
+- Added new `DetermineMPIStack.cmake` file that will detect the MPI Stack being used
+  - The allowed stacks are `openmpi`, `mpich`, `intel`, `mvapich`, `mpt` which will
+    be set in the `MPI_STACK` variable
+    - Can be overridden by setting `MPI_STACK` to one of the allowed values via `-DMPI_STACK=...`
+  - Will also set `MPI_STACK_VERSION` to the version of the stack being used
+    - NOTE: This is the version of the *stack* not the version of MPI supported by the stack 
+
+## [3.40.0] - 2024-02-06
+
+### Changed
+
+- Updated `FindESMF.cmake` to the version from ESMF develop branch, commit da8f410. Will be in ESMF 8.6.1+
+  - This provides the `ESMF::ESMF` alias for ESMF library for non-Baselibs builds
+
+## [3.39.0] - 2024-02-06
+
+### Added
+
+- Added `ESMF::ESMF` alias for ESMF library
+  - Needed to avoid an issue UFS has with MAPL/GOCART (see https://github.com/GEOS-ESM/MAPL/issues/2569)
+  - Needed for Baselibs builds of MAPL 2.44 and higher as we now move to use `ESMF::ESMF` as the target
+  - Will be added to `FindESMF.cmake` in a future release of ESMF, so we only add the alias if it doesn't exist
+
+### Changed
+
+- Update CI to v2 orb
+
+## [3.38.0] - 2024-01-19
+
+### Added
+
+- Add `FindESMF.cmake` for use with Spack builds of GEOSgcm
+- Added support for Hygon processors with Intel Fortran
+
+## [3.37.0] - 2024-01-09
+
+### Changed
+
+- Fixes for `ifx` compiler
+  - Set `nouninit` for check flags when building with Debug build type
+  - Remove some debug flags that don't exist with `ifx`
+  - Remove `-init=snan` as that causes compiler faults with some MAPL files
+- For NAG, turn off setting of `ESMF_HAS_ACHAR_BUG` CMake option as it seems
+  no longer needed
+
+### Deprecated
+
+- The `ESMF_HAS_ACHAR_BUG` CMake option is deprecated and will be removed in a future release
 
 ## [3.36.0] - 2023-10-26
 
