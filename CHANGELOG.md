@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Set `BUILT_ON_SLES15` to `FALSE` if not building on SLES15. Before it was blank
-
 ### Removed
 
 ### Added
@@ -18,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Deprecated
+
+## [3.44.0] - 2024-03-29
+
+### Fixed
+
+- Set `BUILT_ON_SLES15` to `FALSE` if not building on SLES15. Before it was blank
 
 ## [3.43.0] - 2024-03-18
 
