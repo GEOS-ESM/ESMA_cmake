@@ -79,11 +79,13 @@ macro (add_f2py3_module _name)
   #       so we need to test the Python version and then call the correct
   #       f2py
 
-  if (PYTHON_VERSION_MAJOR EQUAL 3 AND PYTHON_VERSION_MINOR GREATER 11)
+  if (Python3_VERSION VERSION_GREATER 3.11)
     set(F2PY3_BACKEND "meson")
   else ()
     set(F2PY3_BACKEND "distutils")
   endif ()
+
+  message(STATUS "F2PY3_BACKEND: ${F2PY3_BACKEND}")
 
   if (F2PY3_BACKEND STREQUAL "distutils")
     set(_fcompiler_opts "--fcompiler=${F2PY3_FCOMPILER}")
