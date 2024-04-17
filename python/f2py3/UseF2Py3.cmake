@@ -74,11 +74,31 @@ macro (add_f2py3_module _name)
 
   #message(STATUS "${_name} F2PY3_Fortran_FLAGS ${F2PY3_Fortran_FLAGS}")
 
-  set(_fcompiler_opts "--fcompiler=${F2PY3_FCOMPILER}")
-  list(APPEND _fcompiler_opts "--f77exec=${CMAKE_Fortran_COMPILER}" "--f77flags='${F2PY3_Fortran_FLAGS}'")
-  if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
-     list(APPEND _fcompiler_opts "--f90exec=${CMAKE_Fortran_COMPILER}" "--f90flags='${F2PY3_Fortran_FLAGS}'")
-  endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+  # NOTE: This style of calling f2py is only for distutils. If you are using
+  #       Python 3.12, the backend is now meson and this will not work
+  #       so we need to test the Python version and then call the correct
+  #       f2py
+
+  if (PYTHON_VERSION_MAJOR EQUAL 3 AND PYTHON_VERSION_MINOR GREATER 11)
+    set(F2PY3_BACKEND "meson")
+  else ()
+    set(F2PY3_BACKEND "distutils")
+  endif ()
+
+  if (F2PY3_BACKEND STREQUAL "distutils")
+    set(_fcompiler_opts "--fcompiler=${F2PY3_FCOMPILER}")
+    list(APPEND _fcompiler_opts "--f77exec=${CMAKE_Fortran_COMPILER}" "--f77flags='${F2PY3_Fortran_FLAGS}'")
+    if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+      list(APPEND _fcompiler_opts "--f90exec=${CMAKE_Fortran_COMPILER}" "--f90flags='${F2PY3_Fortran_FLAGS}'")
+    endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+  else ()
+    set(_fcompiler_opts "")
+    list(APPEND _fcompiler_opts "--f77flags='${F2PY3_Fortran_FLAGS}'")
+    if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+      list(APPEND _fcompiler_opts "--f90flags='${F2PY3_Fortran_FLAGS}'")
+    endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+  endif ()
+
 
   # Make the source filenames absolute.
   set(_abs_srcs)
@@ -227,19 +247,23 @@ macro (add_f2py3_module _name)
 
   # Define the command to generate the Fortran to Python3 interface module. The
   # output will be a shared library that can be imported by python.
+  # We also need to set FC in the environment to the fortran compiler
   if ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
     add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
-      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
+      COMMAND ${CMAKE_COMMAND} -E env "FC=${CMAKE_Fortran_COMPILER}"
+              ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
               ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
       DEPENDS ${add_f2py3_module_SOURCES}
       COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
   else ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
     add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
-      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name} -h ${_name}.pyf
+      COMMAND ${CMAKE_COMMAND} -E env "FC=${CMAKE_Fortran_COMPILER}"
+              ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name} -h ${_name}.pyf
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
               --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
-      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
+      COMMAND ${CMAKE_COMMAND} -E env "FC=${CMAKE_Fortran_COMPILER}"
+              ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
               -c "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}/${_name}.pyf"
               ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} ${REDIRECT_TO_DEV_NULL}
