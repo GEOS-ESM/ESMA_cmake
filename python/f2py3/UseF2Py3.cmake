@@ -113,17 +113,18 @@ macro (add_f2py3_module _name)
   # The f2py3 --include_paths option, used when generating a signature file,
   # needs a colon-separated list. The f2py3 -I option, used when compiling
   # the sources, must be repeated for every include directory.
-  #get_directory_property(_inc_dirs INCLUDE_DIRECTORIES)
 
   set(_inc_opts)
   set(_lib_opts)
-  set(_inc_dirs)
   foreach(_dir ${add_f2py3_module_INCLUDEDIRS})
     list(APPEND _inc_opts "-I${_dir}")
     list(APPEND _lib_opts "-L${_dir}")
-    list(APPEND _inc_dirs "${_dir}")
   endforeach(_dir)
-  string(REPLACE ";" ":" _inc_paths "${_inc_dirs}")
+
+  # We also want to include the directory where the
+  # sources are located as well into _inc_opts
+  get_filename_component(_src_dir ${_abs_srcs} DIRECTORY)
+  list(APPEND _inc_opts "-I${_src_dir}")
 
   set(_libs_opts)
   foreach(_lib ${add_f2py3_module_LIBRARIES})
@@ -251,6 +252,7 @@ macro (add_f2py3_module _name)
   # output will be a shared library that can be imported by python.
   # We also need to set FC in the environment to the fortran compiler
   message(STATUS "add_f2py3_module_SOURCES: ${add_f2py3_module_SOURCES}")
+  message(STATUS "_inc_opts: ${_inc_opts}")
   if ( F2PY3_BACKEND STREQUAL "meson")
     add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
       COMMAND ${CMAKE_COMMAND} -E env "FC=${CMAKE_Fortran_COMPILER}"
