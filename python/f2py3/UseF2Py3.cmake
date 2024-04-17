@@ -85,7 +85,7 @@ macro (add_f2py3_module _name)
     set(F2PY3_BACKEND "distutils")
   endif ()
 
-  message(STATUS "F2PY3_BACKEND: ${F2PY3_BACKEND}")
+  message(STATUS "Using F2PY3_BACKEND: ${F2PY3_BACKEND}")
 
   if (F2PY3_BACKEND STREQUAL "distutils")
     set(_fcompiler_opts "--fcompiler=${F2PY3_FCOMPILER}")
@@ -100,7 +100,6 @@ macro (add_f2py3_module _name)
       list(APPEND _fcompiler_opts "--f90flags='${F2PY3_Fortran_FLAGS}'")
     endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
   endif ()
-
 
   # Make the source filenames absolute.
   set(_abs_srcs)
@@ -259,8 +258,8 @@ macro (add_f2py3_module _name)
   # Define the command to generate the Fortran to Python3 interface module. The
   # output will be a shared library that can be imported by python.
   # We also need to set FC in the environment to the fortran compiler
-  message(STATUS "add_f2py3_module_SOURCES: ${add_f2py3_module_SOURCES}")
-  message(STATUS "_inc_opts: ${_inc_opts}")
+  #message(STATUS "add_f2py3_module_SOURCES: ${add_f2py3_module_SOURCES}")
+  #message(STATUS "_inc_opts: ${_inc_opts}")
   if ( F2PY3_BACKEND STREQUAL "meson")
     add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
       COMMAND ${CMAKE_COMMAND} -E env "FC=${CMAKE_Fortran_COMPILER}"
