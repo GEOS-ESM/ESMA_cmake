@@ -109,6 +109,13 @@ macro (add_f2py3_module _name)
     list(APPEND _abs_srcs ${_abs_src})
   endforeach(_src ${add_f2py3_module_SOURCES})
 
+  # Let's also get all directories that the sources are in
+  set(_src_inc_dirs)
+  foreach(_src ${_abs_srcs})
+    get_filename_component(_dir ${_src} DIRECTORY)
+    list(APPEND _src_inc_dirs ${_dir})
+  endforeach(_src ${_abs_srcs})
+
   # Get a list of the include directories.
   # The f2py3 --include_paths option, used when generating a signature file,
   # needs a colon-separated list. The f2py3 -I option, used when compiling
@@ -123,8 +130,9 @@ macro (add_f2py3_module _name)
 
   # We also want to include the directory where the
   # sources are located as well into _inc_opts
-  get_filename_component(_src_dir ${_abs_srcs} DIRECTORY)
-  list(APPEND _inc_opts "-I${_src_dir}")
+  foreach(_dir ${_src_inc_dirs})
+    list(APPEND _inc_opts "-I${_dir}")
+  endforeach(_dir)
 
   set(_libs_opts)
   foreach(_lib ${add_f2py3_module_LIBRARIES})
