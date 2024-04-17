@@ -119,13 +119,17 @@ macro (add_f2py3_module _name)
   # The f2py3 --include_paths option, used when generating a signature file,
   # needs a colon-separated list. The f2py3 -I option, used when compiling
   # the sources, must be repeated for every include directory.
+  #get_directory_property(_inc_dirs INCLUDE_DIRECTORIES)
 
   set(_inc_opts)
   set(_lib_opts)
+  set(_inc_dirs)
   foreach(_dir ${add_f2py3_module_INCLUDEDIRS})
     list(APPEND _inc_opts "-I${_dir}")
     list(APPEND _lib_opts "-L${_dir}")
+    list(APPEND _inc_dirs "${_dir}")
   endforeach(_dir)
+  string(REPLACE ";" ":" _inc_paths "${_inc_dirs}")
 
   # We also want to include the directory where the
   # sources are located as well into _inc_opts
