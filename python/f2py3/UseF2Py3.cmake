@@ -250,6 +250,16 @@ macro (add_f2py3_module _name)
   # Define the command to generate the Fortran to Python3 interface module. The
   # output will be a shared library that can be imported by python.
   # We also need to set FC in the environment to the fortran compiler
+  message(STATUS "add_f2py3_module_SOURCES: ${add_f2py3_module_SOURCES}")
+  if ( F2PY3_BACKEND STREQUAL "meson")
+    add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
+      COMMAND ${CMAKE_COMMAND} -E env "FC=${CMAKE_Fortran_COMPILER}"
+              ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
+              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
+              ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
+      DEPENDS ${add_f2py3_module_SOURCES}
+      COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
+  else ()
   if ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
     add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
       COMMAND ${CMAKE_COMMAND} -E env "FC=${CMAKE_Fortran_COMPILER}"
@@ -272,6 +282,7 @@ macro (add_f2py3_module _name)
       DEPENDS ${add_f2py3_module_SOURCES}
       COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
   endif ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
+  endif ()
 
 
 
