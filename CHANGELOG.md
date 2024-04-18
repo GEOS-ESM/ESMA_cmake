@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add suppression of remark 10488 for Intel Fortran Classic which is a warning about ifort deprecation in late 2024
+
 ### Changed
 
 ### Deprecated
