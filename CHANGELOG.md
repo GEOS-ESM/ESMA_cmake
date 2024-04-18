@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Updates for building with Clang on macOS
+  - Add `-Wl,-ld_classic` to linker flags for all macOS
+  - Add `-Wno-implicit-int` for Clang on macOS
+
 ### Removed
 
 ### Added

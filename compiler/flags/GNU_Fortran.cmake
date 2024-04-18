@@ -144,6 +144,16 @@ else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
 
+if (APPLE)
+  # We seem to now require (sometimes?) the use of ld_classic if on Apple
+  add_link_options(-Wl,-ld_classic)
+
+  # Also, if our C compiler is Apple Clang, we need to pass -Wno-implicit-int to our C flags
+  if (CMAKE_C_COMPILER_ID MATCHES "Clang")
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-implicit-int")
+  endif ()
+endif ()
+
 ####################################################
 
 add_definitions(-D__GFORTRAN__)
