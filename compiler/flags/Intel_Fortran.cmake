@@ -65,6 +65,9 @@ set (DISABLE_10337 "-diag-disable 10337")
 ## Turn off ifort: command line warning #10121: overriding '-fp-model precise' with '-fp-model fast'
 set (DISABLE_10121 "-diag-disable 10121")
 
+## Turn off remark #10448 warning about ifort deprecation in late 2024
+set (DISABLE_10448 "-diag-disable=10448")
+
 set (NO_RANGE_CHECK "")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
@@ -112,7 +115,7 @@ endif ()
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS}")
-set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC} ${DISABLE_10121}")
+set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC} ${DISABLE_10121} ${DISABLE_10448}")
 
 # GEOS Debug
 # ----------
