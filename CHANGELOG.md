@@ -12,10 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updates for building with Clang on macOS
   - Add `-Wl,-ld_classic` to linker flags for all macOS
   - Add `-Wno-implicit-int` for Clang on macOS
+- Fix for using f2py and Python 3.12
 
 ### Removed
 
 ### Added
+
+- Add suppression of remark 10488 for Intel Fortran Classic which is a warning about ifort deprecation in late 2024
 
 ### Changed
 
