@@ -17,6 +17,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.45.0] - 2024-04-25
+
+### Fixed
+
+- Edit `FindESMF.cmake` to use `ESMF::ESMF` as the primary target and make `ESMF` an alias for `ESMF::ESMF` if it doesn't exist
+- Updates for building with Clang on macOS
+  - Add `-Wl,-ld_classic` to linker flags for all macOS
+  - Add `-Wno-implicit-int` for Clang on macOS
+- Fix for using f2py and Python 3.12
+
+### Added
+
+- Add suppression of remark 10488 for Intel Fortran Classic which is a warning about ifort deprecation in late 2024
+
 ## [3.44.0] - 2024-03-29
 
 ### Fixed
