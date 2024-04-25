@@ -14,7 +14,7 @@ endif ()
 # In CMake this is CMAKE_HOST_SYSTEM_NAME
 
 if (BASEDIR)
-  
+
   # First, what if we have a BASEDIR/lib, let's make sure it's like we want
   # That is, it has ARCH and it's the *right* ARCH!
   if (IS_DIRECTORY ${BASEDIR}/lib)
@@ -153,22 +153,24 @@ if (Baselibs_FOUND)
     set (ESMFMKFILE "${BASEDIR}/lib/esmf.mk" CACHE PATH "Path to esmf.mk file" FORCE)
     message(STATUS "ESMFMKFILE: ${ESMFMKFILE}")
 
-    # Now, let us use the FindESMF.cmake that ESMF itself includes and installs
-    list (APPEND CMAKE_MODULE_PATH "${BASEDIR}/include/esmf")
+    # Now we can use FindESMF.cmake to find ESMF. This uses the one in the current
+    # directory, not the one in the ESMF installation. The one here uses
+    # ESMF::ESMF as the main target
     find_package(ESMF MODULE REQUIRED)
 
     # Also, we know ESMF from Baselibs requires MPI (note that this isn't always true, but
     # for ESMF built in Baselibs for use in GEOS, it currently is)
-    target_link_libraries(ESMF INTERFACE MPI::MPI_Fortran)
+    target_link_libraries(ESMF::ESMF INTERFACE MPI::MPI_Fortran)
 
-    # Finally, we add an alias since GEOS (at the moment) uses esmf not ESMF for the target
-    add_library(esmf ALIAS ESMF)
-
-    # We also add an alias for the target ESMF::ESMF. This will eventually be
-    # added to `FindESMF.cmake` in ESMF, but for now we do it here. To be safe,
-    # we only add the alias if it doesn't already exist.
-    if (NOT TARGET ESMF::ESMF)
-      add_library(ESMF::ESMF ALIAS ESMF)
+    # Finally, we add aliases since GEOS (at the moment) uses esmf and ESMF for the target
+    # instead of ESMF::ESMF (MAPL uses ESMF::ESMF)
+    if (NOT TARGET ESMF)
+      message(STATUS "ESMF alias not found, creating ESMF alias")
+      add_library(ESMF ALIAS ESMF::ESMF)
+    endif ()
+    if (NOT TARGET esmf)
+      message(STATUS "esmf alias not found, creating esmf alias")
+      add_library(esmf ALIAS ESMF::ESMF)
     endif ()
   endif ()
 
