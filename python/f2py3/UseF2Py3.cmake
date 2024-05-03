@@ -79,7 +79,7 @@ macro (add_f2py3_module _name)
   #       so we need to test the Python version and then call the correct
   #       f2py
 
-  if (Python3_VERSION VERSION_GREATER 3.11)
+  if (Python3_VERSION VERSION_GREATER_EQUAL "3.12")
     set(F2PY3_BACKEND "meson")
   else ()
     set(F2PY3_BACKEND "distutils")
