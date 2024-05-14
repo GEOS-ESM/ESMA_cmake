@@ -92,7 +92,16 @@ elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
   # Once you are in here, you are probably on Rosetta, but not required. 
   # Still, on Apple Rosetta we also now need to use the ld_classic as the linker
   if (APPLE)
-    add_link_options("-Wl,-ld_classic")
+    # Determine whether we need to add link options for version 15+ of the Apple command line utilities
+    execute_process(COMMAND "pkgutil"
+                            "--pkg-info=com.apple.pkg.CLTools_Executables"
+                    OUTPUT_VARIABLE TEST)
+    string(REGEX REPLACE ".*version: ([0-9]+).*" "\\1" CMDLINE_UTILS_VERSION ${TEST})
+    message("Apple command line utils major version is '${CMDLINE_UTILS_VERSION}'")
+    if (${CMDLINE_UTILS_VERSION} VERSION_GREATER 14)
+      message("Add link options '-Wl,-ld_classic'")
+      add_link_options(-Wl,-ld_classic)
+    endif ()
   endif ()
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
