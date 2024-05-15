@@ -13,9 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added YAML linter
+
 ### Changed
 
 ### Deprecated
+
+## [3.45.1] - 2024-05-03
+
+### Fixed
+
+- Fix bug with meson/distutils for python 3
 
 ## [3.45.0] - 2024-04-25
 
