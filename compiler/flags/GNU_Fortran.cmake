@@ -150,9 +150,9 @@ if (APPLE)
                           "--pkg-info=com.apple.pkg.CLTools_Executables"
                   OUTPUT_VARIABLE TEST)
   string(REGEX REPLACE ".*version: ([0-9]+).*" "\\1" CMDLINE_UTILS_VERSION ${TEST})
-  message("Apple command line utils major version is '${CMDLINE_UTILS_VERSION}'")
+  message(STATUS "Apple command line utils major version is '${CMDLINE_UTILS_VERSION}'")
   if (${CMDLINE_UTILS_VERSION} VERSION_GREATER 14)
-    message("Add link options '-Wl,-ld_classic'")
+    message(STATUS "Adding link options '-Wl,-ld_classic'")
     add_link_options(-Wl,-ld_classic)
   endif ()
   #
