@@ -19,6 +19,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.45.2] - 2024-05-16
+
+### Fixed
+
+- Fix issue with `ld_classic` detection on macOS. Not all XCode versions need this
+
+### Added
+
+- Added YAML linter
+
+## [3.45.1] - 2024-05-03
+
+### Fixed
+
+- Fix bug with meson/distutils for python 3
+
+## [3.45.0] - 2024-04-25
+
+### Fixed
+
+- Edit `FindESMF.cmake` to use `ESMF::ESMF` as the primary target and make `ESMF` an alias for `ESMF::ESMF` if it doesn't exist
+- Updates for building with Clang on macOS
+  - Add `-Wl,-ld_classic` to linker flags for all macOS
+  - Add `-Wno-implicit-int` for Clang on macOS
+- Fix for using f2py and Python 3.12
+
+### Added
+
+- Add suppression of remark 10488 for Intel Fortran Classic which is a warning about ifort deprecation in late 2024
+
+## [3.44.0] - 2024-03-29
+
+### Fixed
+
+- Set `BUILT_ON_SLES15` to `FALSE` if not building on SLES15. Before it was blank
+
+## [3.43.0] - 2024-03-18
+
+### Changed
+
+- Change `make tests` to only do tests labeled with `ESSENTIAL`. Add new `make tests-all` to run all tests.
+
+## [3.42.0] - 2024-03-08
+
+### Changed
+
+- Added `-quiet` flag for NAG compilation. This suppresses the compiler banner and the summary line, so that only diagnostic messages will appear.
+
 ## [3.41.0] - 2024-02-20
 
 ### Fixed
