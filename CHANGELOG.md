@@ -22,6 +22,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.45.2] - 2024-05-16
+
+### Fixed
+
+- Fix issue with `ld_classic` detection on macOS. Not all XCode versions need this
+
+### Added
+
+- Added YAML linter
+
 ## [3.45.1] - 2024-05-03
 
 ### Fixed
