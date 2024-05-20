@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Change the minumum required NAG compiler verison to be 7.2
+
 ### Deprecated
 
 ## [3.45.2] - 2024-05-16
