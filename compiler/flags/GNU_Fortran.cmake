@@ -1,5 +1,5 @@
-if (CMAKE_Fortran_COMPILER_VERSION VERSION_LESS 8.3)
-  message(FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be at least 8.3!")
+if (CMAKE_Fortran_COMPILER_VERSION VERSION_LESS 10.3)
+  message(FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be at least 10.3!")
 endif()
 
 set (FOPT0 "-O0")
@@ -129,6 +129,15 @@ elseif (${proc_description} MATCHES "Apple M")
   endif ()
 elseif (${proc_description} MATCHES "EPYC")
   set (GNU_TARGET_ARCH "znver2")
+  set (GNU_NATIVE_ARCH "native")
+  set (NO_FMA "-mno-fma")
+elseif (${proc_description} MATCHES "Hygon")
+  # Tests on a Hygon showed it returned 'nocona' for the native arch
+  # see https://github.com/geoschem/GCHP/issues/391
+  # Intel was happy with AVX2, but this test was done with GCC 10
+  # Perhaps later versions of GCC would return a different value?
+  # Until then, nocona is definitely safe. Pentium 4!
+  set (GNU_TARGET_ARCH "nocona")
   set (GNU_NATIVE_ARCH "native")
   set (NO_FMA "-mno-fma")
 elseif (${proc_description} MATCHES "Intel")
