@@ -13,9 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added support for Hygon processors with GCC
+- Add FMS as a library rather than part of Baselibs
+- Added `Findlibyaml.cmake` to support FMS with yaml support
+  - FMS with YAML support is controlled by `-DFMS_BUILT_WITH_YAML` as there is no good way to determine how FMS was built
+    after-the-fact. For now the default is `OFF` but this will change in the future
+- Added preliminary support for Hygon processors with GCC
 
 ### Changed
+
+- Update CI to use Baselibs v8.0.2
 
 ### Deprecated
 
