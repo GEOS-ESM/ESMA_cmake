@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.45.3] - 2024-06-06
+
+### Fixed
+
+- Fix issue with use of `meson` and `f2py` with more complex codes
+
 ## [3.45.2] - 2024-05-16
 
 ### Fixed
