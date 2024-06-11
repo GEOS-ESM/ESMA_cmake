@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix issue with use of `meson` and `f2py` with more complex codes
+  - NOTE: Requires a fix to `f2py` that is not yet released. You can see the change
+    in the `numpy` repo at https://github.com/numpy/numpy/pull/26659
+    This fix has been applied to GEOSpyD 2.44.0-0
+
 ### Removed
 
 ### Added
