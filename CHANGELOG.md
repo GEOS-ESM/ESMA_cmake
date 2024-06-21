@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.46.0] - 2024-06-21
+
+### Added
+
+- Add the file `esma_add_fortran_submodules.cmake` in the `esma_support` folder. The file contains a function that prevents conflicts when several submodule files have the same name.
+
 ## [3.45.3] - 2024-06-14
 
 ### Fixed
