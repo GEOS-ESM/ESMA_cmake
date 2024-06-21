@@ -14,7 +14,7 @@ endif ()
 # In CMake this is CMAKE_HOST_SYSTEM_NAME
 
 if (BASEDIR)
-  
+
   # First, what if we have a BASEDIR/lib, let's make sure it's like we want
   # That is, it has ARCH and it's the *right* ARCH!
   if (IS_DIRECTORY ${BASEDIR}/lib)
@@ -135,9 +135,11 @@ if (Baselibs_FOUND)
       execute_process (COMMAND ${CMAKE_C_COMPILER}   --print-file-name=libgcc.a        OUTPUT_VARIABLE libgcc OUTPUT_STRIP_TRAILING_WHITESPACE)
     endif()
   else ()
-    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.so OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=librt.so     OUTPUT_VARIABLE rt     OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libdl.so     OUTPUT_VARIABLE dl     OUTPUT_STRIP_TRAILING_WHITESPACE)
+    if (NOT CMAKE_CXX_COMPILER_ID MATCHES "NVHPC")
+      execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libstdc++.so OUTPUT_VARIABLE stdcxx OUTPUT_STRIP_TRAILING_WHITESPACE)
+      execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=librt.so     OUTPUT_VARIABLE rt     OUTPUT_STRIP_TRAILING_WHITESPACE)
+      execute_process (COMMAND ${CMAKE_CXX_COMPILER} --print-file-name=libdl.so     OUTPUT_VARIABLE dl     OUTPUT_STRIP_TRAILING_WHITESPACE)
+    endif ()
   endif ()
 
   # ------------
@@ -153,22 +155,24 @@ if (Baselibs_FOUND)
     set (ESMFMKFILE "${BASEDIR}/lib/esmf.mk" CACHE PATH "Path to esmf.mk file" FORCE)
     message(STATUS "ESMFMKFILE: ${ESMFMKFILE}")
 
-    # Now, let us use the FindESMF.cmake that ESMF itself includes and installs
-    list (APPEND CMAKE_MODULE_PATH "${BASEDIR}/include/esmf")
+    # Now we can use FindESMF.cmake to find ESMF. This uses the one in the current
+    # directory, not the one in the ESMF installation. The one here uses
+    # ESMF::ESMF as the main target
     find_package(ESMF MODULE REQUIRED)
 
     # Also, we know ESMF from Baselibs requires MPI (note that this isn't always true, but
     # for ESMF built in Baselibs for use in GEOS, it currently is)
-    target_link_libraries(ESMF INTERFACE MPI::MPI_Fortran)
+    target_link_libraries(ESMF::ESMF INTERFACE MPI::MPI_Fortran)
 
-    # Finally, we add an alias since GEOS (at the moment) uses esmf not ESMF for the target
-    add_library(esmf ALIAS ESMF)
-
-    # We also add an alias for the target ESMF::ESMF. This will eventually be
-    # added to `FindESMF.cmake` in ESMF, but for now we do it here. To be safe,
-    # we only add the alias if it doesn't already exist.
-    if (NOT TARGET ESMF::ESMF)
-      add_library(ESMF::ESMF ALIAS ESMF)
+    # Finally, we add aliases since GEOS (at the moment) uses esmf and ESMF for the target
+    # instead of ESMF::ESMF (MAPL uses ESMF::ESMF)
+    if (NOT TARGET ESMF)
+      message(STATUS "ESMF alias not found, creating ESMF alias")
+      add_library(ESMF ALIAS ESMF::ESMF)
+    endif ()
+    if (NOT TARGET esmf)
+      message(STATUS "esmf alias not found, creating esmf alias")
+      add_library(esmf ALIAS ESMF::ESMF)
     endif ()
   endif ()
 
@@ -271,6 +275,57 @@ if (Baselibs_FOUND)
   add_library(HDF5::HDF5 INTERFACE IMPORTED)
   target_link_libraries(HDF5::HDF5 INTERFACE hdf5::hdf5 hdf5::hdf5_hl hdf5::hdf5_fortran hdf5::hdf5_hl_fortran)
   set(HDF5_FOUND TRUE CACHE BOOL "HDF5 Found" FORCE)
+
+  # libyaml
+  option(FMS_BUILT_WITH_YAML "FMS was built with YAML" OFF)
+  if (FMS_BUILT_WITH_YAML)
+    # We use the same Findlibyaml.cmake that FMS uses
+    find_package(libyaml REQUIRED)
+    message(STATUS "LIBYAML_INCLUDE_DIR: ${LIBYAML_INCLUDE_DIR}")
+    message(STATUS "LIBYAML_LIBRARIES: ${LIBYAML_LIBRARIES}")
+  endif ()
+
+  # - fms_r4
+  set (inc_fms_r4 ${BASEDIR}/FMS/include_r4)
+  set (lib_fms_r4 ${BASEDIR}/FMS/lib/libfms_r4.a)
+  add_library(FMS::fms_r4 STATIC IMPORTED)
+  set_target_properties(FMS::fms_r4 PROPERTIES
+    IMPORTED_LOCATION ${lib_fms_r4}
+    INCLUDE_DIRECTORIES "${inc_fms_r4}"
+    INTERFACE_INCLUDE_DIRECTORIES "${inc_fms_r4}"
+    INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
+    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/FMS/lib"
+  )
+  if (FMS_BUILT_WITH_YAML)
+    target_link_libraries(FMS::fms_r4 INTERFACE ${LIBYAML_LIBRARIES})
+  endif ()
+  add_library(fms_r4 ALIAS FMS::fms_r4)
+  set(FMS_R4_FOUND TRUE CACHE BOOL "fms_r4 Found" FORCE)
+
+  # - fms_r8
+  set (inc_fms_r8 ${BASEDIR}/FMS/include_r8)
+  set (lib_fms_r8 ${BASEDIR}/FMS/lib/libfms_r8.a)
+  add_library(FMS::fms_r8 STATIC IMPORTED)
+  set_target_properties(FMS::fms_r8 PROPERTIES
+    IMPORTED_LOCATION ${lib_fms_r8}
+    INCLUDE_DIRECTORIES "${inc_fms_r8}"
+    INTERFACE_INCLUDE_DIRECTORIES "${inc_fms_r8}"
+    INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
+    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/FMS/lib"
+  )
+  if (FMS_BUILT_WITH_YAML)
+    target_link_libraries(FMS::fms_r8 INTERFACE ${LIBYAML_LIBRARIES})
+  endif ()
+  add_library(fms_r8 ALIAS FMS::fms_r8)
+  set(FMS_R8_FOUND TRUE CACHE BOOL "fms_r8 Found" FORCE)
+
+  if (FMS_R4_FOUND AND FMS_R8_FOUND)
+    set(FMS_FOUND TRUE CACHE BOOL "FMS Found" FORCE)
+  endif ()
+
+  if (FMS_FOUND)
+    set (FMS_DIR ${BASEDIR}/FMS CACHE PATH "Path to FMS" FORCE)
+  endif ()
 
   # BASEDIR.rc file does not have the arch
   string(REPLACE "/${CMAKE_SYSTEM_NAME}" "" BASEDIR_WITHOUT_ARCH ${BASEDIR})

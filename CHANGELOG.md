@@ -17,10 +17,81 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Remove passing in `-init=snan,arrays` and `-fpe0` for Debug flags with Intel Fortran Classic `ifort` 2021.10 or higher. This
-  prevents failures in running `nf90_create` within MAPL (and in standalone)
-
 ### Deprecated
+
+## [4.1.0] - 2024-06-21
+
+### Added
+
+- Add the file `esma_add_fortran_submodules.cmake` in the `esma_support` folder. The file contains a function that prevents conflicts when several submodule files have the same name.
+
+## [4.0.1] - 2024-06-14
+
+### Fixed
+
+- Fixes for NVHPC
+- Fix issue with use of `meson` and `f2py` with more complex codes
+  - NOTE: Requires a fix to `f2py` that is not yet released. You can see the change
+    in the `numpy` repo at https://github.com/numpy/numpy/pull/26659
+    This fix has been applied to GEOSpyD 2.44.0-0
+
+## [4.0.0] - 2024-05-21
+
+### Added
+
+- Add FMS as a library rather than part of Baselibs
+- Added `Findlibyaml.cmake` to support FMS with yaml support
+  - FMS with YAML support is controlled by `-DFMS_BUILT_WITH_YAML` as there is no good way to determine how FMS was built
+    after-the-fact. For now the default is `OFF` but this will change in the future
+- Added preliminary support for Hygon processors with GCC
+
+### Changed
+
+- Change the minimum required GCC compiler version to be 11.2
+- Change the minumum required NAG compiler verison to be 7.2
+- Update CI to use Baselibs v8.0.2
+
+## [3.45.2] - 2024-05-16
+
+### Fixed
+
+- Fix issue with `ld_classic` detection on macOS. Not all XCode versions need this
+
+### Added
+
+- Added YAML linter
+
+## [3.45.1] - 2024-05-03
+
+### Fixed
+
+- Fix bug with meson/distutils for python 3
+
+## [3.45.0] - 2024-04-25
+
+### Fixed
+
+- Edit `FindESMF.cmake` to use `ESMF::ESMF` as the primary target and make `ESMF` an alias for `ESMF::ESMF` if it doesn't exist
+- Updates for building with Clang on macOS
+  - Add `-Wl,-ld_classic` to linker flags for all macOS
+  - Add `-Wno-implicit-int` for Clang on macOS
+- Fix for using f2py and Python 3.12
+
+### Added
+
+- Add suppression of remark 10488 for Intel Fortran Classic which is a warning about ifort deprecation in late 2024
+
+## [3.44.0] - 2024-03-29
+
+### Fixed
+
+- Set `BUILT_ON_SLES15` to `FALSE` if not building on SLES15. Before it was blank
+
+## [3.43.0] - 2024-03-18
+
+### Changed
+
+- Change `make tests` to only do tests labeled with `ESSENTIAL`. Add new `make tests-all` to run all tests.
 
 ## [3.42.0] - 2024-03-08
 

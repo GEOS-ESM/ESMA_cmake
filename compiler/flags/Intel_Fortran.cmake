@@ -48,7 +48,6 @@ set (FMA "-fma")
 set (ALIGN_ALL "-align all")
 set (NO_ALIAS "-fno-alias")
 set (USE_SVML "-fimf-use-svml=true")
-set (INIT_SNAN "-init=snan,arrays")
 
 # Additional flags for better Standards compliance
 ## Set the Standard to be Fortran 2018
@@ -65,6 +64,9 @@ set (DISABLE_10337 "-diag-disable 10337")
 
 ## Turn off ifort: command line warning #10121: overriding '-fp-model precise' with '-fp-model fast'
 set (DISABLE_10121 "-diag-disable 10121")
+
+## Turn off remark #10448 warning about ifort deprecation in late 2024
+set (DISABLE_10448 "-diag-disable=10448")
 
 set (NO_RANGE_CHECK "")
 
@@ -90,7 +92,16 @@ elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
   # Once you are in here, you are probably on Rosetta, but not required. 
   # Still, on Apple Rosetta we also now need to use the ld_classic as the linker
   if (APPLE)
-    add_link_options("-Wl,-ld_classic")
+    # Determine whether we need to add link options for version 15+ of the Apple command line utilities
+    execute_process(COMMAND "pkgutil"
+                            "--pkg-info=com.apple.pkg.CLTools_Executables"
+                    OUTPUT_VARIABLE TEST)
+    string(REGEX REPLACE ".*version: ([0-9]+).*" "\\1" CMDLINE_UTILS_VERSION ${TEST})
+    message(STATUS "Apple command line utils major version is '${CMDLINE_UTILS_VERSION}'")
+    if (${CMDLINE_UTILS_VERSION} VERSION_GREATER 14)
+      message(STATUS "Adding link options '-Wl,-ld_classic'")
+      add_link_options(-Wl,-ld_classic)
+    endif ()
   endif ()
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
@@ -113,36 +124,12 @@ endif ()
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS}")
-set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC} ${DISABLE_10121}")
+set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC} ${DISABLE_10121} ${DISABLE_10448}")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -save-temps")
-
-# Testing shows that -init=snan,arrays and -fpe0 causes MAPL test failures with
-# Intel Fortran 2021.10. So we will append the flags only if the version
-# is less than 2021.10. However, we have to check the version in a weird
-# way. For example, Intel ifort 2021.6 is reported by CMake as:
-#   2021.6.0.20220226
-# Intel 2021.10 reports as:
-#   2021.10.0.20230609
-# but Intel ifort 2021.11 is reported by CMake as:
-#   2021.0.0.20231010
-# So we can't depend on anything but the last node of the version string.
-# First we need to extract the last node of the version string
-string(REGEX MATCH "([0-9]+)$" CMAKE_Fortran_COMPILER_VERSION_LAST_NODE ${CMAKE_Fortran_COMPILER_VERSION})
-
-# Now we can compare the last node to see if it is less than 20230609
-if (CMAKE_Fortran_COMPILER_VERSION_LAST_NODE VERSION_LESS 20230609)
-  set (GEOS_Fortran_Debug_Flags "${GEOS_Fortran_Debug_Flags} ${INIT_SNAN}")
-endif ()
-
-set (GEOS_Fortran_Debug_FPE_Flags "${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
-
-# Like above, we can only add ${FPE0} if the version is less than 20230609
-if (CMAKE_Fortran_COMPILER_VERSION_LAST_NODE VERSION_LESS 20230609)
-  set (GEOS_Fortran_Debug_FPE_Flags "${GEOS_Fortran_Debug_FPE_Flags} ${FPE0}")
-endif ()
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -init=snan,arrays -save-temps")
+set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
 
 # GEOS NoVectorize
 # ----------------
