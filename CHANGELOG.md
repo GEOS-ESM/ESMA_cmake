@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.1.0] - 2024-06-21
 
+### Fixed
+
+- Add more features to the file `esma_add_fortran_submodules.cmake` so that the function `esma_add_fortran_submodules` can handle several level of subdirectories.
+
+## [4.1.0] - 2024-06-21
+
 ### Added
 
 - Add the file `esma_add_fortran_submodules.cmake` in the `esma_support` folder. The file contains a function that prevents conflicts when several submodule files have the same name.
