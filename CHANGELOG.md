@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.2.0] - 2024-07-11
+
+### Fixed
+
+- Add more features to the file `esma_add_fortran_submodules.cmake` so that the function `esma_add_fortran_submodules` can handle several level of subdirectories.
+
 ## [4.1.0] - 2024-06-21
 
 ### Added
