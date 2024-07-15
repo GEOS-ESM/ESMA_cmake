@@ -39,7 +39,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 ### MPI Support ###
 
-# MPI is now found in FindBaselibs
+set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
+find_package(MPI)
 
 ### Threading ###
 
