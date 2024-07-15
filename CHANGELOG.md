@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.48.0] - 2024-07-15
+
+### Changed
+
+- Move detection out of `FindBaselibs.cmake` for Spack purposes
+
 ## [3.47.0] - 2024-07-11
 
 ### Fixed
