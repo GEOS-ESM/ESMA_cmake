@@ -73,10 +73,6 @@ endif ()
 
 if (Baselibs_FOUND)
 
-  # For now require MPI with Baselibs
-  set(MPI_DETERMINE_LIBRARY_VERSION TRUE)
-  find_package(MPI)
-
   link_directories (${BASEDIR}/lib)
 
   # Add path to GFE packages
@@ -284,10 +280,6 @@ else ()
   # These should be in each fixture
 
   ###########################################
-  # # For now require MPI with Baselibs     #
-  # set(MPI_DETERMINE_LIBRARY_VERSION TRUE) #
-  # find_package(MPI)                       #
-  #                                         #
   # find_package(NetCDF REQUIRED Fortran)   #
   # add_definitions(-DHAS_NETCDF4)          #
   # add_definitions(-DHAS_NETCDF3)          #
