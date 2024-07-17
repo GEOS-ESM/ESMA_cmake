@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [3.26.1] - 2024-07-17
+
+### Changed
+
+- Add support for SLES15 at NCCS
+  - Note: This allows for Python2 to not be available on the system
+
 ## [3.26.0] - 2023-03-03
 
 ### Changed
