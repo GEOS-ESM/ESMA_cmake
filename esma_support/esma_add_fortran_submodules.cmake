@@ -13,8 +13,8 @@ function(esma_add_fortran_submodules)
   foreach(file ${ARG_SOURCES})
 
     set(input ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_SUBDIRECTORY}/${file})
-    set(output ${CMAKE_CURRENT_BINARY_DIR}/${ARG_SUBDIRECTORY}_${file})
-    set(esma_internal "esma_internal_${ARG_SUBDIRECTORY}_${file}")
+    set(output ${CMAKE_CURRENT_BINARY_DIR}/${ARG_SUBDIRECTORY}_SMOD_${file})
+    set(esma_internal "esma_internal_${ARG_SUBDIRECTORY}_SMOD_${file}")
 
     add_custom_command(
       OUTPUT ${output}
