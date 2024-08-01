@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.49.0] - 2024-08-01
+
+### Changed
+
+- Edit the file `esma_add_fortran_submodules.cmake` to add the `SMOD` word to the target submodule file name.
+
+
 ## [3.48.0] - 2024-07-15
 
 ### Changed
