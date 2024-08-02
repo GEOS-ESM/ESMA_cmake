@@ -13,18 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `FindJeMalloc.cmake` for use with builds of GEOSgcm
-
 ### Changed
 
 ### Deprecated
+
+## [3.50.0] - 2024-08-02
+
+### Added
+
+- Add `FindJeMalloc.cmake` for use with builds of GEOSgcm
 
 ## [3.49.0] - 2024-08-01
 
 ### Changed
 
 - Edit the file `esma_add_fortran_submodules.cmake` to add the `SMOD` word to the target submodule file name.
-
 
 ## [3.48.0] - 2024-07-15
 
