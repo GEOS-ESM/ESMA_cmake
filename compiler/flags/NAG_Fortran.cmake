@@ -13,7 +13,6 @@ set (EXTENDED_SOURCE "-132 -w=x95" )
 set (FIXED_SOURCE "-fixed")
 set (SUPPRESS_UNUSED_DUMMY "-w=uda")
 set (F2018 "-f2018")
-set (OPENMP "-not_openmp")
 # Add quiet flag
 #        -quiet    Suppress the compiler banner and the summary line, so that only diagnostic messages will appear.
 set (QUIET "-quiet")
@@ -26,7 +25,7 @@ endif ()
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags "${F2018} ${MISMATCH} ${OPENMP} ${QUIET}")
+set (common_Fortran_flags "${F2018} ${MISMATCH} ${QUIET}")
 set (common_Fortran_fpe_flags "")
 
 # GEOS Debug
