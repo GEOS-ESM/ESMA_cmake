@@ -15,9 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add workaround to support OpenMP linking with NAG under CMake
-
 ### Deprecated
+
+## [3.50.0] - 2024-08-12
+
+### Changed
+
+- Add workaround to support OpenMP linking with NAG under CMake
 
 ## [3.49.0] - 2024-08-01
 
