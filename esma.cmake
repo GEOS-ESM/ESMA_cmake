@@ -33,6 +33,15 @@ include (esma_compiler)
 
 find_package (OpenMP)
 
+# CMake has a bug with NAG and OpenMP:
+#   https://gitlab.kitware.com/cmake/cmake/-/issues/21280
+# so we work around it
+if (OpenMP_Fortran_FOUND AND CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
+  message(STATUS "NAG Fortran detected, resetting OpenMP flags to avoid CMake bug")
+  set_property(TARGET OpenMP::OpenMP_Fortran PROPERTY INTERFACE_LINK_LIBRARIES "")
+  set_property(TARGET OpenMP::OpenMP_Fortran PROPERTY INTERFACE_LINK_OPTIONS "-openmp")
+endif()
+
 ### Position independent code ###
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
