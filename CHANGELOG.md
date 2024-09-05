@@ -17,11 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-## [3.51.0] - 2024-08-13
+## [3.51.0] - 2024-09-05
 
 ### Added
 
 - Add `FindJeMalloc.cmake` for use with builds of GEOSgcm
+- Add preliminary LLVMFlang support
 
 ## [3.50.0] - 2024-08-12
 
