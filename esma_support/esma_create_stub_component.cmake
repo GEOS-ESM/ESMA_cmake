@@ -7,6 +7,7 @@ macro (esma_create_stub_component srcs module)
   find_file (stub_generator
     NAME mapl_stub.pl
     PATHS ${MAPL_BASE_DIR}/etc ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL
+    DOC "Path to MAPL stub generator"
     REQUIRED
   )
 
