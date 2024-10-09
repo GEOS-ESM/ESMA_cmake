@@ -75,6 +75,8 @@ if(F2PY2_EXECUTABLE)
        endif(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
      elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
        set(_fcompiler "intelem")
+     elseif(CMAKE_Fortran_COMPILER_ID MATCHES "NVHPC")
+       set(_fcompiler "nv")
      endif()
 
      set(F2PY2_FCOMPILER ${_fcompiler} CACHE STRING

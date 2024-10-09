@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for building GEOSgcm with Spack using MAPL as library
   - Update `esma_create_stub_component` to look for `mapl_stub.pl` in `$MAPL_BASE_DIR/etc` which is a variable defined by ecbuild
   - Make finding `mapl_stub.pl` required (needs CMake 3.18+)
+- Backport fixes from `main`
+  - More support for NVHPC
+  - Support for Hygon processors with GNU Fortran
 
 ## [3.51.0] - 2024-09-05
 
