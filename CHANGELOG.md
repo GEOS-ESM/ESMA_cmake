@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-## [3.52.0] - 2024-10-XX
+## [3.52.0] - 2024-10-10
 
 ### Changed
 
@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backport fixes from `main`
   - More support for NVHPC
   - Support for Hygon processors with GNU Fortran
+- Update to CircleCI orb v4
 
 ## [3.51.0] - 2024-09-05
 
