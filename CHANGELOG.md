@@ -17,6 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.7.0] - 2024-10-10
+
+- Support for building GEOSgcm with Spack using MAPL as library
+  - Update `esma_create_stub_component` to look for `mapl_stub.pl` in `$MAPL_BASE_DIR/etc` (which is a variable defined by ecbuild)
+  - Update `esma_generate_automatic_code` to look for `mapl_acg.pl` in `$MAPL_BASE_DIR/etc` (which is a variable defined by ecbuild)
+  - Require CMake 3.18 for features used in above updates
+- Update to CircleCI orb v4
+
 ## [4.6.0] - 2024-09-05
 
 ### Added
