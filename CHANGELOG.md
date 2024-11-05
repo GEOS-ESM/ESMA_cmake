@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.8.0] - 2024-11-05
+
+### Added
+
+- Added new `esma_capture_mepo_status` function (in `esma_support/esma_mepo_status.cmake`) to capture the output of `mepo status --hashes` when `mepo` was used to clone the fixture. It will output this into a file `MEPO_STATUS.rc` which is installed to `${CMAKE_INSTALL_PREFIX}/etc` and can be used to help determine the exact state of the fixture at build time.
+
 ## [4.7.0] - 2024-10-10
 
 ### Changed
