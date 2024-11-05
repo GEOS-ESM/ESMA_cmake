@@ -17,11 +17,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-## [4.7.0] - 2024-11-05
+## [4.8.0] - 2024-11-05
 
 ### Added
 
 - Added new `esma_capture_mepo_status` function (in `esma_support/esma_mepo_status.cmake`) to capture the output of `mepo status --hashes` when `mepo` was used to clone the fixture. It will output this into a file `MEPO_STATUS.rc` which is installed to `${CMAKE_INSTALL_PREFIX}/etc` and can be used to help determine the exact state of the fixture at build time.
+
+## [4.7.0] - 2024-10-10
+
+### Changed
+
+- Support for building GEOSgcm with Spack using MAPL as library
+  - Update `esma_create_stub_component` to look for `mapl_stub.pl` in `$MAPL_BASE_DIR/etc` (which is a variable defined by ecbuild)
+  - Update `esma_generate_automatic_code` to look for `mapl_acg.pl` in `$MAPL_BASE_DIR/etc` (which is a variable defined by ecbuild)
+  - Require CMake 3.18 for features used in above updates
+- Update to CircleCI orb v5
 
 ## [4.6.0] - 2024-09-05
 

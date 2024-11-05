@@ -1,5 +1,7 @@
 # Generate headers and  resource files for GOCART components
 
+cmake_minimum_required (VERSION 3.18)
+
 set (acg_flags -v)
 
 macro (new_esma_generate_automatic_code
@@ -7,7 +9,9 @@ macro (new_esma_generate_automatic_code
 
   find_file (generator
     NAME mapl_acg.pl
-    PATHS ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL)
+    PATHS ${MAPL_BASE_DIR}/etc ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL
+    DOC "Path to the perl MAPL ACG generator"
+  )
 
   add_custom_command (
     OUTPUT ${rcs}
@@ -59,7 +63,9 @@ macro (esma_generate_gmi_code target type)
 
   find_file (generator
     NAME mapl_acg.pl
-    PATHS ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL)
+    PATHS ${MAPL_BASE_DIR}/etc ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL
+    DOC "Path to the perl MAPL ACG generator"
+  )
 
   add_custom_command (
     #    TARGET ${this}
@@ -85,7 +91,10 @@ macro (esma_generate_automatic_code this name destination flags)
 
   find_file (generator
     NAME mapl_acg.pl
-    PATHS ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL)
+    PATHS ${MAPL_BASE_DIR}/etc ${MAPL_SOURCE_DIR}/Apps ${esma_etc}/MAPL
+    DOC "Path to the perl MAPL ACG generator"
+    REQUIRED
+  )
 
   add_custom_command (
     OUTPUT ${name}_ExportSpec___.h ${name}_GetPointer___.h ${name}_History___.rc
