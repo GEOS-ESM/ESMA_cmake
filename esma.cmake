@@ -72,7 +72,9 @@ include(math_libraries)
 include(FindBaselibs)
 include(DetermineSite)
 find_package(GitInfo)
-include(DetermineMPIStack)
+if (MPI_FOUND)
+  include(DetermineMPIStack)
+endif ()
 
 ### ESMA Support ###
 
