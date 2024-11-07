@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.8.1] - 2024-11-07
+
+### Fixed
+
+- Do not include `DetermineMPIStack` if MPI is not found
+
 ## [4.8.0] - 2024-11-05
 
 ### Added
