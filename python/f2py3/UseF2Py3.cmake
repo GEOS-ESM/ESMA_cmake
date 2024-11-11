@@ -54,11 +54,11 @@ macro (add_f2py3_module _name)
   # # If you really want to pass in the flags used by the rest of the model #
   # # this is how. But I don't think we want to do this                     #
   # if (CMAKE_BUILD_TYPE MATCHES Release)                                   #
-  #    set(F2PY3_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_RELEASE})               #
+  #    set(F2PY3_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_RELEASE})              #
   # elseif(CMAKE_BUILD_TYPE MATCHES Debug)                                  #
-  #    set(F2PY3_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_DEBUG})                 #
+  #    set(F2PY3_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_DEBUG})                #
   # endif()                                                                 #
-  # separate_arguments(F2PY3_Fortran_FLAGS)                                  #
+  # separate_arguments(F2PY3_Fortran_FLAGS)                                 #
   ###########################################################################
 
   if (${add_f2py3_module_USE_OPENMP})
@@ -245,7 +245,7 @@ macro (add_f2py3_module _name)
   # it to allow for this. It's possible it's not correct, but it seem to
   # let things run
   if(${add_f2py3_module_DOUBLE_PRECISION})
-     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.f2py3_f2cmap "{'real':{'':'double'},'integer':{'':'long'},'real*8':{'':'double'},'complex':{'':'complex_double'}}")
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.f2py3_f2cmap "{'real':{'':'double'},'integer':{'':'long'},'real*8':{'':'double'},'complex':{'':'complex_double'}}")
   endif()
 
   # Debugging f2py is a lot easier if you don't quiet it, but we do not
@@ -273,25 +273,25 @@ macro (add_f2py3_module _name)
       DEPENDS ${add_f2py3_module_SOURCES}
       COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
   else ()
-  if ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
-    add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
-      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
-              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
-              ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
-      DEPENDS ${add_f2py3_module_SOURCES}
-      COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
-  else ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
-    add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
-      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name} -h ${_name}.pyf
-              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
-              --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
-      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
-              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
-              -c "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}/${_name}.pyf"
-              ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} ${REDIRECT_TO_DEV_NULL}
-      DEPENDS ${add_f2py3_module_SOURCES}
-      COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
-  endif ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
+    if ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
+      add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
+        COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
+                --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
+                ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
+        DEPENDS ${add_f2py3_module_SOURCES}
+        COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
+    else ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
+      add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
+        COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name} -h ${_name}.pyf
+                --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
+                --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
+        COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
+                --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
+                -c "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}/${_name}.pyf"
+                ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} ${REDIRECT_TO_DEV_NULL}
+        DEPENDS ${add_f2py3_module_SOURCES}
+        COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
+    endif ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
   endif ()
 
 

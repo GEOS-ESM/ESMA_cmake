@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- For F2PY3 code, set CMake Policy CMP0132 if Python is 3.12+ or higher
+
 ### Deprecated
 
 ## [4.8.1] - 2024-11-07
