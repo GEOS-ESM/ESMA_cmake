@@ -32,21 +32,29 @@
 
 # Path to the f2py3 executable
 find_program(F2PY3_EXECUTABLE NAMES "f2py${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
-                                   "f2py-${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
-                                   "f2py${Python3_VERSION_MAJOR}"
-                                   "f2py"
-                                   )
+                                    "f2py-${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
+                                    "f2py${Python3_VERSION_MAJOR}"
+                                    "f2py"
+                                    )
 
 if(F2PY3_EXECUTABLE)
    # extract the version string
    execute_process(COMMAND "${F2PY3_EXECUTABLE}" -v
-                     OUTPUT_VARIABLE F2PY3_VERSION_STRING
-                     OUTPUT_STRIP_TRAILING_WHITESPACE)
+                   OUTPUT_VARIABLE F2PY3_VERSION_STRING
+                   OUTPUT_STRIP_TRAILING_WHITESPACE)
    if("${F2PY3_VERSION_STRING}" MATCHES "^([0-9]+)(.([0-9+]))?(.([0-9+]))?$")
       set(F2PY3_VERSION_MAJOR "${CMAKE_MATCH_1}")
       set(F2PY3_VERSION_MINOR "${CMAKE_MATCH_3}")
       set(F2PY3_VERSION_PATCH "${CMAKE_MATCH_5}")
    endif()
+
+   # Testing has shown that f2py3 with Python 3.12+ needs to set
+   # a new CMake policy, CMP0132, because f2py3 uses Meson in the
+   # instead of distutils.
+   # See https://github.com/mesonbuild/meson/issues/13882
+   if (F2PY_VERSION_MAJOR GREATER_EQUAL 3 AND F2PY_VERSION_MINOR GREATER_EQUAL 12)
+      cmake_policy(SET CMP0132 NEW)
+    endif ()
 
    # Get the compiler-id and map it to compiler vendor as used by f2py3.
    # Currently, we only check for GNU, but this can easily be extended.

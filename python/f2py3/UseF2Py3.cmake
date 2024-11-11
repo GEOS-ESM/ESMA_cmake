@@ -54,11 +54,11 @@ macro (add_f2py3_module _name)
   # # If you really want to pass in the flags used by the rest of the model #
   # # this is how. But I don't think we want to do this                     #
   # if (CMAKE_BUILD_TYPE MATCHES Release)                                   #
-  #    set(F2PY3_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_RELEASE})               #
+  #    set(F2PY3_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_RELEASE})              #
   # elseif(CMAKE_BUILD_TYPE MATCHES Debug)                                  #
-  #    set(F2PY3_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_DEBUG})                 #
+  #    set(F2PY3_Fortran_FLAGS ${CMAKE_Fortran_FLAGS_DEBUG})                #
   # endif()                                                                 #
-  # separate_arguments(F2PY3_Fortran_FLAGS)                                  #
+  # separate_arguments(F2PY3_Fortran_FLAGS)                                 #
   ###########################################################################
 
   if (${add_f2py3_module_USE_OPENMP})
@@ -245,7 +245,7 @@ macro (add_f2py3_module _name)
   # it to allow for this. It's possible it's not correct, but it seem to
   # let things run
   if(${add_f2py3_module_DOUBLE_PRECISION})
-     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.f2py3_f2cmap "{'real':{'':'double'},'integer':{'':'long'},'real*8':{'':'double'},'complex':{'':'complex_double'}}")
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.f2py3_f2cmap "{'real':{'':'double'},'integer':{'':'long'},'real*8':{'':'double'},'complex':{'':'complex_double'}}")
   endif()
 
   # Debugging f2py is a lot easier if you don't quiet it, but we do not
