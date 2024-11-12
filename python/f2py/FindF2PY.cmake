@@ -48,11 +48,12 @@ if(F2PY_EXECUTABLE)
       set(F2PY_VERSION_PATCH "${CMAKE_MATCH_5}")
    endif()
 
-   # Testing has shown that f2py3 with Python 3.12+ needs to set
-   # a new CMake policy, CMP0132, because f2py3 uses Meson in the
+   # Testing has shown that f2py with Python 3.12+ needs to set
+   # a new CMake policy, CMP0132, because f2py uses Meson in the
    # instead of distutils.
    # See https://github.com/mesonbuild/meson/issues/13882
-   if (F2PY_VERSION_MAJOR GREATER_EQUAL 3 AND F2PY_VERSION_MINOR GREATER_EQUAL 12)
+   if (Python_VERSION_MINOR GREATER_EQUAL 12)
+     message(STATUS "[F2PY]: Setting CMP0132 policy to NEW")
      cmake_policy(SET CMP0132 NEW)
    endif ()
 
