@@ -265,33 +265,38 @@ macro (add_f2py3_module _name)
   #message(STATUS "add_f2py3_module_SOURCES: ${add_f2py3_module_SOURCES}")
   #message(STATUS "_inc_opts: ${_inc_opts}")
   if ( F2PY3_BACKEND STREQUAL "meson")
+    if(IFORT_HAS_DEPRECATION_WARNING)
+      set(MESON_F2PY3_FCOMPILER "ifort -diag-disable=10448")
+    else()
+      set(MESON_F2PY3_FCOMPILER "${CMAKE_Fortran_COMPILER}")
+    endif()
     add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
-      COMMAND ${CMAKE_COMMAND} -E env "FC=${CMAKE_Fortran_COMPILER}"
+      COMMAND ${CMAKE_COMMAND} -E env "FC=${MESON_F2PY3_FCONFILER}"
               ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
               ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
       DEPENDS ${add_f2py3_module_SOURCES}
       COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
   else ()
-  if ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
-    add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
-      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
-              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
-              ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
-      DEPENDS ${add_f2py3_module_SOURCES}
-      COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
-  else ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
-    add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
-      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name} -h ${_name}.pyf
-              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
-              --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
-      COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
-              --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
-              -c "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}/${_name}.pyf"
-              ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} ${REDIRECT_TO_DEV_NULL}
-      DEPENDS ${add_f2py3_module_SOURCES}
-      COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
-  endif ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
+    if ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
+      add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
+        COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
+                --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
+                ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
+        DEPENDS ${add_f2py3_module_SOURCES}
+        COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
+    else ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
+      add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
+        COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name} -h ${_name}.pyf
+                --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
+                --include-paths ${_inc_paths} --overwrite-signature ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
+        COMMAND ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
+                --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
+                -c "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}/${_name}.pyf"
+                ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} ${REDIRECT_TO_DEV_NULL}
+        DEPENDS ${add_f2py3_module_SOURCES}
+        COMMENT "[F2PY3] Building Fortran to Python3 interface module ${_name}")
+    endif ( "${add_f2py3_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
   endif ()
 
 

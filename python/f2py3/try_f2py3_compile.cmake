@@ -15,23 +15,17 @@ macro (try_f2py3_compile file var)
    # Once we fully move to use ifx this can be removed
    if (IFORT_HAS_DEPRECATION_WARNING)
      message(STATUS "Using workaround for ifort with deprecation message")
-     set(IFORT_IGNORE_DEPRECATION_WARNING "ifort -diag-disable=10448")
-     execute_process(
-       COMMAND cmake -E env "FC=${FC_WITH_SPACES}" ${F2PY3_EXECUTABLE} -m test_ -c ${file} --fcompiler=${F2PY3_FCOMPILER}
-       WORKING_DIRECTORY ${_f2py3_check_bindir}
-       RESULT_VARIABLE result
-       OUTPUT_QUIET
-       ERROR_QUIET
-       )
+     set(MESON_F2PY3_FCOMPILER "ifort -diag-disable=10448")
    else ()
-     execute_process(
-       COMMAND ${F2PY3_EXECUTABLE} -m test_ -c ${file} --fcompiler=${F2PY3_FCOMPILER}
-       WORKING_DIRECTORY ${_f2py3_check_bindir}
-       RESULT_VARIABLE result
-       OUTPUT_QUIET
-       ERROR_QUIET
-       )
+     set(MESON_F2PY3_FCOMPILER "${CMAKE_Fortran_COMPILER}")
    endif ()
+   execute_process(
+     COMMAND cmake -E env "FC=${MESON_F2PY3_COMPILER}" ${F2PY3_EXECUTABLE} -m test_ -c ${file} --fcompiler=${F2PY3_FCOMPILER}
+     WORKING_DIRECTORY ${_f2py3_check_bindir}
+     RESULT_VARIABLE result
+     OUTPUT_QUIET
+     ERROR_QUIET
+     )
 
    if (result EQUAL 0)
       file(GLOB F2PY3_TEST_OUTPUT_FILE ${_f2py3_check_bindir}/*.so)
