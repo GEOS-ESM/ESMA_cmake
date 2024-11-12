@@ -265,8 +265,13 @@ macro (add_f2py_module _name)
   #message(STATUS "add_f2py_module_SOURCES: ${add_f2py_module_SOURCES}")
   #message(STATUS "_inc_opts: ${_inc_opts}")
   if ( F2PY_BACKEND STREQUAL "meson")
+    if(IFORT_HAS_DEPRECATION_WARNING)
+      set(MESON_F2PY_FCOMPILER "ifort -diag-disable=10448")
+    else()
+      set(MESON_F2PY_FCOMPILER "${CMAKE_Fortran_COMPILER}")
+    endif()
     add_custom_command(OUTPUT "${_name}${F2PY_SUFFIX}"
-      COMMAND ${CMAKE_COMMAND} -E env "FC=${CMAKE_Fortran_COMPILER}"
+      COMMAND ${CMAKE_COMMAND} -E env "FC=${MESON_F2PY_FCOMPILER}"
               ${F2PY_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
               ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
