@@ -1,7 +1,8 @@
 # CMake code involving Python
 
 # FIND_STRATEGY needs CMake 3.15 or later
-cmake_minimum_required(VERSION 3.15)
+# The new policy needed for f2py3 and Meson is 3.24
+cmake_minimum_required(VERSION 3.24)
 
 # Find Python
 find_package(Python COMPONENTS Interpreter)
