@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - For F2PY3 code, set CMake Policy CMP0132 if Python is 3.12+ or higher
 - Add test to see if `ifort` spits out the deprecation warning. Needed to hack f2py/meson
+- Set minimum CMake version to 3.24 for the meson + f2py fix
 
 ### Deprecated
 
