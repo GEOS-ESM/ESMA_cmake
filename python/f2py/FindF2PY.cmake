@@ -52,7 +52,8 @@ if(F2PY_EXECUTABLE)
    # a new CMake policy, CMP0132, because f2py3 uses Meson in the
    # instead of distutils.
    # See https://github.com/mesonbuild/meson/issues/13882
-   if (F2PY_VERSION_MAJOR GREATER_EQUAL 3 AND F2PY_VERSION_MINOR GREATER_EQUAL 12)
+   if (Python_VERSION_MINOR GREATER_EQUAL 12)
+     message(STATUS "[F2PY3]: Setting CMP0132 policy to NEW")
      cmake_policy(SET CMP0132 NEW)
    endif ()
 
