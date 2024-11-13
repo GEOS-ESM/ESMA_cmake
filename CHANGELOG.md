@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.9.0] - 2024-11-13
+
+### Fixed
+
+- Fixed `mepo status` code to allow for quiet failures. There seems to be an odd scenario on non-internet-connected machines where `mepo status` will fail in blobless clones of some repos. Running `mepo status` on a node with internet access seems to fix this. 
+
+### Changed
+
+- For F2PY3 code, set CMake Policy CMP0132 if Python is 3.12+ or higher
+- Add test to see if `ifort` spits out the deprecation warning. Needed to hack f2py/meson
+- Set minimum CMake version to 3.24 for the meson + f2py fix
+
 ## [4.8.1] - 2024-11-07
 
 ### Fixed
