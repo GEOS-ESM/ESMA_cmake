@@ -24,7 +24,7 @@ function(esma_capture_mepo_status)
       )
 
       if(NOT MEPO_STATUS_RESULT EQUAL 0)
-        message(WARNING "mepo state and command were found but failed to run mepo status --hashes. This seems to happen when internet access is not available. Sometimes. We are not sure yet.")
+        message(WARNING "mepo state and command were found but failed to run mepo status --hashes. This seems to happen with blobless clones and running on a node without access to the internet. Skipping mepo status output capture, but to fix, run mepo status on a node with internet access.")
       else()
         message(STATUS "mepo status output captured in ${OUTPUT_FILE_NAME}")
 
