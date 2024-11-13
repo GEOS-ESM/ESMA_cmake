@@ -20,10 +20,11 @@ function(esma_capture_mepo_status)
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         OUTPUT_FILE "${OUTPUT_FILE}"
         RESULT_VARIABLE MEPO_STATUS_RESULT
+        ERROR_QUIET
       )
 
       if(NOT MEPO_STATUS_RESULT EQUAL 0)
-        message(WARNING "mepo state and command were found but failed to run mepo status --hashes. This is odd.")
+        message(WARNING "mepo state and command were found but failed to run mepo status --hashes. This seems to happen when internet access is not available. Sometimes. We are not sure yet.")
       else()
         message(STATUS "mepo status output captured in ${OUTPUT_FILE_NAME}")
 
