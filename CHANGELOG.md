@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed `mepo status` code to allow for quiet failures. There seems to be an odd scenario on non-internet-connected machines where
+  `mepo status` will fail unless first run on a node with internet access. We are as yet uncertain why this is the case.
+
 ### Removed
 
 ### Added
