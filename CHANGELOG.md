@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed bad behavior in the `MPI_STACK` detection on subsequent calls to `DetermineMPIStack` 
+
 ### Removed
 
 ### Added
