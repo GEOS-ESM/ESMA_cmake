@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+[4.11.0] - 2025-01-03
+
+### Changed
+
+- Move to use Python `FIND_STRATEGY LOCATION` by default. This is needed as NAS (at least) has a very recent, but empty (no f2py) Python stack in the default path. Using `LOCATION` should limit it to the Python we want (e.g., via GEOSpyD module)
+
 ## [4.10.0] - 2024-12-02
 
 ### Fixed
