@@ -17,7 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-[4.11.0] - 2025-01-03
+## [4.12.0] - 2025-01-30
+
+### Changed
+
+- Reworked FMS detection to better handle the different `FV_PRECISION` cases in `FindBaselibs.cmake`
+
+## [4.11.0] - 2025-01-03
 
 ### Changed
 
