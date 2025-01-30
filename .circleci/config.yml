@@ -23,7 +23,7 @@ workflows:
           checkout_fixture: true
           # V12 code uses a special branch for now.
           fixture_branch: feature/sdrabenh/gcm_v12
-          checkout_if_exists: feature/sdrabenh/gcm_v12
+          develop_repos: "GEOSgcm_GridComp GEOSgcm_App GMAO_Shared FVdycoreCubed_GridComp fvdycore"
           # We comment out this as it will "undo" the fixture_branch
           #mepodevelop: true
           persist_workspace: true # Needs to be true to run fv3/gcm experiment, costs extra
