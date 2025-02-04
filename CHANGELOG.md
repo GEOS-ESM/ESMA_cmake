@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Update Intel LLVM Fortran flags to use `-march=x86-64-v3` as `-march=core-avx2` is not (technically?) supported by `ifx`
+
 ### Deprecated
 
 ## [3.56.0] - 2025-01-03
