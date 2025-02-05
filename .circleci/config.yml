@@ -17,7 +17,7 @@ workflows:
             - docker-hub-creds
           matrix:
             parameters:
-              compiler: [gfortran, ifort]
+              compiler: [gfortran, ifort, ifx]
           #baselibs_version: *baselibs_version
           repo: GEOSgcm
           checkout_fixture: true
@@ -34,7 +34,7 @@ workflows:
             - docker-hub-creds
           matrix:
             parameters:
-              compiler: [gfortran, ifort]
+              compiler: [gfortran, ifort, ifx]
           requires:
             - build-GEOSgcm-on-<< matrix.compiler >>
           repo: GEOSgcm
@@ -48,7 +48,7 @@ workflows:
             - docker-hub-creds
           matrix:
             parameters:
-              compiler: [ifort]
+              compiler: [ifort, ifx]
               # There seems to be an issue with gfortran, mom6, and GNU
           requires:
             - build-GEOSgcm-on-<< matrix.compiler >>
