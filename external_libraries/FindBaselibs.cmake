@@ -281,54 +281,58 @@ if (Baselibs_FOUND)
     message(STATUS "LIBYAML_LIBRARIES: ${LIBYAML_LIBRARIES}")
   endif ()
 
+  # - fms_r4
   if (FV_PRECISION STREQUAL R4 OR FV_PRECISION STREQUAL R4R8)
-    # - fms_r4
-    set (inc_fms_r4 ${BASEDIR}/FMS/include_r4)
-    set (lib_fms_r4 ${BASEDIR}/FMS/lib/libfms_r4.a)
+    # Use find_path and find_library to find the include and library
+    find_path(FMS_INCLUDE_DIR_R4 NAMES fms.mod PATHS ${BASEDIR}/FMS/include_r4)
+    find_library(FMS_LIBRARIES_R4 NAMES fms_r4 PATHS ${BASEDIR}/FMS/lib ${BASEDIR}/FMS/lib64)
+    # We also need the path of where the library is for the INTERFACE_LINK_DIRECTORIES
+    get_filename_component(FMS_LIBRARIES_DIR_R4 ${FMS_LIBRARIES_R4} DIRECTORY)
     add_library(FMS::fms_r4 STATIC IMPORTED)
     set_target_properties(FMS::fms_r4 PROPERTIES
-      IMPORTED_LOCATION ${lib_fms_r4}
-      INCLUDE_DIRECTORIES "${inc_fms_r4}"
-      INTERFACE_INCLUDE_DIRECTORIES "${inc_fms_r4}"
+      IMPORTED_LOCATION ${FMS_LIBRARIES_R4}
+      INCLUDE_DIRECTORIES "${FMS_INCLUDE_DIR_R4}"
+      INTERFACE_INCLUDE_DIRECTORIES "${FMS_INCLUDE_DIR_R4}"
       INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
-      INTERFACE_LINK_DIRECTORIES "${BASEDIR}/FMS/lib"
+      INTERFACE_LINK_DIRECTORIES "${FMS_LIBRARIES_DIR_R4}"
     )
     if (FMS_BUILT_WITH_YAML)
       target_link_libraries(FMS::fms_r4 INTERFACE ${LIBYAML_LIBRARIES})
     endif ()
-    #add_library(fms_r4 ALIAS FMS::fms_r4)
-    # We will set FMS_R4_FOUND if both lib_fms_r4 and inc_fms_r4 are found
+    # We will set FMS_R4_FOUND if both FMS_LIBRARIES_R4 and FMS_INCLUDE_DIR_R4 are found
     # and are valid files and directories respectively
-    if (EXISTS ${lib_fms_r4} AND IS_DIRECTORY ${inc_fms_r4})
-      message(STATUS "Found FMS::fms_r4: ${lib_fms_r4}")
-      message(STATUS "FMS::fms_r4 include directory: ${inc_fms_r4}")
-      set(FMS_R4_FOUND TRUE CACHE BOOL "fms_r8 Found" FORCE)
+    if (EXISTS ${FMS_LIBRARIES_R4} AND IS_DIRECTORY ${FMS_INCLUDE_DIR_R4})
+      message(STATUS "Found FMS::fms_r4: ${FMS_LIBRARIES_R4}")
+      message(STATUS "FMS::fms_r4 include directory: ${FMS_INCLUDE_DIR_R4}")
+      set(FMS_R4_FOUND TRUE CACHE BOOL "fms_r4 Found" FORCE)
     else ()
-      message(FATAL_ERROR "FMS::fms_r8 not found")
+      message(FATAL_ERROR "FMS::fms_r4 not found")
     endif()
   endif()
 
   # - fms_r8
   if (FV_PRECISION STREQUAL R8 OR FV_PRECISION STREQUAL R4R8)
-    set (inc_fms_r8 ${BASEDIR}/FMS/include_r8)
-    set (lib_fms_r8 ${BASEDIR}/FMS/lib/libfms_r8.a)
+    # Use find_path and find_library to find the include and library
+    find_path(FMS_INCLUDE_DIR_R8 NAMES fms.mod PATHS ${BASEDIR}/FMS/include_r8)
+    find_library(FMS_LIBRARIES_R8 NAMES fms_r8 PATHS ${BASEDIR}/FMS/lib ${BASEDIR}/FMS/lib64)
+    # We also need the path of where the library is for the INTERFACE_LINK_DIRECTORIES
+    get_filename_component(FMS_LIBRARIES_DIR_R8 ${FMS_LIBRARIES_R8} DIRECTORY)
     add_library(FMS::fms_r8 STATIC IMPORTED)
     set_target_properties(FMS::fms_r8 PROPERTIES
-      IMPORTED_LOCATION ${lib_fms_r8}
-      INCLUDE_DIRECTORIES "${inc_fms_r8}"
-      INTERFACE_INCLUDE_DIRECTORIES "${inc_fms_r8}"
+      IMPORTED_LOCATION ${FMS_LIBRARIES_R8}
+      INCLUDE_DIRECTORIES "${FMS_INCLUDE_DIR_R8}"
+      INTERFACE_INCLUDE_DIRECTORIES "${FMS_INCLUDE_DIR_R8}"
       INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
-      INTERFACE_LINK_DIRECTORIES "${BASEDIR}/FMS/lib"
+      INTERFACE_LINK_DIRECTORIES "${FMS_LIBRARIES_DIR_R8}"
     )
     if (FMS_BUILT_WITH_YAML)
       target_link_libraries(FMS::fms_r8 INTERFACE ${LIBYAML_LIBRARIES})
     endif ()
-    #add_library(fms_r8 ALIAS FMS::fms_r8)
-    # We will set FMS_R8_FOUND if both lib_fms_r8 and inc_fms_r8 are found
+    # We will set FMS_R8_FOUND if both FMS_LIBRARIES_R8 and FMS_INCLUDE_DIR_R8 are found
     # and are valid files and directories respectively
-    if (EXISTS ${lib_fms_r8} AND IS_DIRECTORY ${inc_fms_r8})
-      message(STATUS "Found FMS::fms_r8: ${lib_fms_r8}")
-      message(STATUS "FMS::fms_r8 include directory: ${inc_fms_r8}")
+    if (EXISTS ${FMS_LIBRARIES_R8} AND IS_DIRECTORY ${FMS_INCLUDE_DIR_R8})
+      message(STATUS "Found FMS::fms_r8: ${FMS_LIBRARIES_R8}")
+      message(STATUS "FMS::fms_r8 include directory: ${FMS_INCLUDE_DIR_R8}")
       set(FMS_R8_FOUND TRUE CACHE BOOL "fms_r8 Found" FORCE)
     else ()
       message(FATAL_ERROR "FMS::fms_r8 not found")
