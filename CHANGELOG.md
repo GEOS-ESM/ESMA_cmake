@@ -15,9 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated Intel Fortran flags from @wmputman
-
 ### Deprecated
+
+## [4.12.0] - 2025-02-11
+
+### Changed
+
+- Updated Intel Fortran flags from @wmputman
 
 ## [4.11.0] - 2025-01-03
 
