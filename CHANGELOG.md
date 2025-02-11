@@ -15,13 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-### Deprecated
-
-## [4.12.0] - 2025-02-11
-
-### Changed
-
+- Updated Intel Fortran flags from @wmputman
 - Reworked FMS detection to better handle the different `FV_PRECISION` cases in `FindBaselibs.cmake`
+
+### Deprecated
 
 ## [4.11.0] - 2025-01-03
 
