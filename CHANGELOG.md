@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Change f2py detection for the odd case where there might be multiple Python installations. For now, if the path to the Python executable does not match the path to the f2py executable, we issue a `FATAL_ERROR` and exit with a message.
+
 ### Deprecated
 
 ## [3.56.0] - 2025-01-03

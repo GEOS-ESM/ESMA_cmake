@@ -31,11 +31,34 @@
 #
 
 # Path to the f2py3 executable
-find_program(F2PY3_EXECUTABLE NAMES "f2py${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
-                                    "f2py-${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
-                                    "f2py${Python3_VERSION_MAJOR}"
-                                    "f2py"
-                                    )
+
+## We might have an odd circumstance where there are a couple f2py around. As such,
+## we need to find the one that matches the Python3_EXECUTABLE. This is a bit of a
+## hack, but it should work for most cases.
+
+## Find the directory where the Python3_EXECUTABLE is located
+message(DEBUG "[F2PY3]: Searching for f2py3 executable associated with Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
+get_filename_component(PYTHON3_EXECUTABLE_DIR ${Python3_EXECUTABLE} DIRECTORY)
+message(DEBUG "[F2PY3]: Python3 executable directory: ${PYTHON3_EXECUTABLE_DIR}")
+
+find_program(F2PY3_EXECUTABLE
+  NAMES "f2py"
+        "f2py${Python3_VERSION_MAJOR}"
+        "f2py${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
+        "f2py-${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
+  PATHS ${PYTHON3_EXECUTABLE_DIR}
+)
+
+message(DEBUG "[F2PY3]: Found f2py3 executable: ${F2PY3_EXECUTABLE}")
+
+# Now as a sanity check, we need to make sure that the f2py3 executable is
+# actually the one that is associated with the Python3_EXECUTABLE
+get_filename_component(F2PY3_EXECUTABLE_DIR ${F2PY3_EXECUTABLE} DIRECTORY)
+message(DEBUG "[F2PY3]: f2py3 executable directory: ${F2PY3_EXECUTABLE_DIR}")
+
+if (NOT "${F2PY3_EXECUTABLE_DIR}" STREQUAL "${PYTHON3_EXECUTABLE_DIR}")
+  message(FATAL_ERROR "[F2PY3]: The f2py3 executable [${F2PY3_EXECUTABLE}] found is not the one associated with the Python3_EXECUTABLE [${Python3_EXECUTABLE}]. Please check your Python3 environment or build with -DUSE_F2PY=OFF.")
+endif ()
 
 if(F2PY3_EXECUTABLE)
    # extract the version string
