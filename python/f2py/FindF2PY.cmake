@@ -56,6 +56,8 @@ message(DEBUG "[F2PY]: Found f2py executable: ${F2PY_EXECUTABLE}")
 get_filename_component(F2PY_EXECUTABLE_DIR ${F2PY_EXECUTABLE} DIRECTORY)
 message(DEBUG "[F2PY]: f2py executable directory: ${F2PY_EXECUTABLE_DIR}")
 
+# Now we issue a WARNING. We can't do more than that because of things like Spack
+# where f2py will be in a different location than python.
 if (NOT "${F2PY_EXECUTABLE_DIR}" STREQUAL "${PYTHON_EXECUTABLE_DIR}")
   message(WARNING
     "[F2PY]: The f2py executable [${F2PY_EXECUTABLE}] found is not the one associated with the Python_EXECUTABLE [${Python_EXECUTABLE}].\n"
