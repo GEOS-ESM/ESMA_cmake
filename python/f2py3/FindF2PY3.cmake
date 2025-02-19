@@ -57,7 +57,9 @@ get_filename_component(F2PY3_EXECUTABLE_DIR ${F2PY3_EXECUTABLE} DIRECTORY)
 message(DEBUG "[F2PY3]: f2py3 executable directory: ${F2PY3_EXECUTABLE_DIR}")
 
 if (NOT "${F2PY3_EXECUTABLE_DIR}" STREQUAL "${PYTHON3_EXECUTABLE_DIR}")
-  message(FATAL_ERROR "[F2PY3]: The f2py3 executable [${F2PY3_EXECUTABLE}] found is not the one associated with the Python3_EXECUTABLE [${Python3_EXECUTABLE}]. Please check your Python3 environment or build with -DUSE_F2PY=OFF.")
+  message(WARNING
+    "[F2PY3]: The f2py3 executable [${F2PY3_EXECUTABLE}] found is not the one associated with the Python3_EXECUTABLE [${Python3_EXECUTABLE}].\n"
+    "Please check your Python3 environment if this is not expected (for example, not a Spack install) or build with -DUSE_F2PY=OFF.")
 endif ()
 
 if(F2PY3_EXECUTABLE)

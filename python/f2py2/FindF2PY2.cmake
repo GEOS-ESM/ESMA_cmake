@@ -70,7 +70,9 @@ get_filename_component(F2PY2_EXECUTABLE_DIR ${F2PY2_EXECUTABLE} DIRECTORY)
 message(DEBUG "[F2PY2]: f2py2 executable directory: ${F2PY2_EXECUTABLE_DIR}")
 
 if (NOT "${F2PY2_EXECUTABLE_DIR}" STREQUAL "${PYTHON2_EXECUTABLE_DIR}")
-  message(FATAL_ERROR "[F2PY2]: The f2py2 executable [${F2PY2_EXECUTABLE}] found is not the one associated with the Python2_EXECUTABLE [${Python2_EXECUTABLE}]. Please check your Python2 environment or build with -DUSE_F2PY=OFF.")
+  message(WARNING
+    "[F2PY2]: The f2py2 executable [${F2PY2_EXECUTABLE}] found is not the one associated with the Python2_EXECUTABLE [${Python2_EXECUTABLE}].\n"
+    "Please check your Python2 environment if this is not expected (for example, not a Spack install) or build with -DUSE_F2PY=OFF.")
 endif ()
 
 if(F2PY2_EXECUTABLE)
