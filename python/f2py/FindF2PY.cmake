@@ -31,11 +31,34 @@
 #
 
 # Path to the f2py executable
-find_program(F2PY_EXECUTABLE NAMES "f2py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
-                                   "f2py-${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
-                                   "f2py${Python_VERSION_MAJOR}"
-                                   "f2py"
-                                   )
+
+## We might have an odd circumstance where there are a couple f2py around. As such,
+## we need to find the one that matches the Python_EXECUTABLE. This is a bit of a
+## hack, but it should work for most cases.
+
+## Find the directory where the Python_EXECUTABLE is located
+message(DEBUG "[F2PY]: Searching for f2py executable associated with Python_EXECUTABLE: ${Python_EXECUTABLE}")
+get_filename_component(PYTHON_EXECUTABLE_DIR ${Python_EXECUTABLE} DIRECTORY)
+message(DEBUG "[F2PY]: Python executable directory: ${PYTHON_EXECUTABLE_DIR}")
+
+find_program(F2PY_EXECUTABLE
+  NAMES "f2py"
+        "f2py${Python_VERSION_MAJOR}"
+        "f2py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
+        "f2py-${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
+  PATHS ${PYTHON_EXECUTABLE_DIR}
+)
+
+message(DEBUG "[F2PY]: Found f2py executable: ${F2PY_EXECUTABLE}")
+
+# Now as a sanity check, we need to make sure that the f2py executable is
+# actually the one that is associated with the Python_EXECUTABLE
+get_filename_component(F2PY_EXECUTABLE_DIR ${F2PY_EXECUTABLE} DIRECTORY)
+message(DEBUG "[F2PY]: f2py executable directory: ${F2PY_EXECUTABLE_DIR}")
+
+if (NOT "${F2PY_EXECUTABLE_DIR}" STREQUAL "${PYTHON_EXECUTABLE_DIR}")
+  message(FATAL_ERROR "[F2PY]: The f2py executable [${F2PY_EXECUTABLE}] found is not the one associated with the Python_EXECUTABLE [${Python_EXECUTABLE}]. Please check your Python environment or build with -DUSE_F2PY=OFF.")
+endif ()
 
 if(F2PY_EXECUTABLE)
    # extract the version string
