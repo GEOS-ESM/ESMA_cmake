@@ -63,23 +63,18 @@ set (NO_RANGE_CHECK "")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 if (${proc_description} MATCHES "EPYC")
-  # AMD EPYC processors support AVX2, but only via the -march=core-avx2 flag
-  set (COREAVX2_FLAG "-march=core-avx2")
+  set (MARCH_FLAG "-march=x86-64-v3")
 elseif (${proc_description} MATCHES "Hygon")
-  # Hygon processors support AVX2, but only via the -march=core-avx2 flag
-  set (COREAVX2_FLAG "-march=core-avx2")
+  set (MARCH_FLAG "-march=x86-64-v3")
 elseif (${proc_description} MATCHES "Intel")
   # All the Intel processors that GEOS runs on support AVX2, but to be
-  # consistent with the AMD processors, we use the -march=core-avx2 flag
-  set (COREAVX2_FLAG "-march=core-avx2")
-  # Previous versions of GEOS used this flag, which was not portable
-  # for AMD. Keeping here for a few versions for historical purposes.
-  #set (COREAVX2_FLAG "-xCORE-AVX2")
+  # consistent with the AMD processors, we use the -march=x86-64-v3 flag
+  set (MARCH_FLAG "-march=x86-64-v3")
 elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
   # This is a fallback for when the above doesn't work. It should work
   # for most x86_64 processors, but it is not guaranteed to be optimal.
   message(WARNING "Unknown processory type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
-  set (COREAVX2_FLAG "")
+  set (MARCH_FLAG "x86-64")
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
@@ -108,7 +103,7 @@ set (GEOS_Fortran_NoVect_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTEN
 
 # GEOS Vectorize
 # --------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
 set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC}")
 
 # GEOS Release
@@ -118,7 +113,7 @@ set (GEOS_Fortran_Release_FPE_Flags "${GEOS_Fortran_Vect_FPE_Flags}")
 
 # GEOS Aggressive
 # ---------------
-set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
 #set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} -xSKYLAKE-AVX512 -qopt-zmm-usage=high -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array64byte")
 set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${USE_SVML} ${NOOLD_MAXMINLOC}")
 
