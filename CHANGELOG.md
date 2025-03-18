@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Remove code for finding OS at NCCS as system is now all SLES15
+
 ### Added
 
 ### Changed
