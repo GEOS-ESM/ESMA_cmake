@@ -45,12 +45,37 @@ if(NOT Python2_FOUND)
   return()
 endif()
 
-# Path to the f2py2 executable
-find_program(F2PY2_EXECUTABLE NAMES "f2py${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}"
-                                    "f2py-${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}"
-                                    "f2py${Python2_VERSION_MAJOR}"
-                                    "f2py"
-                                    )
+## We might have an odd circumstance where there are a couple f2py around. As such,
+## we need to find the one that matches the Python2_EXECUTABLE. This is a bit of a
+## hack, but it should work for most cases.
+
+## Find the directory where the Python2_EXECUTABLE is located
+message(DEBUG "[F2PY2]: Searching for f2py2 executable associated with Python2_EXECUTABLE: ${Python2_EXECUTABLE}")
+get_filename_component(PYTHON2_EXECUTABLE_DIR ${Python2_EXECUTABLE} DIRECTORY)
+message(DEBUG "[F2PY2]: Python2 executable directory: ${PYTHON2_EXECUTABLE_DIR}")
+
+find_program(F2PY2_EXECUTABLE
+  NAMES "f2py"
+        "f2py${Python2_VERSION_MAJOR}"
+        "f2py${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}"
+        "f2py-${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}"
+  PATHS ${PYTHON2_EXECUTABLE_DIR}
+)
+
+message(DEBUG "[F2PY2]: Found f2py2 executable: ${F2PY2_EXECUTABLE}")
+
+# Now as a sanity check, we need to make sure that the f2py2 executable is
+# actually the one that is associated with the Python2_EXECUTABLE
+get_filename_component(F2PY2_EXECUTABLE_DIR ${F2PY2_EXECUTABLE} DIRECTORY)
+message(DEBUG "[F2PY2]: f2py2 executable directory: ${F2PY2_EXECUTABLE_DIR}")
+
+# Now we issue a WARNING. We can't do more than that because of things like Spack
+# where f2py will be in a different location than python.
+if (NOT "${F2PY2_EXECUTABLE_DIR}" STREQUAL "${PYTHON2_EXECUTABLE_DIR}")
+  message(WARNING
+    "[F2PY2]: The f2py2 executable [${F2PY2_EXECUTABLE}] found is not the one associated with the Python2_EXECUTABLE [${Python2_EXECUTABLE}].\n"
+    "Please check your Python2 environment if this is not expected (for example, not a Spack install) or build with -DUSE_F2PY=OFF.")
+endif ()
 
 if(F2PY2_EXECUTABLE)
    # extract the version string
