@@ -17,7 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated Intel Fortran flags from @wmputman
 - Reworked FMS detection to better handle the different `FV_PRECISION` cases in `FindBaselibs.cmake`
 - Change f2py detection for the odd case where there might be multiple Python installations. For now, if the path to the Python executable does not match the path to the f2py executable, we issue a `WARNING`. We use a `WARNING` since some installations (e.g., Spack) will have the Python executable in a different location than the f2py executable.
 - Removed warning that Baselibs is not supported, to a STATUS message.
