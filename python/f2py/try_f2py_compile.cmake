@@ -19,8 +19,22 @@ macro (try_f2py_compile file var)
    else ()
      set(MESON_F2PY_FCOMPILER "${CMAKE_Fortran_COMPILER}")
    endif ()
+   message(DEBUG "MESON_F2PY_FCOMPILER is set to ${MESON_F2PY_FCOMPILER}")
+   message(DEBUG "F2PY_COMPILER is set to ${F2PY_COMPILER}")
+   # hack for Macs. If the C compiler is clang and we are on Apple,
+   # we need to set the CC environment to /usr/bin/clang
+   if(APPLE AND CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
+     set(MESON_CCOMPILER "/usr/bin/clang")
+     message(STATUS "Detected AppleClang on macOS. Using ugly hack for meson by passing in CC=/usr/bin/clang")
+   else()
+     set(MESON_CCOMPILER "${CMAKE_C_COMPILER}")
+   endif()
+   message(DEBUG "MESON_CCOMPILER is set to ${MESON_CCOMPILER}")
+   list(APPEND ENV_LIST FC=${MESON_F2PY_FCOMPILER})
+   list(APPEND ENV_LIST CC=${MESON_CCOMPILER})
+   message(DEBUG "ENV_LIST is set to ${ENV_LIST}")
    execute_process(
-     COMMAND cmake -E env "FC=${MESON_F2PY_COMPILER}" ${F2PY_EXECUTABLE} -m test_ -c ${file} --fcompiler=${F2PY_FCOMPILER}
+     COMMAND cmake -E env ${ENV_LIST} ${F2PY_EXECUTABLE} -m test_ -c ${file} --fcompiler=${F2PY_FCOMPILER}
      WORKING_DIRECTORY ${_f2py_check_bindir}
      RESULT_VARIABLE result
      OUTPUT_QUIET
