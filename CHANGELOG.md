@@ -17,6 +17,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.13.0] - 2025-03-18
+
+### Removed
+
+- Remove code for finding OS at NCCS as system is now all SLES15
+
+### Changed
+
+- Update Intel LLVM Fortran flags to use `-march=x86-64-v3` as `-march=core-avx2` is not (technically?) supported by `ifx`
+- Reworked FMS detection to better handle the different `FV_PRECISION` cases in `FindBaselibs.cmake`
+- Change f2py detection for the odd case where there might be multiple Python installations. For now, if the path to the Python executable does not match the path to the f2py executable, we issue a `WARNING`. We use a `WARNING` since some installations (e.g., Spack) will have the Python executable in a different location than the f2py executable.
+- Removed warning that Baselibs is not supported, to a STATUS message.
+
 ## [4.12.0] - 2025-02-11
 
 ### Changed

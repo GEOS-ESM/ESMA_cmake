@@ -17,12 +17,13 @@ workflows:
             - docker-hub-creds
           matrix:
             parameters:
-              compiler: [gfortran, ifort]
+              compiler: [gfortran, ifort, ifx]
           #baselibs_version: *baselibs_version
           repo: GEOSgcm
           checkout_fixture: true
           # V12 code uses a special branch for now.
           fixture_branch: feature/sdrabenh/gcm_v12
+          develop_repos: "GEOSgcm_GridComp GEOSgcm_App GMAO_Shared FVdycoreCubed_GridComp fvdycore"
           # We comment out this as it will "undo" the fixture_branch
           #mepodevelop: true
           persist_workspace: true # Needs to be true to run fv3/gcm experiment, costs extra
@@ -34,7 +35,7 @@ workflows:
             - docker-hub-creds
           matrix:
             parameters:
-              compiler: [gfortran, ifort]
+              compiler: [gfortran, ifort, ifx]
           requires:
             - build-GEOSgcm-on-<< matrix.compiler >>
           repo: GEOSgcm
@@ -48,7 +49,7 @@ workflows:
             - docker-hub-creds
           matrix:
             parameters:
-              compiler: [ifort]
+              compiler: [ifort, ifx]
               # There seems to be an issue with gfortran, mom6, and GNU
           requires:
             - build-GEOSgcm-on-<< matrix.compiler >>
