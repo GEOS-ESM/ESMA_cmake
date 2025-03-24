@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.14.0] - 2025-03-24
+
+### Removed
+
+- Removed warning about setting `-fallow-argument-mismatch` and `-fallow-invalid-boz` with GCC 10+. This is pretty much common now. Instead, we emit a message
+
 ## [4.13.0] - 2025-03-18
 
 ### Removed
