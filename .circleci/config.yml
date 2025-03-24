@@ -49,7 +49,7 @@ workflows:
             - docker-hub-creds
           matrix:
             parameters:
-              compiler: [ifort, ifx]
+              compiler: [gfortran, ifort]
               # There seems to be an issue with gfortran, mom6, and GNU
           requires:
             - build-GEOSgcm-on-<< matrix.compiler >>
