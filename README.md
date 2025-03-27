@@ -4,6 +4,8 @@ This is a new line
 
 This repository contains many of the CMake settings, macros, and functions used for the GEOSgcm and other GEOS-ESM projects. 
 
+This is another line
+
 ## Main Directory
 
 The main directory contains two files: `esma.cmake` and `esma_cpack.cmake`.
