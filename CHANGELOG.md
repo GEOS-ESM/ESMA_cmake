@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Added support for Emerald Rapids
+
 ### Deprecated
 
 ## [4.14.1] - 2025-04-03

@@ -83,7 +83,7 @@ if (${proc_description} MATCHES "EPYC")
 elseif (${proc_description} MATCHES "Hygon")
   # Hygon processors support AVX2, but only via the -march=core-avx2 flag
   set (COREAVX2_FLAG "-march=core-avx2")
-elseif (${proc_description} MATCHES "Intel")
+elseif (${proc_description} MATCHES "Intel|INTEL")
   # All the Intel processors that GEOS runs on support AVX2, but to be
   # consistent with the AMD processors, we use the -march=core-avx2 flag
   set (COREAVX2_FLAG "-march=core-avx2")
