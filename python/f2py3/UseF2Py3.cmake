@@ -271,7 +271,7 @@ macro (add_f2py3_module _name)
       set(MESON_F2PY3_FCOMPILER "${CMAKE_Fortran_COMPILER}")
     endif()
     add_custom_command(OUTPUT "${_name}${F2PY3_SUFFIX}"
-      COMMAND ${CMAKE_COMMAND} -E env "FC=${MESON_F2PY3_FCONFILER}"
+      COMMAND ${CMAKE_COMMAND} -E env "FC=${MESON_F2PY3_FCOMPILER}"
               ${F2PY3_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py3-${_name}"
               ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
