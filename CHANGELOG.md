@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.58.1] - 2025-04-03
+
+### Fixed
+
+- Fixed bug in f2py3 code
+
 ## [3.58.0] - 2025-03-24
 
 ### Removed
