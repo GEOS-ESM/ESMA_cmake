@@ -66,7 +66,7 @@ if (${proc_description} MATCHES "EPYC")
   set (MARCH_FLAG "-march=x86-64-v3")
 elseif (${proc_description} MATCHES "Hygon")
   set (MARCH_FLAG "-march=x86-64-v3")
-elseif (${proc_description} MATCHES "Intel")
+elseif (${proc_description} MATCHES "Intel|INTEL")
   # All the Intel processors that GEOS runs on support AVX2, but to be
   # consistent with the AMD processors, we use the -march=x86-64-v3 flag
   set (MARCH_FLAG "-march=x86-64-v3")
