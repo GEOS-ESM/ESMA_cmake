@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.58.1] - 2025-04-22
+
+### Fixed
+
+- Do not add `ld_classic` flag on macOS with XCode 16.3 or newer. No longer needed.
+
+
 ## [3.58.1] - 2025-04-03
 
 ### Fixed
