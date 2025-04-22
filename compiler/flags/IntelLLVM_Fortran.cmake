@@ -73,7 +73,7 @@ elseif (${proc_description} MATCHES "Intel")
 elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
   # This is a fallback for when the above doesn't work. It should work
   # for most x86_64 processors, but it is not guaranteed to be optimal.
-  message(WARNING "Unknown processory type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
+  message(WARNING "Unknown processor type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
   set (MARCH_FLAG "x86-64")
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
