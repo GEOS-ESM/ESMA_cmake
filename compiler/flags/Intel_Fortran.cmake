@@ -93,7 +93,7 @@ elseif (${proc_description} MATCHES "Intel")
 elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
   # This is a fallback for when the above doesn't work. It should work
   # for most x86_64 processors, but it is not guaranteed to be optimal.
-  message(WARNING "Unknown processory type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
+  message(WARNING "Unknown processor type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
   set (COREAVX2_FLAG "")
   # Once you are in here, you are probably on Rosetta, but not required. 
   # Still, on Apple Rosetta we also now need to use the ld_classic as the linker
@@ -102,9 +102,12 @@ elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
     execute_process(COMMAND "pkgutil"
                             "--pkg-info=com.apple.pkg.CLTools_Executables"
                     OUTPUT_VARIABLE TEST)
-    string(REGEX REPLACE ".*version: ([0-9]+).*" "\\1" CMDLINE_UTILS_VERSION ${TEST})
-    message(STATUS "Apple command line utils major version is '${CMDLINE_UTILS_VERSION}'")
-    if (${CMDLINE_UTILS_VERSION} VERSION_GREATER 14)
+
+    # Extract the full version X.Y
+    string(REGEX REPLACE ".*version: ([0-9]+\\.[0-9]+).*" "\\1" CMDLINE_UTILS_VERSION ${TEST})
+    message(STATUS "Apple command line utils version is '${CMDLINE_UTILS_VERSION}'")
+
+    if ((${CMDLINE_UTILS_VERSION} VERSION_GREATER 14) AND (${CMDLINE_UTILS_VERSION} VERSION_LESS 16.3))
       message(STATUS "Adding link options '-Wl,-ld_classic'")
       add_link_options(-Wl,-ld_classic)
     endif ()
