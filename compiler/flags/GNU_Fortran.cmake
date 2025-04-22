@@ -135,9 +135,11 @@ if (APPLE)
   execute_process(COMMAND "pkgutil"
                           "--pkg-info=com.apple.pkg.CLTools_Executables"
                   OUTPUT_VARIABLE TEST)
-  string(REGEX REPLACE ".*version: ([0-9]+).*" "\\1" CMDLINE_UTILS_VERSION ${TEST})
-  message(STATUS "Apple command line utils major version is '${CMDLINE_UTILS_VERSION}'")
-  if (${CMDLINE_UTILS_VERSION} VERSION_GREATER 14)
+  # Extract the full version X.Y
+  string(REGEX REPLACE ".*version: ([0-9]+\\.[0-9]+).*" "\\1" CMDLINE_UTILS_VERSION ${TEST})
+  message(STATUS "Apple command line utils version is '${CMDLINE_UTILS_VERSION}'")
+
+  if ((${CMDLINE_UTILS_VERSION} VERSION_GREATER 14) AND (${CMDLINE_UTILS_VERSION} VERSION_LESS 16.3))
     message(STATUS "Adding link options '-Wl,-ld_classic'")
     add_link_options(-Wl,-ld_classic)
   endif ()
