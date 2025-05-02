@@ -6,6 +6,15 @@ esma_check_install_prefix()
 
 ### ecbuild Support ###
 
+# GEOS' scripting currently assumes `install/lib` is where
+# libraries will be installed. For good or ill, we need to
+# follow this convention. But ecbuild might, via GNUInstallDirs,
+# set it at lib64. This overrides that.
+#
+# NOTE: This must be called *before* including ecbuild (or
+# rather before GNUInstallDirs is included
+set(CMAKE_INSTALL_LIBDIR "lib" CACHE STRING "Libraries")
+
 # Bring in ecbuild
 if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/ecbuild")
   list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/ecbuild/cmake")
