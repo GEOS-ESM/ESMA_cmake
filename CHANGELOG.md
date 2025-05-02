@@ -13,21 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Explicitly set `CMAKE_INSTALL_LIBDIR` to `lib` to override `GNUInstallDirs` from setting it to `lib64`. This is mainly needed due to assumptions in GEOS scripting
-
 ### Changed
-
-- Added support for Emerald Rapids
 
 ### Deprecated
 
 ## [4.16.0] - 2025-05-02
 
+### Added
+
+- Explicitly set `CMAKE_INSTALL_LIBDIR` to `lib` to override `GNUInstallDirs` from setting it to `lib64`. This is mainly needed due to assumptions in GEOS scripting
+
 ### Changed
 
-- Added `DEPENDS` option to f2py and f2py3 code to pass dependencies to the `add_custom_command` used
-  to call f2py
-
+- Added support for Emerald Rapids
+- Added `DEPENDS` option to f2py and f2py3 code to pass dependencies to the `add_custom_command` used to call f2py
 
 ## [4.15.0] - 2025-04-24
 
@@ -36,7 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a timeout to `mepo status` to prevent it from hanging indefinitely. The timeout is set to 60 seconds
 - Modified the f2py and f2py3 codes for meson+MPT support
   - It was found that when an f2py code uses MPI, with meson+MPT we need to run with `LD_PRELOAD=/path/to/mpt/libmpi.so`
-
 
 ## [4.14.2] - 2025-04-22
 
