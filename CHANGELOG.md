@@ -13,11 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Explicitly set `CMAKE_INSTALL_LIBDIR` to `lib` to override `GNUInstallDirs` from setting it to `lib64`. This is mainly needed due to assumptions in GEOS scripting
-
 ### Changed
-
-- Added support for Emerald Rapids
 
 ### Deprecated
 
@@ -25,8 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Added `DEPENDS` option to f2py and f2py3 code to pass dependencies to the `add_custom_command` used
-  to call f2py
+### Added
+
+- Explicitly set `CMAKE_INSTALL_LIBDIR` to `lib` to override `GNUInstallDirs` from setting it to `lib64`. This is mainly needed due to assumptions in GEOS scripting
+
+### Changed
+
+- Added support for Emerald Rapids
+- Added `DEPENDS` option to f2py and f2py3 code to pass dependencies to the `add_custom_command` used to call f2py
 
 ## [3.59.0] - 2025-04-24
 
