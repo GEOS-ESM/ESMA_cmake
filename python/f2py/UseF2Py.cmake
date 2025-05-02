@@ -29,7 +29,7 @@ macro (add_f2py_module _name)
   # Parse arguments.
   set (options USE_MPI USE_OPENMP USE_NETCDF DOUBLE_PRECISION)
   set (oneValueArgs DESTINATION)
-  set (multiValueArgs SOURCES ONLY LIBRARIES INCLUDEDIRS)
+  set (multiValueArgs SOURCES DEPENDS ONLY LIBRARIES INCLUDEDIRS)
   cmake_parse_arguments(add_f2py_module "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
   set(only_list ${add_f2py_module_ONLY})
@@ -275,7 +275,7 @@ macro (add_f2py_module _name)
               ${F2PY_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
               --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
               ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
-      DEPENDS ${add_f2py_module_SOURCES}
+      DEPENDS ${add_f2py_module_SOURCES} ${add_f2py_module_DEPENDS}
       COMMENT "[F2PY] Building Fortran to Python interface module ${_name}")
   else ()
     if ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
@@ -283,7 +283,7 @@ macro (add_f2py_module _name)
         COMMAND ${F2PY_EXECUTABLE} ${F2PY_QUIET} -m ${_name}
                 --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
                 ${_fcompiler_opts} ${_inc_opts} -c ${_abs_srcs} ${REDIRECT_TO_DEV_NULL}
-        DEPENDS ${add_f2py_module_SOURCES}
+        DEPENDS ${add_f2py_module_SOURCES} ${add_f2py_module_DEPENDS}
         COMMENT "[F2PY] Building Fortran to Python interface module ${_name}")
     else ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
       add_custom_command(OUTPUT "${_name}${F2PY_SUFFIX}"
@@ -294,7 +294,7 @@ macro (add_f2py_module _name)
                 --build-dir "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}"
                 -c "${CMAKE_CURRENT_BINARY_DIR}/f2py-${_name}/${_name}.pyf"
                 ${_fcompiler_opts} ${_inc_opts} ${_lib_opts} ${_abs_srcs} ${_lib_opts} ${_only} ${REDIRECT_TO_DEV_NULL}
-        DEPENDS ${add_f2py_module_SOURCES}
+        DEPENDS ${add_f2py_module_SOURCES} ${add_f2py_module_DEPENDS}
         COMMENT "[F2PY] Building Fortran to Python interface module ${_name}")
     endif ( "${add_f2py_module_SOURCES}" MATCHES "^[^;]*\\.pyf;" )
   endif ()

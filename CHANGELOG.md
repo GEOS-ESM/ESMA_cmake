@@ -17,6 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.16.0] - 2025-05-02
+
+### Changed
+
+- Added `DEPENDS` option to f2py and f2py3 code to pass dependencies to the `add_custom_command` used
+  to call f2py
+
+
 ## [4.15.0] - 2025-04-24
 
 ### Changed
