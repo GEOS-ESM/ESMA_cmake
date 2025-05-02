@@ -19,6 +19,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.15.0] - 2025-04-24
+
+### Changed
+
+- Added a timeout to `mepo status` to prevent it from hanging indefinitely. The timeout is set to 60 seconds
+- Modified the f2py and f2py3 codes for meson+MPT support
+  - It was found that when an f2py code uses MPI, with meson+MPT we need to run with `LD_PRELOAD=/path/to/mpt/libmpi.so`
+
+
+## [4.14.2] - 2025-04-22
+
+### Fixed
+
+- Do not add `ld_classic` flag on macOS with XCode 16.3 or newer. No longer needed.
+
 ## [4.14.1] - 2025-04-03
 
 ### Fixed

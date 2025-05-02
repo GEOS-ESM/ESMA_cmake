@@ -21,6 +21,7 @@ function(esma_capture_mepo_status)
         OUTPUT_FILE "${OUTPUT_FILE}"
         RESULT_VARIABLE MEPO_STATUS_RESULT
         ERROR_QUIET
+        TIMEOUT 60
       )
 
       if(NOT MEPO_STATUS_RESULT EQUAL 0)
