@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Explicitly set `CMAKE_INSTALL_LIBDIR` to `lib` to override `GNUInstallDirs` from setting it to `lib64`. This is mainly needed due to assumptions in GEOS scripting
+
 ### Changed
 
 - Added support for Emerald Rapids
