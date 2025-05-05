@@ -8,6 +8,13 @@ message(STATUS "Processor description: ${proc_description}")
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/checks")
 include(check_fortran_support)
 
+## We only allow for three CMake Build Types
+set(ALLOWED_BUILD_TYPES "Debug" "Release" "Aggressive")
+if(NOT CMAKE_BUILD_TYPE IN_LIST ALLOWED_BUILD_TYPES)
+  string(REPLACE ";" ", " ALLOWED_BUILD_TYPES_STRING "${ALLOWED_BUILD_TYPES}")
+  message(FATAL_ERROR "The only allowed CMAKE_BUILD_TYPE are: ${ALLOWED_BUILD_TYPES_STRING}")
+endif()
+
 ## Files with flags for Fortran compilers
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/flags")
 include ("${CMAKE_Fortran_COMPILER_ID}_Fortran")

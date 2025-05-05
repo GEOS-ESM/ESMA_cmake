@@ -17,9 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-## [3.60.0] - 2025-05-02
+## [3.61.0] - 2025-05-06
 
-### Changed
+### Added
+
+- Added code to enforce that we only allow `CMAKE_BUILD_TYPE` of Release, Debug, and Aggressive
+  - CMake can recognize others, but we maintain our own flags so we need to be careful
+
+## [3.60.0] - 2025-05-02
 
 ### Added
 
