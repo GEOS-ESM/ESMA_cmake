@@ -3,6 +3,7 @@
 ## Print out the processor description
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 message(STATUS "Processor description: ${proc_description}")
+set(proc_description "${proc_description}" CACHE INTERNAL "Processor description")
 
 ## Checks for Fortran support
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/checks")
