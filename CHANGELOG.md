@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Make `proc_description` a `CACHE` variable
+
 ### Deprecated
 
 ## [4.17.0] - 2025-05-06
