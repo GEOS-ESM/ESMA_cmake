@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed issue with f2py detection where f2py was still being test compiled even if a user specified `-DUSE_F2PY:BOOL=OFF`
+
 ### Removed
 
 ### Added
