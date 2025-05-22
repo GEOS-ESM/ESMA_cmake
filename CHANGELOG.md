@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.62.1] - 2025-05-22
+
+### Changed
+
+- Added `TMPDIR` environment variable to f2py and f2py3 compilation processes in CMake scripts to avoid `noexec` `/tmp` directories
+
 ## [3.62.0] - 2025-05-13
 
 ### Fixed
