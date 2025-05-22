@@ -32,6 +32,7 @@ macro (try_f2py3_compile file var)
    message(DEBUG "MESON_CCOMPILER is set to ${MESON_CCOMPILER}")
    list(APPEND ENV_LIST FC=${MESON_F2PY3_FCOMPILER})
    list(APPEND ENV_LIST CC=${MESON_CCOMPILER})
+   list(APPEND ENV_LIST TMPDIR=${_f2py3_check_bindir})
    message(DEBUG "ENV_LIST is set to ${ENV_LIST}")
    execute_process(
      COMMAND cmake -E env ${ENV_LIST} ${F2PY3_EXECUTABLE} -m test_ -c ${file} --fcompiler=${F2PY3_FCOMPILER}
