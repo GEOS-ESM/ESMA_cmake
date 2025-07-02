@@ -17,11 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-## [4.19.0] - 2025-07-01
+## [4.19.0] - 2025-07-02
 
 ### Changed
 
 - Prepend our `external_libraries` directory to `CMAKE_MODULE_PATH` so our CMake files win
+- On macOS, add `-Wl,-headerpad_max_install_names` when linking
 
 ## [4.18.1] - 2025-05-22
 
