@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prepend our `external_libraries` directory to `CMAKE_MODULE_PATH` so our CMake files win
 - On macOS, add `-Wl,-headerpad_max_install_names` when linking
 
+### Added
+
+- Added new CMake test for deprecated FMS1 I/O support
+
 ## [4.18.1] - 2025-05-22
 
 ### Changed
