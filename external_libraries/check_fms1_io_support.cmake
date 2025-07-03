@@ -33,7 +33,6 @@ macro(check_fms1_io_support result_var)
     ${CMAKE_BINARY_DIR}/test_fms1_compile
     SOURCES ${TEST_FILE_PATH}
     CMAKE_FLAGS ${CMAKE_FLAGS_LIST}
-    OUTPUT_VARIABLE COMPILE_OUTPUT
   )
 
   # Restore the previous value
@@ -43,6 +42,5 @@ macro(check_fms1_io_support result_var)
     message(STATUS "FMS1 IO support is available.")
   else()
     message(STATUS "FMS1 IO support is NOT available.")
-    message(STATUS "Compile output: ${COMPILE_OUTPUT}")
   endif()
 endmacro()
