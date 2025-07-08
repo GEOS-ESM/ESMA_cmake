@@ -3,8 +3,14 @@ set(_CHECK_FMS1_IO_SUPPORT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 macro(check_fms1_io_support result_var)
   # Get include directories from the FMS target
-  get_target_property(FMS_INCLUDE_DIRS FMS::fms_r4 INTERFACE_INCLUDE_DIRECTORIES)
-  
+  # We default to FMS::fms_r4
+  set(FMS_TARGET FMS::fms_r4)
+  # but if FV_PRECISION is set to R8, we use FMS::fms_r8
+  if(FV_PRECISION STREQUAL R8)
+    set(FMS_TARGET FMS::fms_r8)
+  endif()
+  get_target_property(FMS_INCLUDE_DIRS ${FMS_TARGET} INTERFACE_INCLUDE_DIRECTORIES)
+
   # Handle cases where properties might not be set
   if(NOT FMS_INCLUDE_DIRS)
     set(FMS_INCLUDE_DIRS "")
