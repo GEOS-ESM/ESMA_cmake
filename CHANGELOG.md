@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.19.2] - 2025-07-17
+
+### Fixed
+
+- Fixed an issue with FMS detection when using Baselibs in a project that doesn't need it
+
 ## [4.19.1] - 2025-07-08
 
 ### Fixed
