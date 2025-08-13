@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Add support for libaec in Baselibs
+
 ### Deprecated
 
 ## [4.19.2] - 2025-07-17
