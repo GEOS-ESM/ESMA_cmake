@@ -221,13 +221,13 @@ if (Baselibs_FOUND)
   # HDF5_LIBRARIES is a list of libraries that HDF5 needs to link to
 
   # We need to be careful here. If Baselibs was built with libaec, then
-  # the "sz" library is actually "aec sz". So we need to check if
+  # the "sz" library is actually "sz aec". So we need to check if
   # libaec is in the BASEDIR/lib directory. If it is, then we
-  # can set SZ_LIB to "aec sz", otherwise we set it to just "sz".
+  # can set SZ_LIB to "sz aec", otherwise we set it to just "sz".
   if (EXISTS ${BASEDIR}/lib/libaec.a)
     # If we have libaec, then we use it
-    set (SZ_LIB "aec sz")
-    message(STATUS "Found libaec in BASEDIR/lib. Using aec sz for SZ_LIB.")
+    set (SZ_LIB "sz aec")
+    message(STATUS "Found libaec in BASEDIR/lib. Using sz aec for SZ_LIB.")
   else ()
     # If we don't have libaec, then we use just sz
     set (SZ_LIB "sz")
