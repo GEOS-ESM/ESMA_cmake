@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Add support for libaec in Baselibs
+- Prepend our `external_libraries` directory to `CMAKE_MODULE_PATH` so our CMake files win
+- On macOS, add `-Wl,-headerpad_max_install_names` when linking
 
 ### Deprecated
 
