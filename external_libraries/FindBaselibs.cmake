@@ -181,10 +181,46 @@ if (Baselibs_FOUND)
     if (CMAKE_C_COMPILER_ID MATCHES "Clang")
       list(APPEND NETCDF_LIBRARIES ${FWSecurity})
     endif ()
+
+    # We have a special circumstance with Apple and Baselibs now
+    # we might be linking against OpenSSL from homebrew. So we
+    # need to parse LIB_NETCDF and first pull out all the -L matches
+    string(REGEX MATCHALL " -L[^ ]*" _full_lib_paths "${LIB_NETCDF}")
+
+    # Now, we have a list of all the -L paths, but now we need to look
+    # one with 'openssl' in it. If we find one, then we need to capture
+    # that
+    set (NETCDF_OPENSSL_LIB_PATH "")
+    foreach (lib_path ${_full_lib_paths})
+      # Strip the -L prefix
+      string (REPLACE "-L" "" _tmp ${lib_path})
+      string (STRIP ${_tmp} _tmp)
+      # Now check if it has 'openssl' in it
+      message(DEBUG "Checking if ${_tmp} contains 'openssl'")
+      if (_tmp MATCHES "openssl")
+        # If it does, then we set the NETCDF_OPENSSL_LIB_PATH
+        set (NETCDF_OPENSSL_LIB_PATH ${_tmp})
+        message(DEBUG "[macOS] [SSL] Found OpenSSL library path for NetCDF: ${NETCDF_OPENSSL_LIB_PATH}")
+        # And we break out of the loop
+        break()
+      endif ()
+    endforeach()
+
   endif ()
 
   # We also need to append the pthread flag at link time
   list(APPEND NETCDF_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+
+  # Now we need to make a list for our netcdf INTERFACE_LINK_DIRECTORIES
+  # We know that ${BASEDIR}/lib is the directory where the libraries baselibs
+  # are installed, so we can use that as the link directory.
+  set (NETCDF_LINK_DIRECTORIES ${BASEDIR}/lib)
+  # Now if we have an OpenSSL library path, we need to add that too
+  if (NETCDF_OPENSSL_LIB_PATH)
+    # If we have an OpenSSL library path, we need to add that too
+    message(DEBUG "[macOS] [SSL] Adding OpenSSL library path to NetCDF link directories: ${NETCDF_OPENSSL_LIB_PATH}")
+    list(APPEND NETCDF_LINK_DIRECTORIES ${NETCDF_OPENSSL_LIB_PATH})
+  endif ()
 
   # Create targets
   # - NetCDF C
@@ -193,7 +229,7 @@ if (Baselibs_FOUND)
     IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdf.a
     INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIRS}"
     INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+    INTERFACE_LINK_DIRECTORIES "${NETCDF_LINK_DIRECTORIES}"
     )
   set(NetCDF_C_FOUND TRUE CACHE BOOL "NetCDF C Found" FORCE)
 
@@ -203,7 +239,7 @@ if (Baselibs_FOUND)
     IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdff.a
     INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIRS}"
     INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+    INTERFACE_LINK_DIRECTORIES "${NETCDF_LINK_DIRECTORIES}"
     )
   set(NetCDF_Fortran_FOUND TRUE CACHE BOOL "NetCDF Fortran Found" FORCE)
 
@@ -211,7 +247,7 @@ if (Baselibs_FOUND)
   # HDF5
   # ----
 
-  # Like above, baselibs does not build HDF5 as CMake so the HDF5::HDF5 target is 
+  # Like above, baselibs does not build HDF5 as CMake so the HDF5::HDF5 target is
   # not available. So we create it here.
   # NOTE: This is *very* fragile and mainly creates a target that satisfies the
   #       needs of GEOS. It is not a general HDF5 target. If you need a general
@@ -227,11 +263,11 @@ if (Baselibs_FOUND)
   if (EXISTS ${BASEDIR}/lib/libaec.a)
     # If we have libaec, then we use it
     set (SZ_LIB "sz aec")
-    message(STATUS "Found libaec in BASEDIR/lib. Using sz aec for SZ_LIB.")
+    message(DEBUG "Found libaec in BASEDIR/lib. Using sz aec for SZ_LIB.")
   else ()
     # If we don't have libaec, then we use just sz
     set (SZ_LIB "sz")
-    message(STATUS "Did not find libaec in BASEDIR/lib. Using sz for SZ_LIB.")
+    message(DEBUG "Did not find libaec in BASEDIR/lib. Using sz for SZ_LIB.")
   endif ()
 
   set (HDF5_LIBRARIES hdf5_hl_fortran hdf5_fortran hdf5_hl hdf5 ${SZ_LIB} z m dl)
