@@ -260,14 +260,20 @@ if (Baselibs_FOUND)
   # the "sz" library is actually "sz aec". So we need to check if
   # libaec is in the BASEDIR/lib directory. If it is, then we
   # can set SZ_LIB to "sz aec", otherwise we set it to just "sz".
+  # We should also check to see if sz is there as well! If it isn't
+  # we set SZ_LIB to "".
+  set (SZ_LIB "")
   if (EXISTS ${BASEDIR}/lib/libaec.a)
     # If we have libaec, then we use it
     set (SZ_LIB "sz aec")
     message(DEBUG "Found libaec in BASEDIR/lib. Using sz aec for SZ_LIB.")
-  else ()
-    # If we don't have libaec, then we use just sz
+  elseif (EXISTS ${BASEDIR}/lib/libsz.a)
+    # We don't have libaec, but we do have sz
     set (SZ_LIB "sz")
     message(DEBUG "Did not find libaec in BASEDIR/lib. Using sz for SZ_LIB.")
+  else ()
+    # We don't have sz or libaec
+    message(DEBUG "Did not find libsz or libaec in BASEDIR/lib. Not using sz or aec for SZ_LIB.")
   endif ()
 
   set (HDF5_LIBRARIES hdf5_hl_fortran hdf5_fortran hdf5_hl hdf5 ${SZ_LIB} z m dl)
