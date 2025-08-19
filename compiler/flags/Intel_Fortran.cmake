@@ -11,12 +11,9 @@ set (DEBINFO "-g")
 
 set (FPE0 "-fpe0")
 set (FPE3 "-fpe3")
-set (FP_MODEL_PRECISE "-fp-model precise")
-set (FP_MODEL_EXCEPT "-fp-model except")
 set (FP_MODEL_SOURCE "-fp-model source")
 set (FP_MODEL_STRICT "-fp-model strict")
 set (FP_MODEL_CONSISTENT "-fp-model consistent")
-set (FP_MODEL_FAST "-fp-model fast")
 set (FP_MODEL_FAST1 "-fp-model fast=1")
 set (FP_MODEL_FAST2 "-fp-model fast=2")
 
@@ -44,117 +41,58 @@ set (NOOLD_MAXMINLOC "-assume noold_maxminloc")
 set (REALLOC_LHS "-assume realloc_lhs")
 set (ARCH_CONSISTENCY "-fimf-arch-consistency=true")
 set (FTZ "-ftz")
-set (FMA "-fma")
 set (ALIGN_ALL "-align all")
 set (NO_ALIAS "-fno-alias")
 set (USE_SVML "-fimf-use-svml=true")
 
-# Additional flags for better Standards compliance
-## Set the Standard to be Fortran 2018
-set (STANDARD_F18 "-stand f18")
-## Error out if you try to do if(integer)
-set (ERROR_IF_INTEGER "-diag-error 6188")
-## Error out if you try to set a logical to an integer
-set (ERROR_LOGICAL_SET_TO_INTEGER "-diag-error 6192")
-## Turn off warning #5268 (Extension to standard: The text exceeds right hand column allowed on the line.)
-set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
-
-## Turn off ifort: warning #10337: option '-fno-builtin' disables '-imf*' option
-set (DISABLE_10337 "-diag-disable 10337")
-
-## Turn off ifort: command line warning #10121: overriding '-fp-model precise' with '-fp-model fast'
-set (DISABLE_10121 "-diag-disable 10121")
-
-## Turn off remark #10448 warning about ifort deprecation in late 2024
-set (DISABLE_10448 "-diag-disable=10448")
-
 set (NO_RANGE_CHECK "")
 
-cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
-if (${proc_description} MATCHES "EPYC")
-  # AMD EPYC processors support AVX2, but only via the -march=core-avx2 flag
-  set (COREAVX2_FLAG "-march=core-avx2")
-elseif (${proc_description} MATCHES "Hygon")
-  # Hygon processors support AVX2, but only via the -march=core-avx2 flag
-  set (COREAVX2_FLAG "-march=core-avx2")
-elseif (${proc_description} MATCHES "Intel")
-  # All the Intel processors that GEOS runs on support AVX2, but to be
-  # consistent with the AMD processors, we use the -march=core-avx2 flag
-  set (COREAVX2_FLAG "-march=core-avx2")
-  # Previous versions of GEOS used this flag, which was not portable
-  # for AMD. Keeping here for a few versions for historical purposes.
-  #set (COREAVX2_FLAG "-xCORE-AVX2")
-elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
-  # This is a fallback for when the above doesn't work. It should work
-  # for most x86_64 processors, but it is not guaranteed to be optimal.
-  message(WARNING "Unknown processory type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
-  set (COREAVX2_FLAG "")
-  # Once you are in here, you are probably on Rosetta, but not required. 
-  # Still, on Apple Rosetta we also now need to use the ld_classic as the linker
-  if (APPLE)
-    # Determine whether we need to add link options for version 15+ of the Apple command line utilities
-    execute_process(COMMAND "pkgutil"
-                            "--pkg-info=com.apple.pkg.CLTools_Executables"
-                    OUTPUT_VARIABLE TEST)
-    string(REGEX REPLACE ".*version: ([0-9]+).*" "\\1" CMDLINE_UTILS_VERSION ${TEST})
-    message(STATUS "Apple command line utils major version is '${CMDLINE_UTILS_VERSION}'")
-    if (${CMDLINE_UTILS_VERSION} VERSION_GREATER 14)
-      message(STATUS "Adding link options '-Wl,-ld_classic'")
-      add_link_options(-Wl,-ld_classic)
-    endif ()
-  endif ()
+cmake_host_system_information(RESULT proc_decription QUERY PROCESSOR_DESCRIPTION)
+if (${proc_decription} MATCHES "EPYC")
+   set (COREAVX2_FLAG "-march=core-avx2")
+elseif (${proc_decription} MATCHES "Intel")
+   set (COREAVX2_FLAG "-xCORE-AVX2")
 else ()
-  message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
+   message(FATAL_ERROR "Unknown processor. Contact Matt Thompson")
 endif ()
 
 add_definitions(-DHAVE_SHMEM)
-
-# Make an option to make things quiet during debug builds
-option (QUIET_DEBUG "Suppress excess compiler output during debug builds" OFF)
-if (QUIET_DEBUG)
-  set (WARN_UNUSED "")
-  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_FIELD_WIDTH_WARNING} ${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
-else ()
-  set (WARN_UNUSED "-warn unused")
-  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
-endif ()
 
 ####################################################
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS}")
-set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC} ${DISABLE_10121} ${DISABLE_10448}")
+set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS}")
+set (common_Fortran_fpe_flags "${FPE0} ${FP_MODEL_SOURCE} ${HEAPARRAYS} ${NOOLD_MAXMINLOC}")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -init=snan,arrays -save-temps")
-set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FP_MODEL_EXCEPT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check -warn unused -init=snan,arrays -save-temps")
+set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS NoVectorize
 # ----------------
-set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO}")
-set (GEOS_Fortran_NoVect_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${common_Fortran_fpe_flags}")
+set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO} ${OPTREPORT0} ${FTZ} ${ALIGN_ALL} ${NO_ALIAS}")
+set (GEOS_Fortran_NoVect_FPE_Flags "${common_Fortran_fpe_flags} ${ARCH_CONSISTENCY}")
 
 # NOTE It was found that the Vectorizing Flags gave better performance with the same results in testing.
 #      But in case they are needed, we keep the older flags available
 
 # GEOS Vectorize
-# ---------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${FMA} -align array32byte")
-set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${common_Fortran_fpe_flags}")
-
 # --------------
+set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+set (GEOS_Fortran_Vect_FPE_Flags "${FPE3} ${FP_MODEL_CONSISTENT} ${NOOLD_MAXMINLOC}")
 
-# Set Release flags
-# -----------------
+# GEOS Release
+# ------------
 set (GEOS_Fortran_Release_Flags  "${GEOS_Fortran_Vect_Flags}")
 set (GEOS_Fortran_Release_FPE_Flags "${GEOS_Fortran_Vect_FPE_Flags}")
 
 # GEOS Aggressive
 # ---------------
-set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${FMA} -align array32byte")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${USE_SVML} ${common_Fortran_fpe_flags}")
+set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array32byte")
+#set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} -xSKYLAKE-AVX512 -qopt-zmm-usage=high -fma -qopt-report0 ${FTZ} ${ALIGN_ALL} ${NO_ALIAS} -align array64byte")
+set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${USE_SVML} ${NOOLD_MAXMINLOC}")
 
 # Common variables for every compiler
 include(Generic_Fortran)
