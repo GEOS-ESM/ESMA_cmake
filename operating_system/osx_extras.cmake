@@ -53,3 +53,6 @@ ecbuild_warn(
    " path ${CMAKE_INSTALL_PREFIX}/lib"
    )
 set (ENABLE_RELATIVE_RPATHS FALSE)
+
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-headerpad_max_install_names")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-headerpad_max_install_names")
