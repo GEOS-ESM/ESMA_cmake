@@ -262,21 +262,24 @@ if (Baselibs_FOUND)
   # can set SZ_LIB to "sz aec", otherwise we set it to just "sz".
   # We should also check to see if sz is there as well! If it isn't
   # we set SZ_LIB to "".
-  set (SZ_LIB "")
+  set (SZ_LIB)
   if (EXISTS ${BASEDIR}/lib/libaec.a)
     # If we have libaec, then we use it
-    set (SZ_LIB "sz aec")
+    list (APPEND SZ_LIB sz aec)
     message(DEBUG "Found libaec in BASEDIR/lib. Using sz aec for SZ_LIB.")
   elseif (EXISTS ${BASEDIR}/lib/libsz.a)
     # We don't have libaec, but we do have sz
-    set (SZ_LIB "sz")
+    list (APPEND SZ_LIB sz)
     message(DEBUG "Did not find libaec in BASEDIR/lib. Using sz for SZ_LIB.")
   else ()
     # We don't have sz or libaec
     message(DEBUG "Did not find libsz or libaec in BASEDIR/lib. Not using sz or aec for SZ_LIB.")
   endif ()
 
-  set (HDF5_LIBRARIES hdf5_hl_fortran hdf5_fortran hdf5_hl hdf5 ${SZ_LIB} z m dl)
+  set (HDF5_LIBRARIES
+    hdf5_hl_fortran hdf5_fortran hdf5_hl hdf5
+    ${SZ_LIB}
+    z m dl)
   # Create targets
 
   # - HDF5 C
@@ -284,7 +287,7 @@ if (Baselibs_FOUND)
   set_target_properties(hdf5::hdf5 PROPERTIES
     IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5.a
     INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
-    INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
+    INTERFACE_LINK_LIBRARIES  ${HDF5_LIBRARIES}
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
   set(HDF5_C_FOUND TRUE CACHE BOOL "HDF5 C Found" FORCE)
@@ -294,7 +297,7 @@ if (Baselibs_FOUND)
   set_target_properties(hdf5::hdf5_hl PROPERTIES
     IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_hl.a
     INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
-    INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
+    INTERFACE_LINK_LIBRARIES  ${HDF5_LIBRARIES}
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
   set(HDF5_HL_FOUND TRUE CACHE BOOL "HDF5 C HL Found" FORCE)
@@ -304,7 +307,7 @@ if (Baselibs_FOUND)
   set_target_properties(hdf5::hdf5_fortran PROPERTIES
     IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_fortran.a
     INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
-    INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
+    INTERFACE_LINK_LIBRARIES  ${HDF5_LIBRARIES}
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
   set(HDF5_Fortran_FOUND TRUE CACHE BOOL "HDF5 Fortran Found" FORCE)
@@ -314,7 +317,7 @@ if (Baselibs_FOUND)
   set_target_properties(hdf5::hdf5_hl_fortran PROPERTIES
     IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_hl_fortran.a
     INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
-    INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
+    INTERFACE_LINK_LIBRARIES  ${HDF5_LIBRARIES}
     INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
   set(HDF5_Fortran_HL_FOUND TRUE CACHE BOOL "HDF5 Fortran HL Found" FORCE)
