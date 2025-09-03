@@ -13,17 +13,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `FindISSM.cmake` file
-
 ### Changed
 
 ### Deprecated
 
-## [4.20.1] - 2025-09-03
+## [4.21.0] - 2025-09-03
 
 ### Fixed
 
 - Fix issue with libaec use (use LIST instead of string)
+
+### Added
+
+- Add `FindISSM.cmake` file
 
 ## [4.20.0] - 2025-08-25
 
