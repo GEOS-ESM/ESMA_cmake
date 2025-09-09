@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.22.0] - 2025-09-09
+
+### Changed
+
+- Update the GNU Aggressive flags as the old ones seem to cause rapid instabilities with GEOSgcm v12
+
 ## [4.21.0] - 2025-09-03
 
 ### Fixed

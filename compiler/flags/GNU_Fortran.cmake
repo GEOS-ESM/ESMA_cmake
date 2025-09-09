@@ -200,7 +200,8 @@ if (${proc_description} MATCHES "Apple M1" AND ${CMAKE_HOST_SYSTEM_PROCESSOR} ST
   set (GEOS_Fortran_Aggressive_Flags "${GEOS_Fortran_Release_Flags}")
   set (GEOS_Fortran_Aggressive_FPE_Flags "${GEOS_Fortran_Release_FPE_Flags}")
 else ()
-  set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=${GNU_NATIVE_ARCH} -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} ${NO_FMA}")
+  #set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=${GNU_NATIVE_ARCH} -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} ${NO_FMA}")
+  set (GEOS_Fortran_Aggressive_Flags "${FOPT2} -march=native ${NO_FMA}")
   set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 endif ()
 
