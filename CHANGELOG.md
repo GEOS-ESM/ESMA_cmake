@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.65.0] - 2025-09-23
+
+### Fixed
+
+- Workaround for `ifx` 2025.2 preprocessor bug
+
 ## [3.64.0] - 2025-09-03
 
 ### Fixed
