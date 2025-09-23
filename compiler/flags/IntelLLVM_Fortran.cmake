@@ -118,7 +118,7 @@ add_definitions(-DHAVE_SHMEM)
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${PP}")
-set (common_Fortran_fpe_flags "${FTZ} ${FP_MODEL_SOURCE})
+set (common_Fortran_fpe_flags "${FTZ} ${FP_MODEL_SOURCE}")
 
 # GEOS Debug
 # ----------
