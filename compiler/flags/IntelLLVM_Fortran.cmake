@@ -22,8 +22,10 @@ set (FP_MODEL_FAST "-fp-model fast")
 set (FP_MODEL_FAST1 "-fp-model fast=1")
 set (FP_MODEL_FAST2 "-fp-model fast=2")
 
-set (FP_SPECULATION_SAFE "-fp-speculation=safe")
-set (FP_SPECULATION_STRICT "-fp-speculation=strict")
+# Testing with ifx 2025.2 found these flags caused a lot
+# of ICEs. For now we turn off
+#set (FP_SPECULATION_SAFE "-fp-speculation=safe")
+#set (FP_SPECULATION_STRICT "-fp-speculation=strict")
 
 set (OPTREPORT0 "-qopt-report0")
 set (OPTREPORT5 "-qopt-report5")
