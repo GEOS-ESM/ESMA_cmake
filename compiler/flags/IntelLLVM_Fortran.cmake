@@ -148,17 +148,17 @@ set (GEOS_Fortran_NoVect_FPE_Flags "${FPE1} ${FP_MODEL_FAST1} ${FP_MODEL_SOURCE}
 
 # GEOS Stock-Vect
 # ---------------
-set (GEOS_Fortran_StockVect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${FMA} -align array32byte")
+set (GEOS_Fortran_StockVect_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} ${FMA} -align array32byte")
 set (GEOS_Fortran_StockVect_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${common_Fortran_fpe_flags}")
 
 # GEOS Vectorize
 # ---------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -align array32byte")
+set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
 set (GEOS_Fortran_Vect_FPE_Flags "${FPE1} ${FP_MODEL_FAST1} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
 
 # GEOS Aggressive
 # ---------------
-set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -align array32byte")
+set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
 set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FMA} ${FP_SPECULATION_FAST} ${USE_SVML} ${common_Fortran_fpe_flags}")
 
 # Set Release flags
