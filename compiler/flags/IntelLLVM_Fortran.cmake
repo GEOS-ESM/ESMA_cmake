@@ -12,6 +12,7 @@ set (FFAST "-fast")
 set (DEBINFO "-g")
 
 set (FPE0 "-fpe0")
+set (FPE1 "-fpe1")
 set (FPE3 "-fpe3")
 set (FP_MODEL_PRECISE "-fp-model precise")
 set (FP_MODEL_EXCEPT "-fp-model except")
