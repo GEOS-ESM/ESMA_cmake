@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.23.1] - 2025-09-26
+
+### Fixed
+
+- Corrected missing `FPE1` in Intel flags
+
 ## [4.23.0] - 2025-09-23
 
 ### Fixed
