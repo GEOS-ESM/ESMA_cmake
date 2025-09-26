@@ -10,6 +10,7 @@ set (FOPT4 "-O4")
 set (DEBINFO "-g")
 
 set (FPE0 "-fpe0")
+set (FPE1 "-fpe1")
 set (FPE3 "-fpe3")
 # ifx does not support -fp-model source (yet? see https://www.intel.com/content/www/us/en/develop/documentation/fortran-compiler-oneapi-dev-guide-and-reference/top/compiler-reference/compiler-options/floating-point-options/fp-model-fp.html)
 #set (FP_MODEL_SOURCE "-fp-model source")
