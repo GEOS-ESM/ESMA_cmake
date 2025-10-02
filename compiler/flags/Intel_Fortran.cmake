@@ -118,7 +118,7 @@ elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
   # for most x86_64 processors, but it is not guaranteed to be optimal.
   message(WARNING "Unknown processor type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
   set (COREAVX2_FLAG "")
-  # Once you are in here, you are probably on Rosetta, but not required. 
+  # Once you are in here, you are probably on Rosetta, but not required.
   # Still, on Apple Rosetta we also now need to use the ld_classic as the linker
   if (APPLE)
     # Determine whether we need to add link options for version 15+ of the Apple command line utilities
@@ -160,7 +160,7 @@ set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_STRICT} ${FP_SPECULATION_S
 # Strict (bitwise reproducible, IEEE-compliant)
 set (GEOS_Fortran_Strict_Flags "${FOPT2} ${DEBINFO}")
 set (GEOS_Fortran_Strict_FPE_Flags
-     "${FP_STRICT} ${FP_SPECULATION_STRICT} ${FPE0} -check uninit -prec-div -prec-sqrt -no-ftz ${common_Fortran_fpe_flags}") 
+     "${FP_STRICT} ${FP_SPECULATION_STRICT} ${FPE0} -check uninit -prec-div -prec-sqrt -no-ftz ${common_Fortran_fpe_flags}")
 
 # NoVect (bitwise stable, no FMA)
 set (GEOS_Fortran_NoVect_Flags
