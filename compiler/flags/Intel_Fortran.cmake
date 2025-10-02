@@ -2,6 +2,9 @@ if (CMAKE_Fortran_COMPILER_VERSION VERSION_LESS 15.1)
   message(FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be at least 15.1!")
 endif()
 
+# ----------------------------------------------------------------------
+# Optimization levels
+# ----------------------------------------------------------------------
 set (FOPT0 "-O0")
 set (FOPT1 "-O1")
 set (FOPT2 "-O2")
@@ -9,54 +12,82 @@ set (FOPT3 "-O3")
 set (FOPT4 "-O4")
 set (FFAST "-fast")
 
+# Debug info
 set (DEBINFO "-g")
 
+# ----------------------------------------------------------------------
+# Floating-point handling
+# ----------------------------------------------------------------------
 set (FPE0 "-fpe0")
 set (FPE1 "-fpe1")
 set (FPE3 "-fpe3")
-set (FP_MODEL_PRECISE "-fp-model precise")
-set (FP_MODEL_EXCEPT "-fp-model except")
-set (FP_MODEL_SOURCE "-fp-model source")
-set (FP_MODEL_STRICT "-fp-model strict")
-set (FP_MODEL_CONSISTENT "-fp-model consistent")
-set (FP_MODEL_FAST "-fp-model fast")
-set (FP_MODEL_FAST1 "-fp-model fast=1")
-set (FP_MODEL_FAST2 "-fp-model fast=2")
 
-set (FP_SPECULATION_SAFE "-fp-speculation=safe")
+# Grouped FP models
+set (FP_SOURCE     "-fp-model source")
+set (FP_CONSISTENT "-fp-model consistent")
+set (FP_EXCEPT     "-fp-model except")
+set (FP_PRECISE    "-fp-model precise")
+set (FP_STRICT     "-fp-model strict")
+set (FP_FAST       "-fp-model fast")
+set (FP_FAST1      "-fp-model fast=1")
+set (FP_FAST2      "-fp-model fast=2")
+
+# -fp-speculation=fast is the compiler default
+set (FP_SPECULATION_FAST   "-fp-speculation=fast")
+set (FP_SPECULATION_SAFE   "-fp-speculation=safe")
 set (FP_SPECULATION_STRICT "-fp-speculation=strict")
 
-set (OPTREPORT0 "-qopt-report0")
-set (OPTREPORT5 "-qopt-report5")
+set (ARCH_CONSISTENCY "-fimf-arch-consistency=true")
 
+set (FTZ "-ftz")
+set (NO_PREC_DIV "-no-prec-div")
+set (USE_SVML "-fimf-use-svml=true ")
+
+set (IPO "-ipo")
+set (FMA "-fma")
+set (NO_FMA "-no-fma")
 set (FREAL8 "-r8")
 set (FINT8 "-i8")
 
+# ----------------------------------------------------------------------
+# Reports
+# ----------------------------------------------------------------------
+set (OPTREPORT0 "-qopt-report0")
+set (OPTREPORT5 "-qopt-report5")
+
+# ----------------------------------------------------------------------
+# Portability / source format
+# ----------------------------------------------------------------------
 set (PP    "-fpp")
-set (MISMATCH "")
 set (BIG_ENDIAN "-convert big_endian")
 set (LITTLE_ENDIAN "-convert little_endian")
 set (EXTENDED_SOURCE "-extend-source")
 set (FIXED_SOURCE "-fixed")
+set (NO_RANGE_CHECK "")
+
+# ----------------------------------------------------------------------
+# Warnings / diagnostics
+# ----------------------------------------------------------------------
 set (DISABLE_FIELD_WIDTH_WARNING "-diag-disable 8291")
 set (DISABLE_GLOBAL_NAME_WARNING "-diag-disable 5462")
-set (CRAY_POINTER "")
-set (MCMODEL "-mcmodel medium -shared-intel")
-set (HEAPARRAYS "-heap-arrays 32")
-set (BYTERECLEN "-assume byterecl")
-set (ALIGNCOM "-align dcommons")
-set (TRACEBACK "-traceback")
-set (NOOLD_MAXMINLOC "-assume noold_maxminloc")
-set (REALLOC_LHS "-assume realloc_lhs")
-set (ARCH_CONSISTENCY "-fimf-arch-consistency=true")
-set (FTZ "-ftz")
-set (FMA "-fma")
-set (NO_FMA "-no-fma")
-set (ALIGN_ALL "-align all")
-set (NO_ALIAS "-fno-alias")
-set (USE_SVML "-fimf-use-svml=true")
+set (DISABLE_10337 "-diag-disable 10337")   # fno-builtin warning
+set (DISABLE_10121 "-diag-disable 10121")   # fp-model override warning
+set (DISABLE_10448 "-diag-disable 10448")   # ifort deprecation remark
+set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
 
-# Additional flags for better Standards compliance
+# Make an option to make things quiet during debug builds
+option (QUIET_DEBUG "Suppress excess compiler output during debug builds" OFF)
+if (QUIET_DEBUG)
+  set (WARN_UNUSED "")
+  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_FIELD_WIDTH_WARNING} ${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
+else ()
+  set (WARN_UNUSED "-warn unused")
+  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
+endif ()
+
+# ----------------------------------------------------------------------
+# Standards Compliance (used in MAPL)
+# ----------------------------------------------------------------------
 ## Set the Standard to be Fortran 2018
 set (STANDARD_F18 "-stand f18")
 ## Error out if you try to do if(integer)
@@ -66,16 +97,19 @@ set (ERROR_LOGICAL_SET_TO_INTEGER "-diag-error 6192")
 ## Turn off warning #5268 (Extension to standard: The text exceeds right hand column allowed on the line.)
 set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
 
-## Turn off ifort: warning #10337: option '-fno-builtin' disables '-imf*' option
-set (DISABLE_10337 "-diag-disable 10337")
-
-## Turn off ifort: command line warning #10121: overriding '-fp-model precise' with '-fp-model fast'
-set (DISABLE_10121 "-diag-disable 10121")
-
-## Turn off remark #10448 warning about ifort deprecation in late 2024
-set (DISABLE_10448 "-diag-disable=10448")
-
-set (NO_RANGE_CHECK "")
+# ----------------------------------------------------------------------
+# Memory / alignment
+# ----------------------------------------------------------------------
+set (MCMODEL "-mcmodel medium -shared-intel")
+set (HEAPARRAYS "-heap-arrays 32")
+set (BYTERECLEN "-assume byterecl")
+set (TRACEBACK "-traceback")
+set (NOOLD_MAXMINLOC "-assume noold_maxminloc")
+set (REALLOC_LHS "-assume realloc_lhs")
+set (ALIGNCOM "-align dcommons")
+set (NO_ALIAS "-fno-alias")
+set (ARRAY_ALIGN_32BYTE "-align array32byte")
+set (ARRAY_ALIGN_64BYTE "-align array64byte")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 if (${proc_description} MATCHES "EPYC")
@@ -96,7 +130,7 @@ elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
   # for most x86_64 processors, but it is not guaranteed to be optimal.
   message(WARNING "Unknown processor type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
   set (COREAVX2_FLAG "")
-  # Once you are in here, you are probably on Rosetta, but not required. 
+  # Once you are in here, you are probably on Rosetta, but not required.
   # Still, on Apple Rosetta we also now need to use the ld_classic as the linker
   if (APPLE)
     # Determine whether we need to add link options for version 15+ of the Apple command line utilities
@@ -117,57 +151,52 @@ else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
 
+# ----------------------------------------------------------------------
+# Defines
+# ----------------------------------------------------------------------
 add_definitions(-DHAVE_SHMEM)
 
-# Make an option to make things quiet during debug builds
-option (QUIET_DEBUG "Suppress excess compiler output during debug builds" OFF)
-if (QUIET_DEBUG)
-  set (WARN_UNUSED "")
-  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_FIELD_WIDTH_WARNING} ${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
-else ()
-  set (WARN_UNUSED "-warn unused")
-  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
-endif ()
+# ----------------------------------------------------------------------
+# Common flag bundles
+# ----------------------------------------------------------------------
+set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGNCOM} ${NO_ALIAS}")
+set (common_Fortran_fpe_flags "${NOOLD_MAXMINLOC} ${DISABLE_10121} ${DISABLE_10448}")
 
-####################################################
-
-# Common Fortran Flags
-# --------------------
-set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS}")
-set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC} ${DISABLE_10121} ${DISABLE_10448}")
-
-# GEOS Debug
-# ----------
+# ----------------------------------------------------------------------
+# Build type specific bundles
+# ----------------------------------------------------------------------
+# Debug
 set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -init=snan,arrays -save-temps")
 set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_STRICT} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
 
-# GEOS Safe
-# ----------------
-set (GEOS_Fortran_Safe_Flags "${FOPT2} ${DEBINFO}")
-set (GEOS_Fortran_Safe_FPE_Flags "${FPE1} ${FP_MODEL_PRECISE} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags}")
+# Strict (bitwise reproducible, IEEE-compliant)
+set (GEOS_Fortran_Strict_Flags "${FOPT2} ${DEBINFO}")
+set (GEOS_Fortran_Strict_FPE_Flags
+     "${FP_STRICT} ${FP_SPECULATION_STRICT} ${FPE0} -check uninit -prec-div -prec-sqrt -no-ftz ${common_Fortran_fpe_flags}")
 
-# GEOS NoVectorize
-# ----------------
-set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO}")
-set (GEOS_Fortran_NoVect_FPE_Flags "${FPE1} ${FP_MODEL_FAST1} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
+# NoVect (bitwise stable, no FMA)
+set (GEOS_Fortran_NoVect_Flags
+     "${FOPT3}")
+set (GEOS_Fortran_NoVect_FPE_Flags
+     "${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# NOTE It was found that the Vectorizing Flags gave better performance with the same results in testing.
-#      But in case they are needed, we keep the older flags available
+# Vectorization with floating point exception trapping
+set (GEOS_Fortran_VectTrap_Flags
+     "${FOPT2} ${COREAVX2_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_VectTrap_FPE_Flags
+     "${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE0} -check uninit ${common_Fortran_fpe_flags}")
 
-# GEOS Stock-Vect
-# ---------------
-set (GEOS_Fortran_StockVect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} ${FMA} -align array32byte")
-set (GEOS_Fortran_StockVect_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${common_Fortran_fpe_flags}")
+# Vectorized
+set (GEOS_Fortran_Vect_Flags
+     "${FOPT3} ${COREAVX2_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_Vect_FPE_Flags
+     "${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# GEOS Vectorize
-# ---------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -align array32byte")
-set (GEOS_Fortran_Vect_FPE_Flags "${FPE1} ${FP_MODEL_FAST1} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
-
-# GEOS Aggressive
-# ---------------
-set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${COREAVX2_FLAG} -align array32byte")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FMA} ${FP_SPECULATION_FAST} ${USE_SVML} ${common_Fortran_fpe_flags}")
+# Aggressive (fast math, SVML)
+set (GEOS_Fortran_Aggressive_Flags
+     "${FOPT3} ${COREAVX2_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_Aggressive_FPE_Flags
+     "${FP_FAST2} ${FP_SOURCE} ${FP_CONSISTENT} ${FMA} ${USE_SVML} ${FPE3} ${common_Fortran_fpe_flags}")
 
 # Set Release flags
 # -----------------

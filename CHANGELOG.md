@@ -17,6 +17,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.25.0] - 2025-10-02
+
+### Added
+
+- Add new "VectTrap" `CMAKE_BUILD_TYPE`. This is only different from `Release` for Intel Fortran. It is a set of flags to try to trap exceptions (e.g., invalid floating point operations) while still being vectorized.
+
+### Changed
+
+- Update `ifx` flags to be close to `ifort` flags (ish)
+  - NOTE: ifx is still in testing and flags will change (currently does not layout-regress)
+
 ## [4.24.0] - 2025-10-02
 
 ### Removed
