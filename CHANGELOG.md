@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.24.0] - 2025-10-02
+
+### Removed
+
+- Remove support for Python 2 (mainly f2py2)
+
 ## [4.23.1] - 2025-09-26
 
 ### Fixed

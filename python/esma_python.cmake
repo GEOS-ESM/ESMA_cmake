@@ -24,18 +24,6 @@ if (USE_F2PY)
   include (esma_add_f2py_module)
 endif ()
 
-# Find Python2
-set(Python2_FIND_STRATEGY LOCATION)
-set(Python2_FIND_UNVERSIONED_NAMES FIRST)
-set(Python2_FIND_FRAMEWORK LAST)
-find_package(Python2 COMPONENTS Interpreter)
-list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/f2py2")
-include (esma_find_python2_module)
-include (esma_check_python2_module)
-if (USE_F2PY)
-  include (esma_add_f2py2_module)
-endif ()
-
 # Find Python3
 set(Python3_FIND_STRATEGY LOCATION)
 set(Python3_FIND_UNVERSIONED_NAMES FIRST)
