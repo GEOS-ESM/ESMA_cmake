@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Update `ifx` flags to match as close as possible to `ifort` flags
+
 ### Deprecated
 
 ## [4.25.0] - 2025-10-02
