@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Update `ifort` flags (per @wmputman)
 - Update `ifx` flags to be close to `ifort` flags (ish)
   - NOTE: ifx is still in testing and flags will change (currently does not layout-regress)
 
