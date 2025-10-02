@@ -86,6 +86,18 @@ else ()
 endif ()
 
 # ----------------------------------------------------------------------
+# Standards Compliance (used in MAPL)
+# ----------------------------------------------------------------------
+## Set the Standard to be Fortran 2018
+set (STANDARD_F18 "-stand f18")
+## Error out if you try to do if(integer)
+set (ERROR_IF_INTEGER "-diag-error 6188")
+## Error out if you try to set a logical to an integer
+set (ERROR_LOGICAL_SET_TO_INTEGER "-diag-error 6192")
+## Turn off warning #5268 (Extension to standard: The text exceeds right hand column allowed on the line.)
+set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
+
+# ----------------------------------------------------------------------
 # Memory / alignment
 # ----------------------------------------------------------------------
 set (MCMODEL "-mcmodel medium -shared-intel")
@@ -193,4 +205,3 @@ set (GEOS_Fortran_Release_FPE_Flags "${GEOS_Fortran_Vect_FPE_Flags}")
 
 # Common variables for every compiler
 include(Generic_Fortran)
-
