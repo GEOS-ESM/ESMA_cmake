@@ -205,6 +205,12 @@ set (GEOS_Fortran_StockVect_FPE_Flags "${FPE3} ${FP_FAST} ${FP_SOURCE} ${FP_CONS
 set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
 set (GEOS_Fortran_Vect_FPE_Flags "${FPE1} ${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
 
+# GEOS VectTrap
+# -------------
+# Until these can be tested, we just use the same as GEOS_Vectorize
+set (GEOS_Fortran_VectTrap_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
+set (GEOS_Fortran_VectTrap_FPE_Flags "${FPE1} ${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
+
 # GEOS Aggressive
 # ---------------
 set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
