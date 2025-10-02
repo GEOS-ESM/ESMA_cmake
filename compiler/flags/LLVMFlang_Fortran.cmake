@@ -76,7 +76,7 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 set (GEOS_Fortran_Release_Flags "${FOPT3} ${FLANG_TARGET_ARCH} ${DEBINFO}")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
-# Create a NoVectorize version for consistency. No difference from Release for GNU
+# Create a NoVectorize version for consistency. No difference from Release for Flang
 
 # GEOS NoVectorize
 # ----------------
@@ -85,13 +85,21 @@ set (GEOS_Fortran_NoVect_FPE_Flags "${GEOS_Fortran_Release_FPE_Flags}")
 
 # GEOS Vectorize
 # --------------
-
 # Until good options can be found, make vectorize equal common flags
 set (GEOS_Fortran_Vect_Flags ${GEOS_Fortran_Release_Flags})
 set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 
-set (GEOS_Fortran_Aggressive_Flags "${GEOS_Fortran_Release_Flags}")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${GEOS_Fortran_Release_FPE_Flags}")
+# GEOS VectTrap
+# --------------
+# Until good options can be found, make vecttrap equal common flags
+set (GEOS_Fortran_VectTrap_Flags ${GEOS_Fortran_Release_Flags})
+set (GEOS_Fortran_VectTrap_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
+
+# GEOS Aggressive
+# ---------------
+# Until good options can be found, make vectorize equal common flags
+set (GEOS_Fortran_Aggressive_Flags ${GEOS_Fortran_Release_Flags})
+set (GEOS_Fortran_Aggressive_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 
 # Common variables for every compiler
 include(Generic_Fortran)

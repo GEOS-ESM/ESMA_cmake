@@ -185,6 +185,12 @@ set (GEOS_Fortran_NoVect_FPE_Flags "${GEOS_Fortran_Release_FPE_Flags}")
 set (GEOS_Fortran_Vect_Flags ${GEOS_Fortran_Release_Flags})
 set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 
+# GEOS VectTrap
+# --------------
+# Until good options can be found, make vecttrap equal common flags
+set (GEOS_Fortran_VectTrap_Flags ${GEOS_Fortran_Release_Flags})
+set (GEOS_Fortran_VectTrap_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
+
 # GEOS Aggressive
 # ---------------
 # NOTE: gfortran does get a benefit from vectorization, but the resulting code
