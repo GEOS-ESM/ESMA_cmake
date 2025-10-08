@@ -5,6 +5,12 @@
 # Citation: https://cmake.org/pipermail/cmake/2011-January/041666.html
 # Mark Moll
 
+execute_process (
+  COMMAND bash -c "which python3"
+  OUTPUT_VARIABLE python3exec
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+set(Python3_EXECUTABLE ${python3exec})
 find_package(Python3 COMPONENTS Interpreter)
 
 function(esma_find_python3_module module)
