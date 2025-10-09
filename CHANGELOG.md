@@ -15,9 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated the Python and Python3 detection better find f2py and f2py3 given the found Python executable
-
 ### Deprecated
+
+## [3.66.0] - 2025-10-09
+
+### Changed
+
+- Updated the Python and Python3 detection better find f2py and f2py3 given the found Python executable
 
 ## [3.65.0] - 2025-09-23
 
