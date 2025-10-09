@@ -19,8 +19,8 @@ macro (try_f2py_compile file var)
    else ()
      set(MESON_F2PY_FCOMPILER "${CMAKE_Fortran_COMPILER}")
    endif ()
-   message(DEBUG "MESON_F2PY_FCOMPILER is set to ${MESON_F2PY_FCOMPILER}")
-   message(DEBUG "F2PY_COMPILER is set to ${F2PY_COMPILER}")
+   message(DEBUG "[F2PY] MESON_F2PY_FCOMPILER is set to ${MESON_F2PY_FCOMPILER}")
+   message(DEBUG "[F2PY] F2PY_COMPILER is set to ${F2PY_COMPILER}")
    # hack for Macs. If the C compiler is clang and we are on Apple,
    # we need to set the CC environment to /usr/bin/clang
    if(APPLE AND CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
@@ -29,11 +29,11 @@ macro (try_f2py_compile file var)
    else()
      set(MESON_CCOMPILER "${CMAKE_C_COMPILER}")
    endif()
-   message(DEBUG "MESON_CCOMPILER is set to ${MESON_CCOMPILER}")
+   message(DEBUG "[F2PY] MESON_CCOMPILER is set to ${MESON_CCOMPILER}")
    list(APPEND ENV_LIST FC=${MESON_F2PY_FCOMPILER})
    list(APPEND ENV_LIST CC=${MESON_CCOMPILER})
    list(APPEND ENV_LIST TMPDIR=${_f2py_check_bindir})
-   message(DEBUG "ENV_LIST is set to ${ENV_LIST}")
+   message(DEBUG "[F2PY] ENV_LIST is set to ${ENV_LIST}")
    execute_process(
      COMMAND cmake -E env ${ENV_LIST} ${F2PY_EXECUTABLE} -m test_ -c ${file} --fcompiler=${F2PY_FCOMPILER}
      WORKING_DIRECTORY ${_f2py_check_bindir}
@@ -44,6 +44,7 @@ macro (try_f2py_compile file var)
 
    if (result EQUAL 0)
       file(GLOB F2PY_TEST_OUTPUT_FILE ${_f2py_check_bindir}/*.so)
+      message(DEBUG "[F2PY] F2PY_TEST_OUTPUT_FILE is ${F2PY_TEST_OUTPUT_FILE}")
 
       get_filename_component(F2PY_FOUND_EXTENSION ${F2PY_TEST_OUTPUT_FILE} EXT)
 
