@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Update CI to use reusable workflows
+
 ### Deprecated
 
 ## [4.26.0] - 2025-10-09
