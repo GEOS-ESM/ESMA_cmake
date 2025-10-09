@@ -38,15 +38,16 @@
 
 ## Find the directory where the Python3_EXECUTABLE is located
 message(DEBUG "[F2PY3]: Searching for f2py3 executable associated with Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
-get_filename_component(PYTHON3_EXECUTABLE_DIR ${Python3_EXECUTABLE} DIRECTORY)
-message(DEBUG "[F2PY3]: Python3 executable directory: ${PYTHON3_EXECUTABLE_DIR}")
+get_filename_component(Python3_EXECUTABLE_DIR ${Python3_EXECUTABLE} DIRECTORY)
+message(DEBUG "[F2PY3]: Python3 executable directory: ${Python3_EXECUTABLE_DIR}")
 
 find_program(F2PY3_EXECUTABLE
-  NAMES "f2py"
-        "f2py${Python3_VERSION_MAJOR}"
+  NAMES "f2py${Python3_VERSION_MAJOR}"
         "f2py${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
         "f2py-${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
-  PATHS ${PYTHON3_EXECUTABLE_DIR}
+        "f2py"
+  PATHS ${Python3_EXECUTABLE_DIR}
+  HINTS ${Python3_EXECUTABLE_DIR}
 )
 
 message(DEBUG "[F2PY3]: Found f2py3 executable: ${F2PY3_EXECUTABLE}")
@@ -58,7 +59,7 @@ message(DEBUG "[F2PY3]: f2py3 executable directory: ${F2PY3_EXECUTABLE_DIR}")
 
 # Now we issue a WARNING. We can't do more than that because of things like Spack
 # where f2py will be in a different location than python.
-if (NOT "${F2PY3_EXECUTABLE_DIR}" STREQUAL "${PYTHON3_EXECUTABLE_DIR}")
+if (NOT "${F2PY3_EXECUTABLE_DIR}" STREQUAL "${Python3_EXECUTABLE_DIR}")
   message(WARNING
     "[F2PY3]: The f2py3 executable [${F2PY3_EXECUTABLE}] found is not the one associated with the Python3_EXECUTABLE [${Python3_EXECUTABLE}].\n"
     "Please check your Python3 environment if this is not expected (for example, not a Spack install) or build with -DUSE_F2PY=OFF.")
@@ -102,6 +103,7 @@ if(F2PY3_EXECUTABLE)
 
      set(F2PY3_FCOMPILER ${_fcompiler} CACHE STRING
        "F2PY3: Fortran compiler type by vendor" FORCE)
+     message(DEBUG "[F2PY3]: Fortran compiler type: ${F2PY3_FCOMPILER}")
 
      if(NOT F2PY3_FCOMPILER)
        message(FATAL_ERROR "[F2PY3]: Could not determine Fortran compiler type. ")
