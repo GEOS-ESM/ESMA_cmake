@@ -105,9 +105,12 @@ if(F2PY3_EXECUTABLE)
        "F2PY3: Fortran compiler type by vendor" FORCE)
      message(DEBUG "[F2PY3]: Fortran compiler type: ${F2PY3_FCOMPILER}")
 
-     if(NOT F2PY3_FCOMPILER)
+     # Finding the Fortran compiler is only necessary if using distutils.
+     # For Meson, f2py3 will find the compiler itself. We use meson
+     # if Python3_VERSION is 3.12 or greater.
+     if(NOT F2PY3_FCOMPILER AND Python3_VERSION_MINOR LESS 12)
        message(FATAL_ERROR "[F2PY3]: Could not determine Fortran compiler type. ")
-     endif(NOT F2PY3_FCOMPILER)
+     endif(NOT F2PY3_FCOMPILER AND Python3_VERSION_MINOR LESS 12)
    endif(NOT F2PY3_FCOMPILER)
 
    # Now we need to test if we can actually use f2py and what its suffix is
