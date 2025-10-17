@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.28.0] - 2025-10-17
+
+### Changed
+
+- Update GNU flags to not do `-ffpe-trap` when building as `Release`
+  - This was causing (spurious??) issues with some GEOSgcm runs with GCC 15
+
 ## [4.27.0] - 2025-10-14
 
 ### Changed
