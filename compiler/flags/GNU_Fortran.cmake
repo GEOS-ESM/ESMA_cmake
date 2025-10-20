@@ -157,11 +157,11 @@ add_definitions(-D__GFORTRAN__)
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "-ffree-line-length-none ${NO_RANGE_CHECK} -Wno-missing-include-dirs ${TRACEBACK} ${UNUSED_DUMMY}" )
-set (common_Fortran_fpe_flags "-ffpe-trap=zero,overflow ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
+set (common_Fortran_fpe_flags "${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} -fcheck=all,no-array-temps -finit-real=snan -save-temps")
+set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} -ffpe-trap=zero,overflow -fcheck=all,no-array-temps -finit-real=snan -save-temps")
 set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
