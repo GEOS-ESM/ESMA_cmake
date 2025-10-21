@@ -185,31 +185,31 @@ set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_STRICT} ${FP_SPECULATION_S
 # Strict (bitwise reproducible, IEEE-compliant)
 set (GEOS_Fortran_Strict_Flags "${FOPT2} ${DEBINFO}")
 set (GEOS_Fortran_Strict_FPE_Flags
-     "${FP_STRICT} ${FP_SPECULATION_STRICT} ${FPE0} -check uninit -prec-div -prec-sqrt -no-ftz ${common_Fortran_fpe_flags}")
+  "${FP_STRICT} ${FP_SPECULATION_STRICT} ${FPE0} -check uninit -prec-div -prec-sqrt -no-ftz ${common_Fortran_fpe_flags}")
 
 # NoVect (bitwise stable, no FMA)
 set (GEOS_Fortran_NoVect_Flags
-     "${FOPT3}")
+  "${FOPT3}")
 set (GEOS_Fortran_NoVect_FPE_Flags
-     "${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE1} ${common_Fortran_fpe_flags}")
+  "${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE1} ${common_Fortran_fpe_flags}")
 
 # Vectorization with floating point exception trapping
 set (GEOS_Fortran_VectTrap_Flags
-     "${FOPT2} ${COREAVX2_FLAG} ${ARRAY_ALIGN_32BYTE}")
+  "${FOPT2} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
 set (GEOS_Fortran_VectTrap_FPE_Flags
-     "${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE0} -check uninit ${common_Fortran_fpe_flags}")
+  "${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE0} -check uninit ${common_Fortran_fpe_flags}")
 
 # Vectorized
 set (GEOS_Fortran_Vect_Flags
-     "${FOPT3} ${COREAVX2_FLAG} ${ARRAY_ALIGN_32BYTE}")
+  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
 set (GEOS_Fortran_Vect_FPE_Flags
-     "${FP_FAST1} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
+  "${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
 
 # Aggressive (fast math, SVML)
 set (GEOS_Fortran_Aggressive_Flags
-     "${FOPT3} ${COREAVX2_FLAG} ${ARRAY_ALIGN_32BYTE}")
+  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
 set (GEOS_Fortran_Aggressive_FPE_Flags
-     "${FP_FAST2} ${FP_CONSISTENT} ${FMA} ${USE_SVML} ${FPE3} ${common_Fortran_fpe_flags}")
+  "${FP_FAST2} ${FP_SOURCE} ${FP_CONSISTENT} ${FMA} ${USE_SVML} ${FPE3} ${common_Fortran_fpe_flags}")
 
 # Set Release flags
 # -----------------
