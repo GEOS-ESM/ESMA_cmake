@@ -179,42 +179,37 @@ set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC}")
 # Build type specific bundles
 # ----------------------------------------------------------------------
 # Debug
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -check all,noarg_temp_created,nouninit ${WARN_UNUSED} -init=snan,arrays -save-temps")
-set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_STRICT} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -init=snan,arrays -save-temps")
+set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_STRICT} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
 
-# GEOS Safe
-# ----------------
-set (GEOS_Fortran_Safe_Flags "${FOPT2} ${DEBINFO}")
-set (GEOS_Fortran_Safe_FPE_Flags "${FPE1} ${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags}")
+# Strict (bitwise reproducible, IEEE-compliant)
+set (GEOS_Fortran_Strict_Flags "${FOPT2} ${DEBINFO}")
+set (GEOS_Fortran_Strict_FPE_Flags
+     "${FP_STRICT} ${FP_SPECULATION_STRICT} ${FPE0} -check uninit -prec-div -prec-sqrt -no-ftz ${common_Fortran_fpe_flags}")
 
-# GEOS NoVectorize
-# ----------------
-set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO}")
-set (GEOS_Fortran_NoVect_FPE_Flags "${FPE1} ${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
+# NoVect (bitwise stable, no FMA)
+set (GEOS_Fortran_NoVect_Flags
+     "${FOPT3}")
+set (GEOS_Fortran_NoVect_FPE_Flags
+     "${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# NOTE It was found that the Vectorizing Flags gave better performance with the same results in testing.
-#      But in case they are needed, we keep the older flags available
+# Vectorization with floating point exception trapping
+set (GEOS_Fortran_VectTrap_Flags
+     "${FOPT2} ${COREAVX2_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_VectTrap_FPE_Flags
+     "${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE0} -check uninit ${common_Fortran_fpe_flags}")
 
-# GEOS Stock-Vect
-# ---------------
-set (GEOS_Fortran_StockVect_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} ${FMA} -align array32byte")
-set (GEOS_Fortran_StockVect_FPE_Flags "${FPE3} ${FP_FAST} ${FP_SOURCE} ${FP_CONSISTENT} ${common_Fortran_fpe_flags}")
+# Vectorized
+set (GEOS_Fortran_Vect_Flags
+     "${FOPT3} ${COREAVX2_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_Vect_FPE_Flags
+     "${FP_FAST1} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# GEOS Vectorize
-# ---------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
-set (GEOS_Fortran_Vect_FPE_Flags "${FPE1} ${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
-
-# GEOS VectTrap
-# -------------
-# Until these can be tested, we just use the same as GEOS_Vectorize
-set (GEOS_Fortran_VectTrap_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
-set (GEOS_Fortran_VectTrap_FPE_Flags "${FPE1} ${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
-
-# GEOS Aggressive
-# ---------------
-set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_FAST2} ${FP_SOURCE} ${FP_CONSISTENT} ${FMA} ${FP_SPECULATION_FAST} ${USE_SVML} ${common_Fortran_fpe_flags}")
+# Aggressive (fast math, SVML)
+set (GEOS_Fortran_Aggressive_Flags
+     "${FOPT3} ${COREAVX2_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_Aggressive_FPE_Flags
+     "${FP_FAST2} ${FP_CONSISTENT} ${FMA} ${USE_SVML} ${FPE3} ${common_Fortran_fpe_flags}")
 
 # Set Release flags
 # -----------------
