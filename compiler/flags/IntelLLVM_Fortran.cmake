@@ -179,13 +179,13 @@ set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC}")
 # Build type specific bundles
 # ----------------------------------------------------------------------
 # Debug
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -init=snan,arrays -save-temps")
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -check all,noarg_temp_created ${WARN_UNUSED} -init=snan,arrays -save-temps")
 set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_STRICT} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
 
 # Strict (bitwise reproducible, IEEE-compliant)
 set (GEOS_Fortran_Strict_Flags "${FOPT2} ${DEBINFO}")
 set (GEOS_Fortran_Strict_FPE_Flags
-  "${FP_STRICT} ${FP_SPECULATION_STRICT} ${FPE0} -check uninit -prec-div -prec-sqrt -no-ftz ${common_Fortran_fpe_flags}")
+  "${FP_STRICT} ${FP_SPECULATION_STRICT} ${FPE0} -check uninit -prec-div -no-ftz ${common_Fortran_fpe_flags}")
 
 # NoVect (bitwise stable, no FMA)
 set (GEOS_Fortran_NoVect_Flags
@@ -217,7 +217,7 @@ set (GEOS_Fortran_VectTrap_FPE_Flags
 # NOTE: we remove ARCH_CONSISTENCY because it causes crashes with -fp-model strict in ifx 2025.2:
 # https://community.intel.com/t5/Intel-Fortran-Compiler/IFX-2025-2-Internal-Compiler-Error-for-Floating-Point-Math/m-p/1705308
 set (GEOS_Fortran_Vect_Flags
-  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE} -prec-div -prec-sqrt -assume protect_parens")
+  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE} -prec-div -assume protect_parens")
 set (GEOS_Fortran_Vect_FPE_Flags
   "${FP_STRICT} ${NO_FMA} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
 
