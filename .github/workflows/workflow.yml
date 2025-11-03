@@ -29,8 +29,8 @@ jobs:
       fixture-ref: feature/sdrabenh/gcm_v12
       baselibs-version: v9.0.0
       # We need to not run mepo develop for now as it will "override" components
-      # that have been specifically checked out for the fixture. We will need
-      # to restore this once we have updated the fixture
+      # that have been specifically put in components.yaml for this fixture.
+      # We'll need to undo this once we have updated the fixture
       run-mepo-develop: false
 
   spack_build:
