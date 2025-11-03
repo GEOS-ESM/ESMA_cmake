@@ -27,6 +27,7 @@ jobs:
       cmake-build-type: ${{ matrix.build-type }}
       fixture-repo: GEOS-ESM/GEOSgcm
       fixture-ref: feature/sdrabenh/gcm_v12
+      baselibs-version: v9.0.0
 
   spack_build:
     uses: GEOS-ESM/CI-workflows/.github/workflows/spack_gcc_build.yml@project/geosgcm
