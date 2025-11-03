@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [5.0.0] - 2025-11-03
+
+### Changed
+
+- Update FMS detection and use for FMS 2025 support
+  - FMS 2025 is now built in multi-precision support so that we have `FMS::fms` targets and not the separate `FMS::fms_r4` and `FMS::fms_r8` targets
+  - Because of this change, we update the major version number to 5.0.0
+  - Requires Baselibs v9.0.0 or higher (which has FMS 2025)
+
 ## [4.28.0] - 2025-10-17
 
 ### Changed
