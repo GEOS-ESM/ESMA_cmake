@@ -26,7 +26,8 @@ jobs:
       compiler: ${{ matrix.compiler }}
       cmake-build-type: ${{ matrix.build-type }}
       fixture-repo: GEOS-ESM/GEOSgcm
-      fixture-ref: feature/sdrabenh/gcm_v12
+      #fixture-ref: feature/sdrabenh/gcm_v12
+      fixture-ref: feature/v12-remove-mom5
       baselibs-version: v9.0.0
       # We need to not run mepo develop for now as it will "override" components
       # that have been specifically checked out for the fixture
