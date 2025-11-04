@@ -179,42 +179,53 @@ set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC}")
 # Build type specific bundles
 # ----------------------------------------------------------------------
 # Debug
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -check all,noarg_temp_created,nouninit ${WARN_UNUSED} -init=snan,arrays -save-temps")
-set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_STRICT} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -check all,noarg_temp_created ${WARN_UNUSED} -init=snan,arrays -save-temps")
+set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_STRICT} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
 
-# GEOS Safe
-# ----------------
-set (GEOS_Fortran_Safe_Flags "${FOPT2} ${DEBINFO}")
-set (GEOS_Fortran_Safe_FPE_Flags "${FPE1} ${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags}")
+# Strict (bitwise reproducible, IEEE-compliant)
+set (GEOS_Fortran_Strict_Flags "${FOPT2} ${DEBINFO}")
+set (GEOS_Fortran_Strict_FPE_Flags
+  "${FP_STRICT} ${FP_SPECULATION_STRICT} ${FPE0} -check uninit -prec-div -no-ftz ${common_Fortran_fpe_flags}")
 
-# GEOS NoVectorize
-# ----------------
-set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO}")
-set (GEOS_Fortran_NoVect_FPE_Flags "${FPE1} ${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
+# NoVect (bitwise stable, no FMA)
+set (GEOS_Fortran_NoVect_Flags
+  "${FOPT3}")
+set (GEOS_Fortran_NoVect_FPE_Flags
+  "${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# NOTE It was found that the Vectorizing Flags gave better performance with the same results in testing.
-#      But in case they are needed, we keep the older flags available
+# Vectorization with floating point exception trapping
+set (GEOS_Fortran_VectTrap_Flags
+  "${FOPT2} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_VectTrap_FPE_Flags
+  "${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE0} -check uninit ${common_Fortran_fpe_flags}")
 
-# GEOS Stock-Vect
-# ---------------
-set (GEOS_Fortran_StockVect_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} ${FMA} -align array32byte")
-set (GEOS_Fortran_StockVect_FPE_Flags "${FPE3} ${FP_FAST} ${FP_SOURCE} ${FP_CONSISTENT} ${common_Fortran_fpe_flags}")
+# Vectorized
 
-# GEOS Vectorize
-# ---------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
-set (GEOS_Fortran_Vect_FPE_Flags "${FPE1} ${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
+# These flags (which are close to the ifort flags) currently do not pass layout regression
+# with ifx 2025.2. My suspicion is that is because of the bugs with FP_SPECULATION_SAFE and
+# FP_SPECULATION_STRICT in this compiler version. The hope is that when ifx 2025.3 is released,
+# we can re-enable these flags and these will pass layout regression.
+#set (GEOS_Fortran_Vect_Flags
+#  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
+#set (GEOS_Fortran_Vect_FPE_Flags
+#  "${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# GEOS VectTrap
-# -------------
-# Until these can be tested, we just use the same as GEOS_Vectorize
-set (GEOS_Fortran_VectTrap_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
-set (GEOS_Fortran_VectTrap_FPE_Flags "${FPE1} ${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
+# These flags with fp-model strict and no ARCH_CONSISTENCY are the only flags that
+# currently pass layout regression reliably. However, this is probably due to the
+# bugginess of ifx 2025.2. So, we will turn thes on as default for now for testing,
+# but we will revisit this when ifx 2025.3 is released.
+# NOTE: we remove ARCH_CONSISTENCY because it causes crashes with -fp-model strict in ifx 2025.2:
+# https://community.intel.com/t5/Intel-Fortran-Compiler/IFX-2025-2-Internal-Compiler-Error-for-Floating-Point-Math/m-p/1705308
+set (GEOS_Fortran_Vect_Flags
+  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE} -prec-div -assume protect_parens")
+set (GEOS_Fortran_Vect_FPE_Flags
+  "${FP_STRICT} ${NO_FMA} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# GEOS Aggressive
-# ---------------
-set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_FAST2} ${FP_SOURCE} ${FP_CONSISTENT} ${FMA} ${FP_SPECULATION_FAST} ${USE_SVML} ${common_Fortran_fpe_flags}")
+# Aggressive (fast math, SVML)
+set (GEOS_Fortran_Aggressive_Flags
+  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_Aggressive_FPE_Flags
+  "${FP_FAST2} ${FP_SOURCE} ${FP_CONSISTENT} ${FMA} ${USE_SVML} ${FPE3} ${common_Fortran_fpe_flags}")
 
 # Set Release flags
 # -----------------

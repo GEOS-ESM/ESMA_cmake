@@ -19,7 +19,7 @@ macro(check_fms1_io_support result_var)
 
   # Save the current value
   set(_SAVED_CMAKE_TRY_COMPILE_TARGET_TYPE ${CMAKE_TRY_COMPILE_TARGET_TYPE})
-
+  
   # Set to static library (compile only, no linking)
   set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
