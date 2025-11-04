@@ -2,6 +2,9 @@ if (CMAKE_Fortran_COMPILER_VERSION VERSION_LESS 2025.1)
   message(FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be at least 2025.1!")
 endif()
 
+# ----------------------------------------------------------------------
+# Optimization levels
+# ----------------------------------------------------------------------
 set (FOPT0 "-O0")
 set (FOPT1 "-O1")
 set (FOPT2 "-O2")
@@ -9,8 +12,12 @@ set (FOPT3 "-O3")
 set (FOPT4 "-O4")
 set (FFAST "-fast")
 
+# Debug info
 set (DEBINFO "-g")
 
+# ----------------------------------------------------------------------
+# Floating-point handling
+# ----------------------------------------------------------------------
 set (FPE0 "-fpe0")
 set (FPE1 "-fpe1")
 set (FPE3 "-fpe3")
@@ -67,30 +74,35 @@ exec \"${cpp_exe}\" -P -traditional-cpp -undef \"$@\"
   endif()
 endif()
 
-set (MISMATCH "")
 set (BIG_ENDIAN "-convert big_endian")
 set (LITTLE_ENDIAN "-convert little_endian")
 set (EXTENDED_SOURCE "-extend-source")
 set (FIXED_SOURCE "-fixed")
+set (NO_RANGE_CHECK "")
+
+# ----------------------------------------------------------------------
+# Warnings / diagnostics
+# ----------------------------------------------------------------------
 set (DISABLE_FIELD_WIDTH_WARNING "-diag-disable 8291")
 set (DISABLE_GLOBAL_NAME_WARNING "-diag-disable 5462")
-set (CRAY_POINTER "")
-set (MCMODEL "-mcmodel medium -shared-intel")
-set (HEAPARRAYS "-heap-arrays 32")
-set (BYTERECLEN "-assume byterecl")
-set (ALIGNCOM "-align dcommons")
-set (TRACEBACK "-traceback")
-set (NOOLD_MAXMINLOC "-assume noold_maxminloc")
-set (REALLOC_LHS "-assume realloc_lhs")
-set (ARCH_CONSISTENCY "-fimf-arch-consistency=true")
-set (FTZ "-ftz")
-set (FMA "-fma")
-set (NO_FMA "-no-fma")
-set (ALIGN_ALL "-align all")
-set (NO_ALIAS "-fno-alias")
-set (USE_SVML "-fimf-use-svml=true")
+set (DISABLE_10337 "-diag-disable 10337")   # fno-builtin warning
+set (DISABLE_10121 "-diag-disable 10121")   # fp-model override warning
+set (DISABLE_10448 "-diag-disable 10448")   # ifort deprecation remark
+set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
 
-# Additional flags for better Standards compliance
+# Make an option to make things quiet during debug builds
+option (QUIET_DEBUG "Suppress excess compiler output during debug builds" OFF)
+if (QUIET_DEBUG)
+  set (WARN_UNUSED "")
+  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_FIELD_WIDTH_WARNING} ${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
+else ()
+  set (WARN_UNUSED "-warn unused")
+  set (SUPPRESS_COMMON_WARNINGS "${DISABLE_GLOBAL_NAME_WARNING} ${DISABLE_10337}")
+endif ()
+
+# ----------------------------------------------------------------------
+# Standards Compliance (used in MAPL)
+# ----------------------------------------------------------------------
 ## Set the Standard to be Fortran 2018
 set (STANDARD_F18 "-stand f18")
 ## Error out if you try to do if(integer)
@@ -100,7 +112,20 @@ set (ERROR_LOGICAL_SET_TO_INTEGER "-diag-error 6192")
 ## Turn off warning #5268 (Extension to standard: The text exceeds right hand column allowed on the line.)
 set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
 
-set (NO_RANGE_CHECK "")
+# ----------------------------------------------------------------------
+# Memory / alignment
+# ----------------------------------------------------------------------
+set (MCMODEL "-mcmodel medium -shared-intel")
+set (HEAPARRAYS "-heap-arrays 32")
+set (BYTERECLEN "-assume byterecl")
+set (TRACEBACK "-traceback")
+set (NOOLD_MAXMINLOC "-assume noold_maxminloc")
+set (REALLOC_LHS "-assume realloc_lhs")
+set (ALIGNCOM "-align dcommons")
+set (NO_ALIAS "-fno-alias")
+set (ALIGN_ALL "-align all")
+set (ARRAY_ALIGN_32BYTE "-align array32byte")
+set (ARRAY_ALIGN_64BYTE "-align array64byte")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 if (${proc_description} MATCHES "EPYC")
@@ -120,47 +145,68 @@ else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
 
+# ----------------------------------------------------------------------
+# Defines
+# ----------------------------------------------------------------------
 add_definitions(-DHAVE_SHMEM)
 
-####################################################
-
-# Common Fortran Flags
-# --------------------
+# ----------------------------------------------------------------------
+# Common flag bundles
+# ----------------------------------------------------------------------
 set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS} ${PP}")
 set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC}")
 
-# GEOS Debug
-# ----------
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -check all,noarg_temp_created,nouninit ${WARN_UNUSED} -init=snan,arrays -save-temps")
+# ----------------------------------------------------------------------
+# Build type specific bundles
+# ----------------------------------------------------------------------
+# Debug
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -check all,noarg_temp_created ${WARN_UNUSED} -init=snan,arrays -save-temps")
 set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_STRICT} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
 
-# GEOS Safe
-# ----------------
-set (GEOS_Fortran_Safe_Flags "${FOPT2} ${DEBINFO}")
-set (GEOS_Fortran_Safe_FPE_Flags "${FPE1} ${FP_MODEL_PRECISE} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags}")
+# Strict (bitwise reproducible, IEEE-compliant)
+set (GEOS_Fortran_Strict_Flags "${FOPT2} ${DEBINFO}")
+set (GEOS_Fortran_Strict_FPE_Flags
+  "${FP_STRICT} ${FP_SPECULATION_STRICT} ${FPE0} -check uninit -prec-div -no-ftz ${common_Fortran_fpe_flags}")
 
-# GEOS NoVectorize
-# ----------------
-set (GEOS_Fortran_NoVect_Flags "${FOPT3} ${DEBINFO}")
-set (GEOS_Fortran_NoVect_FPE_Flags "${FPE1} ${FP_MODEL_FAST1} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
+# NoVect (bitwise stable, no FMA)
+set (GEOS_Fortran_NoVect_Flags
+  "${FOPT3}")
+set (GEOS_Fortran_NoVect_FPE_Flags
+  "${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# NOTE It was found that the Vectorizing Flags gave better performance with the same results in testing.
-#      But in case they are needed, we keep the older flags available
+# Vectorization with floating point exception trapping
+set (GEOS_Fortran_VectTrap_Flags
+  "${FOPT2} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_VectTrap_FPE_Flags
+  "${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE0} -check uninit ${common_Fortran_fpe_flags}")
 
-# GEOS Stock-Vect
-# ---------------
-set (GEOS_Fortran_StockVect_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} ${FMA} -align array32byte")
-set (GEOS_Fortran_StockVect_FPE_Flags "${FPE3} ${FP_MODEL_FAST} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${common_Fortran_fpe_flags}")
+# Vectorized
 
-# GEOS Vectorize
-# ---------------
-set (GEOS_Fortran_Vect_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
-set (GEOS_Fortran_Vect_FPE_Flags "${FPE1} ${FP_MODEL_FAST1} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${common_Fortran_fpe_flags}")
+# These flags (which are close to the ifort flags) currently do not pass layout regression
+# with ifx 2025.2. My suspicion is that is because of the bugs with FP_SPECULATION_SAFE and
+# FP_SPECULATION_STRICT in this compiler version. The hope is that when ifx 2025.3 is released,
+# we can re-enable these flags and these will pass layout regression.
+#set (GEOS_Fortran_Vect_Flags
+#  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
+#set (GEOS_Fortran_Vect_FPE_Flags
+#  "${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# GEOS Aggressive
-# ---------------
-set (GEOS_Fortran_Aggressive_Flags "${FOPT3} ${DEBINFO} ${MARCH_FLAG} -align array32byte")
-set (GEOS_Fortran_Aggressive_FPE_Flags "${FPE3} ${FP_MODEL_FAST2} ${FP_MODEL_SOURCE} ${FP_MODEL_CONSISTENT} ${FMA} ${FP_SPECULATION_FAST} ${USE_SVML} ${common_Fortran_fpe_flags}")
+# These flags with fp-model strict and no ARCH_CONSISTENCY are the only flags that
+# currently pass layout regression reliably. However, this is probably due to the
+# bugginess of ifx 2025.2. So, we will turn thes on as default for now for testing,
+# but we will revisit this when ifx 2025.3 is released.
+# NOTE: we remove ARCH_CONSISTENCY because it causes crashes with -fp-model strict in ifx 2025.2:
+# https://community.intel.com/t5/Intel-Fortran-Compiler/IFX-2025-2-Internal-Compiler-Error-for-Floating-Point-Math/m-p/1705308
+set (GEOS_Fortran_Vect_Flags
+  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE} -prec-div -assume protect_parens")
+set (GEOS_Fortran_Vect_FPE_Flags
+  "${FP_STRICT} ${NO_FMA} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
+
+# Aggressive (fast math, SVML)
+set (GEOS_Fortran_Aggressive_Flags
+  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_Aggressive_FPE_Flags
+  "${FP_FAST2} ${FP_SOURCE} ${FP_CONSISTENT} ${FMA} ${USE_SVML} ${FPE3} ${common_Fortran_fpe_flags}")
 
 # Set Release flags
 # -----------------
