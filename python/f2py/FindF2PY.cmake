@@ -38,15 +38,16 @@
 
 ## Find the directory where the Python_EXECUTABLE is located
 message(DEBUG "[F2PY]: Searching for f2py executable associated with Python_EXECUTABLE: ${Python_EXECUTABLE}")
-get_filename_component(PYTHON_EXECUTABLE_DIR ${Python_EXECUTABLE} DIRECTORY)
-message(DEBUG "[F2PY]: Python executable directory: ${PYTHON_EXECUTABLE_DIR}")
+get_filename_component(Python_EXECUTABLE_DIR ${Python_EXECUTABLE} DIRECTORY)
+message(DEBUG "[F2PY]: Python executable directory: ${Python_EXECUTABLE_DIR}")
 
 find_program(F2PY_EXECUTABLE
-  NAMES "f2py"
-        "f2py${Python_VERSION_MAJOR}"
+  NAMES "f2py${Python_VERSION_MAJOR}"
         "f2py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
         "f2py-${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
-  PATHS ${PYTHON_EXECUTABLE_DIR}
+        "f2py"
+  PATHS ${Python_EXECUTABLE_DIR}
+  HINTS ${Python_EXECUTABLE_DIR}
 )
 
 message(DEBUG "[F2PY]: Found f2py executable: ${F2PY_EXECUTABLE}")
@@ -58,7 +59,7 @@ message(DEBUG "[F2PY]: f2py executable directory: ${F2PY_EXECUTABLE_DIR}")
 
 # Now we issue a WARNING. We can't do more than that because of things like Spack
 # where f2py will be in a different location than python.
-if (NOT "${F2PY_EXECUTABLE_DIR}" STREQUAL "${PYTHON_EXECUTABLE_DIR}")
+if (NOT "${F2PY_EXECUTABLE_DIR}" STREQUAL "${Python_EXECUTABLE_DIR}")
   message(WARNING
     "[F2PY]: The f2py executable [${F2PY_EXECUTABLE}] found is not the one associated with the Python_EXECUTABLE [${Python_EXECUTABLE}].\n"
     "Please check your Python environment if this is not expected (for example, not a Spack install) or build with -DUSE_F2PY=OFF.")
@@ -102,10 +103,14 @@ if(F2PY_EXECUTABLE)
 
      set(F2PY_FCOMPILER ${_fcompiler} CACHE STRING
        "F2PY: Fortran compiler type by vendor" FORCE)
+     message(DEBUG "[F2PY]: Fortran compiler type: ${F2PY3_FCOMPILER}")
 
-     if(NOT F2PY_FCOMPILER)
+     # Finding the Fortran compiler is only necessary if using distutils.
+     # For Meson, f2py3 will find the compiler itself. We use meson
+     # if Python3_VERSION is 3.12 or greater.
+     if(NOT F2PY_FCOMPILER AND Python_VERSION_MINOR LESS 12)
        message(FATAL_ERROR "[F2PY]: Could not determine Fortran compiler type. ")
-     endif(NOT F2PY_FCOMPILER)
+     endif(NOT F2PY_FCOMPILER AND Python_VERSION_MINOR LESS 12)
    endif(NOT F2PY_FCOMPILER)
 
    # Now we need to test if we can actually use f2py and what its suffix is

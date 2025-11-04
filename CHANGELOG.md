@@ -19,6 +19,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.67.0] - 2025-10-14
+
+### Changed
+
+- Updates for f2py and flang
+  - Prevent error when building with flang and meson
+- Update CI to reusable workflows
+
+## [3.66.0] - 2025-10-09
+
+### Changed
+
+- Updated the Python and Python3 detection better find f2py and f2py3 given the found Python executable
+
 ## [3.65.0] - 2025-09-23
 
 ### Fixed
