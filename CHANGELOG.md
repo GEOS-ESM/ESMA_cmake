@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [5.1.0] - 2025-11-14
+
+### Changed
+
+- Update `ifx` flags to match as close as possible to `ifort` flags
+- Update site detection for NAS
+
 ## [5.0.0] - 2025-11-03
 
 ### Changed
