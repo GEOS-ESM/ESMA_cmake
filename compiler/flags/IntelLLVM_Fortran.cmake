@@ -36,8 +36,8 @@ set (FP_FAST2      "-fp-model fast=2")
 set (FP_SPECULATION_FAST   "-fp-speculation=fast")
 # Testing with ifx 2025.2 found these flags caused a lot
 # of ICEs. For now we turn off
-#set (FP_SPECULATION_SAFE "-fp-speculation=safe")
-#set (FP_SPECULATION_STRICT "-fp-speculation=strict")
+set (FP_SPECULATION_SAFE "-fp-speculation=safe")
+set (FP_SPECULATION_STRICT "-fp-speculation=strict")
 
 set (ARCH_CONSISTENCY "-fimf-arch-consistency=true")
 
@@ -201,25 +201,15 @@ set (GEOS_Fortran_VectTrap_FPE_Flags
 
 # Vectorized
 
-# These flags (which are close to the ifort flags) currently do not pass layout regression
-# with ifx 2025.2. My suspicion is that is because of the bugs with FP_SPECULATION_SAFE and
-# FP_SPECULATION_STRICT in this compiler version. The hope is that when ifx 2025.3 is released,
-# we can re-enable these flags and these will pass layout regression.
-#set (GEOS_Fortran_Vect_Flags
-#  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
-#set (GEOS_Fortran_Vect_FPE_Flags
-#  "${FP_FAST1} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
-
 # These flags with fp-model strict and no ARCH_CONSISTENCY are the only flags that
-# currently pass layout regression reliably. However, this is probably due to the
-# bugginess of ifx 2025.2. So, we will turn thes on as default for now for testing,
-# but we will revisit this when ifx 2025.3 is released.
-# NOTE: we remove ARCH_CONSISTENCY because it causes crashes with -fp-model strict in ifx 2025.2:
-# https://community.intel.com/t5/Intel-Fortran-Compiler/IFX-2025-2-Internal-Compiler-Error-for-Floating-Point-Math/m-p/1705308
+# currently pass layout regression reliably with ifx 2025.2 and 2025.3. Note:
+# this includes using flags much like our ifort ones with the (now working)
+# -fp-speculation=safe and -fp-speculation=strict options.
 set (GEOS_Fortran_Vect_Flags
   "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE} -prec-div -assume protect_parens")
 set (GEOS_Fortran_Vect_FPE_Flags
   "${FP_STRICT} ${NO_FMA} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
+endif()
 
 # Aggressive (fast math, SVML)
 set (GEOS_Fortran_Aggressive_Flags
