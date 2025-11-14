@@ -203,7 +203,6 @@ set (GEOS_Fortran_Vect_Flags
   "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE} -prec-div -assume protect_parens")
 set (GEOS_Fortran_Vect_FPE_Flags
   "${FP_STRICT} ${NO_FMA} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
-endif()
 
 # Aggressive (fast math, SVML)
 set (GEOS_Fortran_Aggressive_Flags
