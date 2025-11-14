@@ -2,7 +2,7 @@
 
 set(DETECTED_SITE "UNKNOWN")
 
-# In ecbuild, ecbuild itself sets a site_name for us 
+# In ecbuild, ecbuild itself sets a site_name for us
 # called BUILD_SITE. If it didn't, we could use
 # site_name(BUILD_SITE) as they do
 
@@ -11,7 +11,12 @@ set(DETECTED_SITE "UNKNOWN")
 
 if (${BUILD_SITE} MATCHES "discover*" OR ${BUILD_SITE} MATCHES "borg*" OR ${BUILD_SITE} MATCHES "warp*")
   set (DETECTED_SITE "NCCS")
-elseif (${BUILD_SITE} MATCHES "pfe" OR ${BUILD_SITE} MATCHES "r[0-9]*i[0-9]*n[0-9]*" OR ${BUILD_SITE} MATCHES "r[0-9]*c[0-9]*t[0-9]*n[0-9]*")
+elseif (${BUILD_SITE} MATCHES "pfe"
+    OR ${BUILD_SITE} MATCHES "afe"
+    OR ${BUILD_SITE} MATCHES "mvnfe"
+    OR ${BUILD_SITE} MATCHES "r[0-9]*i[0-9]*n[0-9]*"
+    OR ${BUILD_SITE} MATCHES "r[0-9]*c[0-9]*t[0-9]*n[0-9]*"
+    OR ${BUILD_SITE} MATCHES "x[0-9]*c[0-9]*s[0-9]*b[0-9]*n[0-9]*")
   set (DETECTED_SITE "NAS")
 elseif (EXISTS /ford1/share/gmao_SIteam AND EXISTS /ford1/local AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   set (DETECTED_SITE "GMAO.desktop")
@@ -37,7 +42,7 @@ if (NOT DEFINED DETECTED_SITE OR DETECTED_SITE STREQUAL "UNKNOWN")
   # Per https://learn.microsoft.com/en-us/azure/virtual-machines/linux/instance-metadata-service?tabs=linux
   # it says you can run:
   # curl -s -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2021-02-01" | jq
-  # to know more about the instance. Well, we don't need jq, we just need to know if we can get to 
+  # to know more about the instance. Well, we don't need jq, we just need to know if we can get to
   # that page. So we'll just try to download it.
   file(DOWNLOAD http://169.254.169.254/metadata/instance?api-version=2021-02-01 ${CMAKE_CURRENT_BINARY_DIR}/instance
     HTTPHEADER "Metadata:true"
