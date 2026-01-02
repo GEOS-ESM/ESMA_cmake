@@ -13,6 +13,7 @@ if (${BUILD_SITE} MATCHES "discover*" OR ${BUILD_SITE} MATCHES "borg*" OR ${BUIL
   set (DETECTED_SITE "NCCS")
 elseif (${BUILD_SITE} MATCHES "pfe"
     OR ${BUILD_SITE} MATCHES "afe"
+    OR ${BUILD_SITE} MATCHES "athfe"
     OR ${BUILD_SITE} MATCHES "mvnfe"
     OR ${BUILD_SITE} MATCHES "r[0-9]*i[0-9]*n[0-9]*"
     OR ${BUILD_SITE} MATCHES "r[0-9]*c[0-9]*t[0-9]*n[0-9]*"
