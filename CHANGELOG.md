@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.69.0] - 2026-01-02
+
+### Fixed
+
+- Add Athena frontend nodes for NAS detection
+
 ## [3.68.0] - 2025-11-14
 
 ### Changed
