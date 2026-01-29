@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.70.0] - 2026-01-29
+
+### Changed
+
+- Updates for f2py and f2py3 for running on macOS with Spack
+
 ## [3.69.0] - 2026-01-02
 
 ### Fixed
