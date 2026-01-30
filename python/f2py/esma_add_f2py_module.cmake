@@ -29,10 +29,33 @@ macro (esma_add_f2py_module name)
     endif()
   endif()
 
+# --- NEW: Robust Fortran Runtime Path Detection ---
+  # Ask the compiler exactly where libgfortran is
+  execute_process(
+    COMMAND ${CMAKE_Fortran_COMPILER} -print-file-name=libgfortran.dylib
+    OUTPUT_VARIABLE _libgfortran_full_path
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  get_filename_component(_fortran_lib_dir "${_libgfortran_full_path}" DIRECTORY)
+
+  # Also include the build tree lib directory
+  set(_base_paths "${CMAKE_BINARY_DIR}/lib:${_fortran_lib_dir}")
+
+  # Construct environment list safely
+  set(_test_env
+    "LD_LIBRARY_PATH=${_base_paths}:$ENV{LD_LIBRARY_PATH}"
+    "DYLD_LIBRARY_PATH=${_base_paths}:$ENV{DYLD_LIBRARY_PATH}"
+  )
+
+  if(F2PY_PRELOAD)
+    list(APPEND _test_env "${F2PY_PRELOAD}")
+  endif()
+  # --------------------------------------------------
+
   set(UNIT_TEST test_${name})
   add_test (
     NAME ${UNIT_TEST}
-    COMMAND ${CMAKE_COMMAND} -E env "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}" "${F2PY_PRELOAD}" ${Python_EXECUTABLE} -c "import ${name}"
+    COMMAND ${CMAKE_COMMAND} -E env ${_test_env} ${Python_EXECUTABLE} -c "import ${name}"
     )
 
   add_custom_command(
@@ -40,7 +63,8 @@ macro (esma_add_f2py_module name)
     COMMENT "Running Python import test on ${name}"
     POST_BUILD
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E env "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}" "${F2PY_PRELOAD}" ${Python_EXECUTABLE} -c "import ${name}"
+    # Pass the list directly to -E env
+    COMMAND ${CMAKE_COMMAND} -E env ${_test_env} ${Python_EXECUTABLE} -c "import ${name}"
     )
 
 endmacro ()
