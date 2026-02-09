@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.71.0] - 2026-02-09
+
+### Changed
+
+- Add `USES_TERMINAL` to our `tests` target to ensure output is shown as tests run with Ninja
+
 ## [3.70.0] - 2026-01-29
 
 ### Changed
