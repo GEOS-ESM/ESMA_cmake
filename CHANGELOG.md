@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [5.5.0] - 2026-02-10
+
+### Removed
+
+- Removed custom CTest pre-test build configuration that was forcing tests to be built when using `make ctest`. This simplifies the test configuration by removing the automatic build-tests dependency from CTest runs.
+
 ## [5.4.0] - 2026-02-09
 
 ### Changed
