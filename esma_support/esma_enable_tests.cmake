@@ -15,10 +15,3 @@ add_custom_target(tests-all
   USES_TERMINAL
 )
 add_dependencies(tests-all build-tests)
-
-# The following forces tests to be built when using "make ctest" even if some targets
-# are EXCLUDE_FROM_ALL
-# From https://stackoverflow.com/questions/733475/cmake-ctest-make-test-doesnt-build-tests/56448477#56448477
-build_command(CTEST_CUSTOM_PRE_TEST TARGET build-tests)
-string(CONFIGURE \"@CTEST_CUSTOM_PRE_TEST@\" CTEST_CUSTOM_PRE_TEST_QUOTED ESCAPE_QUOTES)
-file(WRITE "${CMAKE_BINARY_DIR}/CTestCustom.cmake" "set(CTEST_CUSTOM_PRE_TEST ${CTEST_CUSTOM_PRE_TEST_QUOTED})" "\n")
