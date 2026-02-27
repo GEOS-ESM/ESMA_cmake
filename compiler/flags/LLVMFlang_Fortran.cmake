@@ -20,7 +20,7 @@ set (OPTREPORT5 "")
 
 set (FREAL8 "-fdefault-real-8 -fdefault-double-8")
 set (FINT8 "-fdefault-integer-8")
-set (UNUSED_DUMMY "")
+set (UNUSED_DUMMY "-Wno-unused-dummy-argument")
 set (PP    "-cpp")
 
 #set (BIG_ENDIAN "-fconvert=swap") # This doesn't seem to work at the moment
@@ -35,6 +35,7 @@ set (ARCH_CONSISTENCY "")
 set (FTZ "")
 set (ALIGN_ALL "")
 set (NO_ALIAS "")
+set (STACK_ARRAYS "-fstack-arrays")
 
 set (NO_RANGE_CHECK "")
 
@@ -59,17 +60,17 @@ endif ()
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags "${NO_RANGE_CHECK} ${TRACEBACK} ${UNUSED_DUMMY}" )
+set (common_Fortran_flags "${NO_RANGE_CHECK} -Wno-missing-include-dirs ${TRACEBACK} ${UNUSED_DUMMY}" )
 set (common_Fortran_fpe_flags "${TRACEBACK}")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO}")
+set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} -save-temps")
 set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
 # ------------
-set (GEOS_Fortran_Release_Flags "${FOPT3} -march=${FLANG_TARGET_ARCH} ${DEBINFO}")
+set (GEOS_Fortran_Release_Flags "${FOPT3} -march=${FLANG_TARGET_ARCH} -funroll-loops ${STACK_ARRAYS} ${DEBINFO}")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # Create a NoVectorize version for consistency. No difference from Release for Flang
