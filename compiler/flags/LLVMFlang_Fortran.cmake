@@ -20,7 +20,7 @@ set (OPTREPORT5 "")
 
 set (FREAL8 "-fdefault-real-8 -fdefault-double-8")
 set (FINT8 "-fdefault-integer-8")
-set (UNUSED_DUMMY "-Wno-unused-dummy-argument")
+set (UNUSED_DUMMY "")
 set (PP    "-cpp")
 
 #set (BIG_ENDIAN "-fconvert=swap") # This doesn't seem to work at the moment
@@ -60,7 +60,7 @@ endif ()
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags "${NO_RANGE_CHECK} -Wno-missing-include-dirs ${TRACEBACK} ${UNUSED_DUMMY}" )
+set (common_Fortran_flags "${NO_RANGE_CHECK} ${TRACEBACK} ${UNUSED_DUMMY}" )
 set (common_Fortran_fpe_flags "${TRACEBACK}")
 
 # GEOS Debug
