@@ -40,7 +40,6 @@ set (NO_RANGE_CHECK "")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
-# NOT SURE ABOUT ANY OF THIS...
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
   set (FLANG_TARGET_ARCH "-mcpu=armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
 elseif (${proc_description} MATCHES "Apple M")
@@ -51,13 +50,10 @@ elseif (${proc_description} MATCHES "Intel|INTEL")
   set (FLANG_TARGET_ARCH "-mcpu=haswell")
 elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
   message(WARNING "Unknown processor type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
-  set (FLANG_TARGET_ARCH "x86-64")
+  set (FLANG_TARGET_ARCH "-mcpu=x86-64")
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
-
-# ...SO WE JUST TURN OFF FLANG_TARGET_ARCH FOR NOW
-set (FLANG_TARGET_ARCH "")
 
 ####################################################
 
