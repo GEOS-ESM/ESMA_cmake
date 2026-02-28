@@ -87,6 +87,10 @@ set (NO_ALIAS "")
 
 set (NO_RANGE_CHECK "-fno-range-check")
 
+set (OPENACC_COMPILE "-fopenacc")
+set (OPENACC_OFFLOAD_TARGETS "-foffload=nvptx-none")
+set (OPENACC_OFFLOAD_OPTIONS "-foffload=-lgfortran -lgomp -lm")
+
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
@@ -216,6 +220,10 @@ endif ()
 #set (GEOS_Fortran_Aggressive_Flags "-O2 -march=native -ffast-math -ftree-vectorize -funroll-loops --param max-unroll-times=4 ${PREFER_AVX128} -mno-fma -mveclibabi=svml")
 #set (GEOS_Fortran_Aggressive_FPE_Flags "${DEBINFO} ${TRACEBACK} ${MISMATCH} ${ALLOW_BOZ}")
 
+# OpenACC flags
+# -------------
+set (GEOS_Fortran_OpenACC_Flags "${OPENACC_COMPILE} ${OPENACC_OFFLOAD_TARGETS}")
+set (GEOS_Fortran_OpenACC_Flags_Offload_Libs "${OPENACC_COMPILE} ${OPENACC_OFFLOAD_OPTIONS} ${OPENACC_OFFLOAD_TARGETS}")
 
 # Common variables for every compiler
 include(Generic_Fortran)
