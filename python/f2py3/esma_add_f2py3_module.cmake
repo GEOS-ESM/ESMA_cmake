@@ -29,17 +29,26 @@ macro (esma_add_f2py3_module name)
     endif()
   endif()
 
-# --- NEW: Robust Fortran Runtime Path Detection ---
-  # Ask the compiler exactly where libgfortran is
-  execute_process(
-    COMMAND ${CMAKE_Fortran_COMPILER} -print-file-name=libgfortran.dylib
-    OUTPUT_VARIABLE _libgfortran_full_path
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  get_filename_component(_fortran_lib_dir "${_libgfortran_full_path}" DIRECTORY)
+  # --- NEW: Robust Fortran Runtime Path Detection ---
+  # This is only needed if APPLE and if we are using GNU Fortran
 
-  # Also include the build tree lib directory
-  set(_base_paths "${CMAKE_BINARY_DIR}/lib:${_fortran_lib_dir}")
+  if (APPLE AND CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+    message(DEBUG "[F2PY3]: Detected Apple platform with GNU Fortran. Setting up robust Fortran runtime path detection.")
+    # Ask the compiler exactly where libgfortran is
+    execute_process(
+      COMMAND ${CMAKE_Fortran_COMPILER} -print-file-name=libgfortran.dylib
+      OUTPUT_VARIABLE _libgfortran_full_path
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    get_filename_component(_fortran_lib_dir "${_libgfortran_full_path}" DIRECTORY)
+
+    # Also include the build tree lib directory
+    set(_base_paths "${CMAKE_BINARY_DIR}/lib:${_fortran_lib_dir}")
+
+  else()
+    message(DEBUG "[F2PY3]: No special handling for Fortran runtime needed on this platform/compiler.")
+    set(_base_paths "${CMAKE_BINARY_DIR}/lib")
+  endif()
 
   # Construct environment list safely
   set(_test_env
