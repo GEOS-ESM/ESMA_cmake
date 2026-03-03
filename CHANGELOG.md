@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [5.5.1] - 2026-03-03
+
+### Fixed
+
+- Fixed handling of f2py3 with non-APPLE + GNU Fortran builds
+
 ## [5.5.0] - 2026-02-10
 
 ### Removed
