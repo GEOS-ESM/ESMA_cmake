@@ -16,6 +16,9 @@ endif ()
 set(Python_FIND_STRATEGY LOCATION)
 set(Python_FIND_UNVERSIONED_NAMES FIRST)
 set(Python_FIND_FRAMEWORK LAST)
+# FIRST: respect an active virtualenv (e.g. Spack python-venv) on PATH before
+# falling back to system/Homebrew Python.
+set(Python_FIND_VIRTUALENV FIRST)
 find_package(Python COMPONENTS Interpreter)
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/f2py")
 include (esma_find_python_module)
@@ -28,6 +31,17 @@ endif ()
 set(Python3_FIND_STRATEGY LOCATION)
 set(Python3_FIND_UNVERSIONED_NAMES FIRST)
 set(Python3_FIND_FRAMEWORK LAST)
+# FIRST: respect an active virtualenv (e.g. Spack python-venv) on PATH before
+# falling back to system/Homebrew Python.
+set(Python3_FIND_VIRTUALENV FIRST)
+# If find_package(Python) already found a Python 3 interpreter (e.g. via
+# Python_ROOT_DIR set by a Spack environment), pin Python3 to the exact same
+# executable so it doesn't wander off and find a different Python 3 (e.g. a
+# newer Homebrew Python). Python3_EXECUTABLE bypasses all discovery logic.
+if (Python_EXECUTABLE AND Python_VERSION_MAJOR EQUAL 3)
+  message(DEBUG "[esma_python]: Pinning Python3_EXECUTABLE to ${Python_EXECUTABLE} (already found by find_package(Python))")
+  set(Python3_EXECUTABLE "${Python_EXECUTABLE}")
+endif ()
 find_package(Python3 COMPONENTS Interpreter)
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/f2py3")
 include (esma_find_python3_module)
