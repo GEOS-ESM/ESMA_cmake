@@ -39,6 +39,13 @@ set (STACK_ARRAYS "-fstack-arrays")
 
 set (NO_RANGE_CHECK "")
 
+set(NO_FMA "-ffp-contract=off")
+
+# NOTE: There is currently a bug(?) in flang that says you have to pass
+# -fno-integrated-as when doing save temps (see https://github.com/llvm/llvm-project/pull/119624)
+# It does seem to work, but a PR says this might have issues with offloading:
+set(SAVE_TEMPS "-fno-integrated-as -save-temps=obj")
+
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
@@ -65,7 +72,7 @@ set (common_Fortran_fpe_flags "${TRACEBACK}")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} -save-temps")
+set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} ${SAVE_TEMPS} ${NO_FMA}")
 set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
