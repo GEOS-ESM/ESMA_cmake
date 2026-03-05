@@ -44,7 +44,9 @@ set(NO_FMA "-ffp-contract=off")
 # NOTE: There is currently a bug(?) in flang that says you have to pass
 # -fno-integrated-as when doing save temps (see https://github.com/llvm/llvm-project/pull/119624)
 # It does seem to work, but a PR says this might have issues with offloading:
-set(SAVE_TEMPS "-fno-integrated-as -save-temps=obj")
+# NOTE 2: I found a bug with this and flang: https://github.com/llvm/llvm-project/issues/184802
+# Turning off for now.
+#set(SAVE_TEMPS "-fno-integrated-as -save-temps=obj")
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
