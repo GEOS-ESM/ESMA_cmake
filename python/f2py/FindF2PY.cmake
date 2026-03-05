@@ -41,14 +41,48 @@ message(DEBUG "[F2PY]: Searching for f2py executable associated with Python_EXEC
 get_filename_component(Python_EXECUTABLE_DIR ${Python_EXECUTABLE} DIRECTORY)
 message(DEBUG "[F2PY]: Python executable directory: ${Python_EXECUTABLE_DIR}")
 
+# In Spack environments, f2py lives in the py-numpy package's bin dir, which is
+# separate from the Python interpreter's bin dir. Ask Python/numpy directly for
+# the path to f2py so we always get the one matching the active numpy.
+execute_process(
+  COMMAND "${Python_EXECUTABLE}" -c "import numpy.f2py; import os; print(os.path.dirname(numpy.f2py.__file__))"
+  OUTPUT_VARIABLE _numpy_f2py_dir
+  ERROR_QUIET
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+if (_numpy_f2py_dir)
+  # numpy.f2py package dir is e.g. .../lib/pythonX.Y/site-packages/numpy/f2py
+  # Walking up 5 levels reaches the package prefix; bin/ lives alongside lib/.
+  # Layout: <prefix>/bin/f2py
+  #                  lib/pythonX.Y/site-packages/numpy/f2py   <- _numpy_f2py_dir
+  get_filename_component(_numpy_bin_dir "${_numpy_f2py_dir}/../../../../.." ABSOLUTE)
+  set(_numpy_bin_dir "${_numpy_bin_dir}/bin")
+  message(DEBUG "[F2PY]: numpy f2py package dir: ${_numpy_f2py_dir}")
+  message(DEBUG "[F2PY]: numpy-derived bin hint: ${_numpy_bin_dir}")
+endif ()
+
 find_program(F2PY_EXECUTABLE
   NAMES "f2py${Python_VERSION_MAJOR}"
         "f2py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
         "f2py-${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
         "f2py"
   PATHS ${Python_EXECUTABLE_DIR}
+        ${_numpy_bin_dir}
   HINTS ${Python_EXECUTABLE_DIR}
+        ${_numpy_bin_dir}
+  NO_DEFAULT_PATH
 )
+
+# If not found in the preferred locations, fall back to a normal PATH search.
+# This handles non-Spack environments where f2py may be elsewhere on PATH.
+if (NOT F2PY_EXECUTABLE)
+  find_program(F2PY_EXECUTABLE
+    NAMES "f2py${Python_VERSION_MAJOR}"
+          "f2py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
+          "f2py-${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}"
+          "f2py"
+  )
+endif ()
 
 message(DEBUG "[F2PY]: Found f2py executable: ${F2PY_EXECUTABLE}")
 
