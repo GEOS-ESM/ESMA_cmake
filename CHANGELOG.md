@@ -19,6 +19,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [5.6.0] - 2026-03-04
+
+### Fixed
+
+- Fixed f2py and f2py3 detection in Spack environments where the `f2py`
+  executable lives in the `py-numpy` package's `bin/` directory rather than
+  alongside the Python interpreter. `FindF2PY.cmake` and `FindF2PY3.cmake` now
+  ask Python directly (`import numpy.f2py`) to locate the correct `f2py`
+  binary. A two-pass search is used: the preferred locations (Python `bin/` and
+  numpy-derived `bin/`) are checked first with `NO_DEFAULT_PATH`, then a normal
+  `PATH` search is used as a fallback to preserve behaviour on non-Spack
+  (e.g. module-based) systems.
+- Fixed `find_package(Python3)` picking up a different Python 3 interpreter
+  (e.g. a newer Homebrew Python) instead of the one already found by
+  `find_package(Python)` in Spack environments. `esma_python.cmake` now pins
+  `Python3_EXECUTABLE` to `Python_EXECUTABLE` when `find_package(Python)` has
+  already resolved a Python 3 interpreter, ensuring both find the same Python.
+
+### Changed
+
+- Added `Python_FIND_VIRTUALENV FIRST` and `Python3_FIND_VIRTUALENV FIRST` to
+  `esma_python.cmake` so that an active Spack `python-venv` on `PATH` is
+  preferred over system or framework Pythons.
+
+## [5.5.1] - 2026-03-03
+
+### Fixed
+
+- Fixed handling of f2py3 with non-APPLE + GNU Fortran builds
+
 ## [5.5.0] - 2026-02-10
 
 ### Removed
