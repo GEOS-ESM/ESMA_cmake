@@ -68,7 +68,7 @@ set (common_Fortran_fpe_flags "${TRACEBACK}")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO}")
+set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} -fno-omit-frame-pointer")
 set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
