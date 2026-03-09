@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixes for using Homebrew flang on macOS
+
 ### Removed
 
 ### Added
 
 ### Changed
+
+- Enable flang architecture flags
 
 ### Deprecated
 
