@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.74.0] - 2026-03-09
+
+### Fixed
+
+- More fixes for f2py and macOS in trying to fix ssl detection issues
+
 ## [3.73.0] - 2026-03-04
 
 ### Fixed
