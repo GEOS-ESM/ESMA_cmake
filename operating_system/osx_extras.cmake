@@ -59,7 +59,7 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-headerpad_max_i
 
 # 5) Flang compiler workarounds for macOS shared libraries
 # CMake natively uses Apple's '-dynamiclib' and '-install_name' for shared libraries,
-# but the LLVM flang frontend strictly rejects them. 
+# but the LLVM flang frontend strictly rejects them.
 # We force flang to use '-shared' (which it correctly translates down to the linker)
 # and use -Xlinker to safely pass the soname without space-parsing errors.
 if(CMAKE_Fortran_COMPILER_ID MATCHES "Flang" OR CMAKE_Fortran_COMPILER_ID MATCHES "LLVMFlang")
