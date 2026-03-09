@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Enable flang architecture flags
+
 ### Deprecated
 
 ## [5.7.0] - 2026-03-09
