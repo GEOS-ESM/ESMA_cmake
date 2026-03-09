@@ -65,7 +65,7 @@ macro (esma_add_f2py3_module name)
   add_test (
     NAME ${UNIT_TEST}
     COMMAND ${CMAKE_COMMAND} -E env ${_test_env} ${Python3_EXECUTABLE} -c "import ${name}"
-    )
+  )
 
   add_custom_command(
     TARGET ${name}
@@ -74,6 +74,6 @@ macro (esma_add_f2py3_module name)
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     # Pass the list directly to -E env
     COMMAND ${CMAKE_COMMAND} -E env ${_test_env} ${Python3_EXECUTABLE} -c "import ${name}"
-    )
+  )
 
 endmacro ()
