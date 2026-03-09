@@ -41,14 +41,48 @@ message(DEBUG "[F2PY3]: Searching for f2py3 executable associated with Python3_E
 get_filename_component(Python3_EXECUTABLE_DIR ${Python3_EXECUTABLE} DIRECTORY)
 message(DEBUG "[F2PY3]: Python3 executable directory: ${Python3_EXECUTABLE_DIR}")
 
+# In Spack environments, f2py lives in the py-numpy package's bin dir, which is
+# separate from the Python interpreter's bin dir. Ask Python/numpy directly for
+# the path to f2py so we always get the one matching the active numpy.
+execute_process(
+  COMMAND "${Python3_EXECUTABLE}" -c "import numpy.f2py; import os; print(os.path.dirname(numpy.f2py.__file__))"
+  OUTPUT_VARIABLE _numpy_f2py_dir
+  ERROR_QUIET
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+if (_numpy_f2py_dir)
+  # numpy.f2py package dir is e.g. .../lib/pythonX.Y/site-packages/numpy/f2py
+  # Walking up 5 levels reaches the package prefix; bin/ lives alongside lib/.
+  # Layout: <prefix>/bin/f2py
+  #                  lib/pythonX.Y/site-packages/numpy/f2py   <- _numpy_f2py_dir
+  get_filename_component(_numpy_bin_dir "${_numpy_f2py_dir}/../../../../.." ABSOLUTE)
+  set(_numpy_bin_dir "${_numpy_bin_dir}/bin")
+  message(DEBUG "[F2PY3]: numpy f2py package dir: ${_numpy_f2py_dir}")
+  message(DEBUG "[F2PY3]: numpy-derived bin hint: ${_numpy_bin_dir}")
+endif ()
+
 find_program(F2PY3_EXECUTABLE
   NAMES "f2py${Python3_VERSION_MAJOR}"
         "f2py${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
         "f2py-${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
         "f2py"
   PATHS ${Python3_EXECUTABLE_DIR}
+        ${_numpy_bin_dir}
   HINTS ${Python3_EXECUTABLE_DIR}
+        ${_numpy_bin_dir}
+  NO_DEFAULT_PATH
 )
+
+# If not found in the preferred locations, fall back to a normal PATH search.
+# This handles non-Spack environments where f2py may be elsewhere on PATH.
+if (NOT F2PY3_EXECUTABLE)
+  find_program(F2PY3_EXECUTABLE
+    NAMES "f2py${Python3_VERSION_MAJOR}"
+          "f2py${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
+          "f2py-${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
+          "f2py"
+  )
+endif ()
 
 message(DEBUG "[F2PY3]: Found f2py3 executable: ${F2PY3_EXECUTABLE}")
 
