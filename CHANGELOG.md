@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [4.37.0] - 2026-03-31
+
+### Changed
+
+- Update compiler flags for LLVM flang (still in testing)
+
 ## [4.36.0] - 2026-03-31
 
 ### Fixed
