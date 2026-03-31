@@ -17,12 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-## [3.76.0] - 2026-03-31
-
-### Changed
-
-- Update compiler flags for LLVM flang (still in testing)
-
 ## [3.75.0] - 2026-03-31
 
 ### Fixed
@@ -39,6 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the clang/clang++/gfortran toolchain on macOS; these arise from gfortran
   injecting Cellar lib paths multiple times via ESMF and Baselibs transitive
   dependencies and are upstream issues, not project bugs
+
+### Changed
+
+- Update compiler flags for LLVM flang (still in testing)
 
 ## [3.74.0] - 2026-03-09
 
