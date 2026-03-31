@@ -9,10 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+### Removed
+
+### Added
+
+### Changed
+
+### Deprecated
+
+## [4.36.0] - 2026-03-31
+
+### Fixed
+
 - Downgrade noisy `ecbuild_warn` to `ecbuild_info` for the
   `ENABLE_RELATIVE_RPATHS` message in `osx_extras.cmake`
-
-### Removed
 
 ### Added
 
@@ -23,10 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the clang/clang++/gfortran toolchain on macOS; these arise from gfortran
   injecting Cellar lib paths multiple times via ESMF and Baselibs transitive
   dependencies and are upstream issues, not project bugs
-
-### Changed
-
-### Deprecated
 
 ## [4.35.0] - 2026-03-09
 
