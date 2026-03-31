@@ -34,6 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   injecting Cellar lib paths multiple times via ESMF and Baselibs transitive
   dependencies and are upstream issues, not project bugs
 
+### Changed
+
+- Update compiler flags for LLVM flang (still in testing)
+
 ## [5.7.0] - 2026-03-09
 
 ### Fixed
