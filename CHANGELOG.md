@@ -15,9 +15,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Enable flang architecture flags
-
 ### Deprecated
+
+## [5.8.0] - 2026-03-31
+
+### Fixed
+
+- Downgrade noisy `ecbuild_warn` to `ecbuild_info` for the
+  `ENABLE_RELATIVE_RPATHS` message in `osx_extras.cmake`
+
+### Added
+
+- Added `NOINSTALL` option to `esma_add_library()` to allow libraries to skip
+  the `install(DIRECTORY ...)` step for their include files
+- Added GNU-guarded linker flags (`-Wl,-w -Wl,-no_warn_duplicate_libraries`)
+  in `osx_extras.cmake` to suppress duplicate rpath and library warnings from
+  the clang/clang++/gfortran toolchain on macOS; these arise from gfortran
+  injecting Cellar lib paths multiple times via ESMF and Baselibs transitive
+  dependencies and are upstream issues, not project bugs
+
+### Changed
+
+- Update compiler flags for LLVM flang (still in testing)
 
 ## [5.7.0] - 2026-03-09
 
