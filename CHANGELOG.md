@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [3.76.0] - 2026-04-13
+
+### Added
+
+- Added new `Coverage` build type for use in code coverage testing. Currently only supports GNU.
+
 ## [3.75.0] - 2026-03-31
 
 ### Fixed
