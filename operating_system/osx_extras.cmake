@@ -68,22 +68,22 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "Flang" OR CMAKE_Fortran_COMPILER_ID MATCHE
 endif()
 
 # 6) Suppress duplicate rpath/library warnings that arise only with the
-# clang/clang++/gfortran toolchain on macOS.  gfortran injects its Cellar
+# clang/clang++/gfortran toolchain on macOS. gfortran injects its Cellar
 # lib directories as implicit link paths/rpaths; those get accumulated
 # multiple times via ESMF and Baselibs transitive dependencies, producing
-# noise on every link.  These are upstream issues, not MAPL bugs.
+# noise on every link. These are upstream issues, not MAPL bugs.
 #
 # Not needed (and not applied) when using nagfor, which has its own runtime
 # and does not inject gfortran Cellar paths.
 #
-#   -Wl,-w                           suppresses all ld warnings (duplicate
-#                                    rpath, missing search paths from the
-#                                    gfortran 15.2.0 vs 15.2.0_1 Cellar mismatch)
-#   -Wl,-no_warn_duplicate_libraries suppresses "ignoring duplicate libraries"
+# -Wl,-w suppresses all ld warnings (duplicate
+#         rpath, missing search paths from the
+#         gfortran 15.2.0 vs 15.2.0_1 Cellar mismatch)
+# -Wl,-no_warn_duplicate_libraries suppresses "ignoring duplicate libraries"
 #
 # Both flags are Apple ld (ld-prime/ld64) specific.
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-  set(CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS}    -Wl,-w -Wl,-no_warn_duplicate_libraries")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-w -Wl,-no_warn_duplicate_libraries")
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-w -Wl,-no_warn_duplicate_libraries")
   set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-w -Wl,-no_warn_duplicate_libraries")
 endif()
