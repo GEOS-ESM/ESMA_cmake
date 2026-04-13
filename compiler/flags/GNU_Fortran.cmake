@@ -191,6 +191,16 @@ set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 set (GEOS_Fortran_VectTrap_Flags ${GEOS_Fortran_Release_Flags})
 set (GEOS_Fortran_VectTrap_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 
+# GEOS Coverage
+# -------------
+# Intended for use with gcov/lcov.  Requires -O0 and --coverage (which expands
+# to -fprofile-arcs -ftest-coverage for both compile and link).
+# We intentionally skip -ffpe-trap and array checks (-fcheck) so that the
+# instrumented code does not abort on benign floating-point exceptions during
+# a coverage run.
+set (GEOS_Fortran_Coverage_Flags "${FOPT0} ${DEBINFO} --coverage")
+set (GEOS_Fortran_Coverage_FPE_Flags "${common_Fortran_fpe_flags}")
+
 # GEOS Aggressive
 # ---------------
 # NOTE: gfortran does get a benefit from vectorization, but the resulting code
