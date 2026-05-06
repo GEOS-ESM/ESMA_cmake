@@ -6,7 +6,7 @@ set (FREAL8 "-r8")
 set (FINT8 "-i8")
 set (PP    "-fpp")
 set (DUSTY "-dusty")
-set (MISMATCH "-wmismatch=QSORTL,QSORTS,MPI_Recv,MPI_Send,MPI_Irecv,MPI_BCast,MPI_Allgather,MPI_Allgatherv,MPI_Allreduce,MPI_Scatterv,MPI_Gatherv,MPI_Sendrecv,MPI_File_write,MPI_File_read,MPI_File_Read_at_all,MPI_File_write_at_all,ESMF_UserCompSetInternalState,ESMF_UserCompGetInternalState")
+set (MISMATCH "-wmismatch=QSORTL,QSORTS,MPI_Recv,MPI_Send,MPI_Irecv,MPI_BCast,MPI_Gather,MPI_Allgather,MPI_Allgatherv,MPI_Allreduce,MPI_Scatter,MPI_Scatterv,MPI_Gatherv,MPI_Sendrecv,MPI_Alltoallv,MPI_File_write,MPI_File_read,MPI_File_Read_at_all,MPI_File_write_at_all,ESMF_UserCompSetInternalState,ESMF_UserCompGetInternalState")
 set (DISABLE_FIELD_WIDTH_WARNING)
 set (CRAY_POINTER "")
 set (EXTENDED_SOURCE "-132 -w=x95" )
@@ -19,13 +19,26 @@ set (QUIET "-quiet")
 
 if (APPLE)
   option (ESMF_HAS_ACHAR_BUG "ESMF Compatibility issue" OFF)
+  # NAG Fortran doesn't understand Apple's -F framework flags
+  # Tell CMake to use -I for all include directories (including frameworks) for Fortran
+  set(CMAKE_INCLUDE_FLAG_Fortran "-I")
+  set(CMAKE_INCLUDE_SYSTEM_FLAG_Fortran "-I")
+  # Tell CMake not to add framework directories to Fortran implicit includes
+  set(CMAKE_Fortran_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "" CACHE STRING "")
 endif ()
 
 ####################################################
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags "${F2018} ${MISMATCH} ${QUIET}")
+# On macOS, CMake may add -F framework flags that NAG doesn't understand
+# We use -w=uep to suppress the specific unrecognised option error
+if (APPLE)
+  set (IGNORE_UNKNOWN_FLAGS "-w=uep")
+else()
+  set (IGNORE_UNKNOWN_FLAGS "")
+endif()
+set (common_Fortran_flags "${F2018} ${MISMATCH} ${QUIET} ${IGNORE_UNKNOWN_FLAGS}")
 set (common_Fortran_fpe_flags "")
 
 # GEOS Debug

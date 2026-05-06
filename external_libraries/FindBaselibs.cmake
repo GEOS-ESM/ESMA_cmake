@@ -98,10 +98,13 @@ if (Baselibs_FOUND)
 
   # Changes in Baselibs mean on Darwin we need to capture three
   # Framework Libraries needed to link with Curl (so netCDF needs them)
+  # On macOS, use framework names directly instead of find_library to avoid
+  # CMake adding framework paths to Fortran compiler flags
   if (APPLE)
-    find_library(FWSystemConfiguration NAMES SystemConfiguration)
-    find_library(FWCoreFoundation      NAMES CoreFoundation)
-    find_library(FWSecurity            NAMES Security)
+    # Use framework names directly - linker will find them automatically
+    set(FWSystemConfiguration "-framework SystemConfiguration")
+    set(FWCoreFoundation "-framework CoreFoundation")
+    set(FWSecurity "-framework Security")
   endif ()
 
   add_definitions(-DHAS_NETCDF4)
