@@ -42,5 +42,6 @@ jobs:
     with:
       fixture-repo: GEOS-ESM/GEOSgcm
       fixture-ref: feature/v12-remove-mom5
+      load-fms: true
       #fixture-ref: feature/sdrabenh/gcm_v12
 
