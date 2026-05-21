@@ -18,15 +18,12 @@ set (TRACEBACK "-traceback")
 
 ####################################################
 
-add_definitions(-D__PGI) # Needed for LANL CICE
-add_definitions(-D__PGI) # Needed for LANL CICE
-
-set(CMAKE_EXE_LINKER_FLAGS "-pgc++libs -tp=px-64" CACHE INTERNAL "" FORCE)
+#set(CMAKE_EXE_LINKER_FLAGS "-pgc++libs -tp=px-64" CACHE INTERNAL "" FORCE)
 
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${BACKSLASH_STRING}")
-set (common_Fortran_fpe_flags "-Ktrap=fp -tp=px-64")
+set (common_Fortran_fpe_flags "-Ktrap=fp")
 
 # GEOS Debug
 # ----------
