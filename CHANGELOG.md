@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [5.10.0] - 2026-05-19
+
+### Changed
+
+- Use `copy_if_different` in `esma_add_fortran_submodules.cmake` to prevent unnecessary copying of submodule files when they haven't changed.
+- Update NVHPC flags for ng compiler testing
+
 ## [5.9.0] - 2026-04-13
 
 ### Added
