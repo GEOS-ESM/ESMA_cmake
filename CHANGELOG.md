@@ -19,9 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.39.0] - 2026-06-04
 
-### Fixed
+### Changed
 
 - Update IntelLLVM Fortran flags to suppress common warnings and remove the redundant `-fp-speculation=safe` flag from `GEOS_Fortran_Vect_FPE_Flags`, which triggers warning #5425 under strict floating-point mode.
+- Update CI now that v12 code is in GEOSgcm main
 
 ## [4.38.0] - 2026-05-19
 
