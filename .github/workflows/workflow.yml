@@ -18,8 +18,9 @@ concurrency:
 jobs:
   build_gcm:
     strategy:
+      fail-fast: false
       matrix:
-        compiler: [ifort, gfortran-15]
+        compiler: [ifort, gfortran-15, ifx]
         build-type: [Debug]
     uses: GEOS-ESM/CI-workflows/.github/workflows/geosgcm_build_tests.yml@project/geosgcm
     with:
@@ -27,8 +28,7 @@ jobs:
       cmake-build-type: ${{ matrix.build-type }}
       fixture-repo: GEOS-ESM/GEOSgcm
       fixture-ref: feature/v12-remove-mom5
-      #fixture-ref: feature/sdrabenh/gcm_v12
-      baselibs-version: v9.0.0
+      baselibs-version: v9.12.0
       # We need to not run mepo develop for now as it will "override" components
       # that have been specifically put in components.yaml for this fixture.
       # We'll need to undo this once we have updated the fixture
@@ -43,5 +43,4 @@ jobs:
       fixture-repo: GEOS-ESM/GEOSgcm
       fixture-ref: feature/v12-remove-mom5
       load-fms: true
-      #fixture-ref: feature/sdrabenh/gcm_v12
 

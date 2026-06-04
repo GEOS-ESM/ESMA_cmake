@@ -1,7 +1,7 @@
 version: 2.1
 
 # Anchors in case we need to override the defaults from the orb
-#baselibs_version: &baselibs_version v9.0.0
+#baselibs_version: &baselibs_version v9.12.0
 #bcs_version: &bcs_version v12.0.0
 
 orbs:
@@ -17,18 +17,12 @@ workflows:
             - docker-hub-creds
           matrix:
             parameters:
-              # ifx does not compile FMS 2024, so we skip it for now
-              #compiler: [gfortran, ifort, ifx]
               compiler: [gfortran, ifort]
-          #baselibs_version: *baselibs_version
           repo: GEOSgcm
           checkout_fixture: true
           # For now, we need a branch above v12
           fixture_branch: feature/v12-remove-mom5
-          # V12 code uses a special branch for now.
-          #fixture_branch: feature/sdrabenh/gcm_v12
-          #develop_repos: "GEOSgcm_GridComp GEOSgcm_App GMAO_Shared FVdycoreCubed_GridComp fvdycore"
-          # We do not mepodevelop
+          # and we don't mepo develop
           mepodevelop: false
           persist_workspace: true # Needs to be true to run fv3/gcm experiment, costs extra
 
@@ -39,8 +33,6 @@ workflows:
             - docker-hub-creds
           matrix:
             parameters:
-              # ifx does not compile FMS 2024, so we skip it for now
-              #compiler: [gfortran, ifort, ifx]
               compiler: [gfortran, ifort]
           requires:
             - build-GEOSgcm-on-<< matrix.compiler >>
