@@ -18,7 +18,6 @@ workflows:
           matrix:
             parameters:
               compiler: [gfortran, ifort]
-          fail_fast: true
           repo: GEOSgcm
           checkout_fixture: true
           mepodevelop: true
@@ -32,7 +31,6 @@ workflows:
           matrix:
             parameters:
               compiler: [gfortran, ifort]
-          fail_fast: true
           requires:
             - build-GEOSgcm-on-<< matrix.compiler >>
           repo: GEOSgcm
