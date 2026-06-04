@@ -105,8 +105,6 @@ set (NO_RANGE_CHECK "")
 set (DISABLE_FIELD_WIDTH_WARNING "-diag-disable 8291")
 set (DISABLE_GLOBAL_NAME_WARNING "-diag-disable 5462")
 set (DISABLE_10337 "-diag-disable 10337")   # fno-builtin warning
-set (DISABLE_10121 "-diag-disable 10121")   # fp-model override warning
-set (DISABLE_10448 "-diag-disable 10448")   # ifort deprecation remark
 set (DISABLE_LONG_LINE_LENGTH_WARNING "-diag-disable 5268")
 
 # Make an option to make things quiet during debug builds
@@ -173,7 +171,7 @@ add_definitions(-DHAVE_SHMEM)
 # Common flag bundles
 # ----------------------------------------------------------------------
 set (common_Fortran_flags "${TRACEBACK} ${REALLOC_LHS} ${OPTREPORT0} ${ALIGN_ALL} ${NO_ALIAS} ${PP}")
-set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC}")
+set (common_Fortran_fpe_flags "${FTZ} ${NOOLD_MAXMINLOC} ${SUPPRESS_COMMON_WARNINGS}")
 
 # ----------------------------------------------------------------------
 # Build type specific bundles
@@ -205,10 +203,15 @@ set (GEOS_Fortran_VectTrap_FPE_Flags
 # currently pass layout regression reliably with ifx 2025.2 and 2025.3. Note:
 # this includes using flags much like our ifort ones with the (now working)
 # -fp-speculation=safe and -fp-speculation=strict options.
+#
+# We used to use -fp-speculation=safe here but ifx throws:
+#   warning #5425: Qualifier 'fp-speculation' conflicts with floating-point mode and will be ignored
+#
+# Testing shows it is zero-diff without the flag, so we remove it to keep noise down
 set (GEOS_Fortran_Vect_Flags
   "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE} -prec-div -assume protect_parens")
 set (GEOS_Fortran_Vect_FPE_Flags
-  "${FP_STRICT} ${NO_FMA} ${FP_SPECULATION_SAFE} ${FPE1} ${common_Fortran_fpe_flags}")
+  "${FP_STRICT} ${NO_FMA} ${FPE1} ${common_Fortran_fpe_flags}")
 
 # Aggressive (fast math, SVML)
 set (GEOS_Fortran_Aggressive_Flags
