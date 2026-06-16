@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Update `FindF2PY.cmake` and `FindF2PY3.cmake` to use `color_message` instead of a `message(WARNING)` (as with Spack we would always trigger the warning)
+- Suppress duplicate f2py/Python executable mismatch warnings when `find_package` is called multiple times in the same configure run, using a global-property once-only guard.
+
 ### Deprecated
 
 ## [4.39.0] - 2026-06-04
