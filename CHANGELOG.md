@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added new `esma_color_message.cmake` which adds a `color_message` function
+- Added `check_fms_yaml_support` macro (`external_libraries/check_fms_yaml_support.cmake` + `external_libraries/test_fms_yaml.f90`) to autodetect whether FMS was built with YAML support via a `try_compile` probe, replacing the manual `FMS_BUILT_WITH_YAML` option. Note: once we move to FMS 2026.01 ([NOAA-GFDL/FMS#1822](https://github.com/NOAA-GFDL/FMS/pull/1822)), FMS will export libyaml as a proper `find_dependency` and this probe (along with `Findlibyaml.cmake`) can be removed.
 
 ### Changed
 

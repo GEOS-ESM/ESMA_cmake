@@ -335,14 +335,6 @@ if (Baselibs_FOUND)
 
   if (DEFINED FV_PRECISION)
     message(STATUS "Looking for FMS")
-    # libyaml
-    option(FMS_BUILT_WITH_YAML "FMS was built with YAML" OFF)
-    if (FMS_BUILT_WITH_YAML)
-      # We use the same Findlibyaml.cmake that FMS uses
-      find_package(libyaml REQUIRED)
-      message(STATUS "LIBYAML_INCLUDE_DIR: ${LIBYAML_INCLUDE_DIR}")
-      message(STATUS "LIBYAML_LIBRARIES: ${LIBYAML_LIBRARIES}")
-    endif ()
 
     # - fms_r4
     if (FV_PRECISION STREQUAL R4 OR FV_PRECISION STREQUAL R4R8)
@@ -359,9 +351,6 @@ if (Baselibs_FOUND)
         INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
         INTERFACE_LINK_DIRECTORIES "${FMS_LIBRARIES_DIR_R4}"
       )
-      if (FMS_BUILT_WITH_YAML)
-        target_link_libraries(FMS::fms_r4 INTERFACE ${LIBYAML_LIBRARIES})
-      endif ()
       # We will set FMS_R4_FOUND if both FMS_LIBRARIES_R4 and FMS_INCLUDE_DIR_R4 are found
       # and are valid files and directories respectively
       if (EXISTS ${FMS_LIBRARIES_R4} AND IS_DIRECTORY ${FMS_INCLUDE_DIR_R4})
@@ -388,9 +377,6 @@ if (Baselibs_FOUND)
         INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
         INTERFACE_LINK_DIRECTORIES "${FMS_LIBRARIES_DIR_R8}"
       )
-      if (FMS_BUILT_WITH_YAML)
-        target_link_libraries(FMS::fms_r8 INTERFACE ${LIBYAML_LIBRARIES})
-      endif ()
       # We will set FMS_R8_FOUND if both FMS_LIBRARIES_R8 and FMS_INCLUDE_DIR_R8 are found
       # and are valid files and directories respectively
       if (EXISTS ${FMS_LIBRARIES_R8} AND IS_DIRECTORY ${FMS_INCLUDE_DIR_R8})
@@ -401,6 +387,28 @@ if (Baselibs_FOUND)
         message(FATAL_ERROR "FMS::fms_r8 not found")
       endif()
     endif()
+
+    # Probe whether FMS was built with YAML support by attempting to compile
+    # a small Fortran file that uses yaml_parser_mod from FMS.
+    # NOTE: As of FMS 2026.01 (NOAA-GFDL/FMS#1822), FMS exports libyaml as a
+    # proper dependency in fms-config.cmake via find_dependency, so the probe,
+    # find_package(libyaml), and target_link_libraries calls below can all be
+    # removed once we move to FMS 2026.01 or later.
+    include(check_fms_yaml_support)
+    check_fms_yaml_support(FMS_BUILT_WITH_YAML)
+    if (FMS_BUILT_WITH_YAML)
+      find_package(libyaml REQUIRED)
+      message(STATUS "LIBYAML_INCLUDE_DIR: ${LIBYAML_INCLUDE_DIR}")
+      message(STATUS "LIBYAML_LIBRARIES: ${LIBYAML_LIBRARIES}")
+      if (TARGET FMS::fms_r4)
+        target_link_libraries(FMS::fms_r4 INTERFACE ${LIBYAML_LIBRARIES})
+        message(STATUS "Linking libyaml into FMS::fms_r4")
+      endif ()
+      if (TARGET FMS::fms_r8)
+        target_link_libraries(FMS::fms_r8 INTERFACE ${LIBYAML_LIBRARIES})
+        message(STATUS "Linking libyaml into FMS::fms_r8")
+      endif ()
+    endif ()
 
     if (FV_PRECISION STREQUAL R4R8)
       # We will set FMS_FOUND if both fms_r4 and fms_r8 are found
