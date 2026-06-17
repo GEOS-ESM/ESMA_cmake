@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `esma_sync_data()` CMake macro and build-time helper script to support build-time synchronization of data from AWS S3 buckets using temporary AWS credentials.
+
 ### Changed
 
 ### Deprecated
