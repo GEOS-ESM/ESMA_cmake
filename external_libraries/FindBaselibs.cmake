@@ -335,14 +335,6 @@ if (Baselibs_FOUND)
 
   if (DEFINED FV_PRECISION)
     message(STATUS "Looking for FMS")
-    # libyaml
-    option(FMS_BUILT_WITH_YAML "FMS was built with YAML" OFF)
-    if (FMS_BUILT_WITH_YAML)
-      # We use the same Findlibyaml.cmake that FMS uses
-      find_package(libyaml REQUIRED)
-      message(STATUS "LIBYAML_INCLUDE_DIR: ${LIBYAML_INCLUDE_DIR}")
-      message(STATUS "LIBYAML_LIBRARIES: ${LIBYAML_LIBRARIES}")
-    endif ()
 
     # - fms
     # Use find_path and find_library to find the include and library
@@ -358,7 +350,19 @@ if (Baselibs_FOUND)
       INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
       INTERFACE_LINK_DIRECTORIES "${FMS_LIBRARIES_DIR}"
     )
+
+    # Probe whether FMS was built with YAML support by attempting to compile
+    # a small Fortran file that uses yaml_parser_mod from FMS.
+    # NOTE: As of FMS 2026.01 (NOAA-GFDL/FMS#1822), FMS exports libyaml as a
+    # proper dependency in fms-config.cmake via find_dependency, so the probe,
+    # find_package(libyaml), and target_link_libraries calls below can all be
+    # removed once we move to FMS 2026.01 or later.
+    include(check_fms_yaml_support)
+    check_fms_yaml_support(FMS_BUILT_WITH_YAML)
     if (FMS_BUILT_WITH_YAML)
+      find_package(libyaml REQUIRED)
+      message(STATUS "LIBYAML_INCLUDE_DIR: ${LIBYAML_INCLUDE_DIR}")
+      message(STATUS "LIBYAML_LIBRARIES: ${LIBYAML_LIBRARIES}")
       target_link_libraries(FMS::fms INTERFACE ${LIBYAML_LIBRARIES})
     endif ()
     # We will set FMS_FOUND if both FMS_LIBRARIES and FMS_INCLUDE_DIR are found
