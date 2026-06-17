@@ -2,6 +2,10 @@
 # The following variables are set:
 #    LIBYAML_INCLUDE_DIR
 #    LIBYAML_LIBRARIES
+#
+# NOTE: As of FMS 2026.01 (NOAA-GFDL/FMS#1822), FMS uses pkg-config to find
+# libyaml and exports it as a dependency in fms-config.cmake. This file will
+# no longer be needed once we move to FMS 2026.01 or later and can be removed.
 
 FIND_PATH(LIBYAML_INCLUDE_DIR  NAMES yaml.h  PATHS ${LIBYAML_ROOT}/include $ENV{LIBYAML_ROOT}/include )
 FIND_LIBRARY(LIBYAML_LIBRARIES NAMES yaml    PATHS ${LIBYAML_ROOT}/lib     $ENV{LIBYAML_ROOT}/lib )
