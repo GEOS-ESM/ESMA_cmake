@@ -124,7 +124,7 @@ macro (esma_add_library this)
 
   # The following possibly duplicates logic that is already in the ecbuild layer
   if(NOT ARGS_NOINSTALL)
-    install(DIRECTORY  ${esma_include}/${this}/ DESTINATION include/${this})
+    install(DIRECTORY ${esma_include}/${this}/ DESTINATION include/${this})
   endif()
 
 endmacro ()
