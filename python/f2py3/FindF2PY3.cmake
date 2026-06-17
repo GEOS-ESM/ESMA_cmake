@@ -94,9 +94,15 @@ message(DEBUG "[F2PY3]: f2py3 executable directory: ${F2PY3_EXECUTABLE_DIR}")
 # Now we issue a WARNING. We can't do more than that because of things like Spack
 # where f2py will be in a different location than python.
 if (NOT "${F2PY3_EXECUTABLE_DIR}" STREQUAL "${Python3_EXECUTABLE_DIR}")
-  message(WARNING
-    "[F2PY3]: The f2py3 executable [${F2PY3_EXECUTABLE}] found is not the one associated with the Python3_EXECUTABLE [${Python3_EXECUTABLE}].\n"
-    "Please check your Python3 environment if this is not expected (for example, not a Spack install) or build with -DUSE_F2PY=OFF.")
+  # Use a global property as a once-only guard so this message is emitted at
+  # most once per configure run, even if find_package(F2PY3) is called multiple
+  # times (e.g. from different subdirectories).
+  get_property(_f2py3_mismatch_warned GLOBAL PROPERTY _F2PY3_MISMATCH_WARNED)
+  if (NOT _f2py3_mismatch_warned)
+    color_message(ORANGE STATUS
+      "[F2PY3]: The f2py3 executable [${F2PY3_EXECUTABLE}] found is not the one associated with the Python3_EXECUTABLE [${Python3_EXECUTABLE}].\nPlease check your Python3 environment if this is not expected (for example, not a Spack install) or build with -DUSE_F2PY=OFF.")
+    set_property(GLOBAL PROPERTY _F2PY3_MISMATCH_WARNED TRUE)
+  endif ()
 endif ()
 
 if(F2PY3_EXECUTABLE)
