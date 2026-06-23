@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add new `esma_install_manifest.cmake` to create a manifest of installed files
+
 ### Changed
 
 ### Deprecated
