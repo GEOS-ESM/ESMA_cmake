@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Switch macOS RPATH in `osx_extras.cmake` from absolute `${CMAKE_INSTALL_PREFIX}/lib` to relative `@loader_path/../lib` and set `ENABLE_RELATIVE_RPATHS TRUE` so that experiment-local install trees (`EXPDIR/install/bin/GEOSgcm.x`) resolve GEOS/MAPL shared libraries from their own `EXPDIR/install/lib` without referencing the original build prefix
+
 ### Deprecated
 
 ## [4.40.0] - 2026-06-17
