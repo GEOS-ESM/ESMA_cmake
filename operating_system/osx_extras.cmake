@@ -20,8 +20,23 @@ foreach(lang Fortran C CXX)
 endforeach()
 
 
-
-# 3) Rpath handling per https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling#always-full-rpath
+# 3) Rpath handling
+#
+# GEOS uses an install-tree layout like:
+#
+#   install/bin/GEOSgcm.x
+#   install/lib/*.dylib
+#
+# On Linux this is handled with:
+#
+#   $ORIGIN/../lib
+#
+# On macOS/Darwin the equivalent is:
+#
+#   @loader_path/../lib
+#
+# This allows an experiment-local copy of install/bin and install/lib
+# to be self-contained.
 
 ## use, i.e. don't skip the full RPATH for the build tree
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
@@ -30,29 +45,31 @@ set(CMAKE_SKIP_BUILD_RPATH FALSE)
 ## (but later on when installing)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+## Historically we used ${CMAKE_INSTALL_PREFIX}/lib here following the
+## "always full RPATH" CMake guidance. That worked for running directly
+## from the build install prefix, but it prevents experiment-local install
+## trees from being self-contained: a copied EXPDIR/install/bin/GEOSgcm.x
+## keeps loading GEOS dylibs from the original install prefix.
+##
+## Use the Darwin equivalent of Linux $ORIGIN/../lib instead.
+set(CMAKE_INSTALL_RPATH "@loader_path/../lib")
 
-## add the automatically determined parts of the RPATH
-## which point to directories outside the build tree to the install RPATH
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+## Do not automatically append link directories to the install RPATH.
+## In particular, avoid hard-wiring ${CMAKE_INSTALL_PREFIX}/lib into
+## installed executables, since that defeats experiment-local install trees.
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
-## the RPATH to be used when installing, but only if it's not a system directory
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-endif("${isSystemDir}" STREQUAL "-1")
-
-
-# 4) With the advent of shared libraries in GEOS, one needs to symlink install/lib in an experiment
-#    or use this command
-ecbuild_info(
-   "Setting ENABLE_RELATIVE_RPATHS to FALSE.\n"
-   "This changes LC_RPATH in the executable from:\n"
-   " path @loader_path/../lib\n"
-   "to:\n"
-   " path ${CMAKE_INSTALL_PREFIX}/lib"
-   )
-set (ENABLE_RELATIVE_RPATHS FALSE)
+# 4) With the advent of shared libraries in GEOS, installed executables
+# should use relative RPATHs so that:
+#
+#   EXPDIR/install/bin/GEOSgcm.x
+#
+# resolves GEOS/MAPL shared libraries from:
+#
+#   EXPDIR/install/lib
+#
+message(STATUS "Setting ENABLE_RELATIVE_RPATHS to TRUE. This keeps LC_RPATH in installed executables relocatable: path @loader_path/../lib")
+set(ENABLE_RELATIVE_RPATHS TRUE)
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-headerpad_max_install_names")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-headerpad_max_install_names")
