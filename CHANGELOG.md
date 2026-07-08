@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+## [4.41.0] - 2026-07-08
+
+### Added
+
 - Add new `esma_install_manifest.cmake` to create a manifest of installed files
 - Added `esma_add_regression_tests()` macro (`esma_support/esma_regression_tests.cmake`) to centralise the CMake boilerplate for registering GEOS component regression tests. Each component passes `NAME`, `DATA_PATH`, `TEST_CASES`, and an optional `EXTRA_ENV` list; the macro handles OpenMPI flag detection, local/S3 data-dir selection, the `sync_data` ctest fixture, and per-case test registration.
 - Added `esma_sync_aws_s3_data.cmake`, a generic `-P` script invoked by the `sync_data` fixture that downloads regression data from S3 using temporary AWS credentials (via `esma_sync_data_script.cmake`). Replaces the per-component `sync_data.cmake` files.
@@ -21,8 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Switch macOS RPATH in `osx_extras.cmake` from absolute `${CMAKE_INSTALL_PREFIX}/lib` to relative `@loader_path/../lib` and set `ENABLE_RELATIVE_RPATHS TRUE` so that experiment-local install trees (`EXPDIR/install/bin/GEOSgcm.x`) resolve GEOS/MAPL shared libraries from their own `EXPDIR/install/lib` without referencing the original build prefix
-
-### Deprecated
 
 ## [4.40.0] - 2026-06-17
 
