@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `esma_add_regression_tests()` macro (`esma_support/esma_regression_tests.cmake`) to centralise the CMake boilerplate for registering GEOS component regression tests. Each component passes `NAME`, `DATA_PATH`, `TEST_CASES`, and an optional `EXTRA_ENV` list; the macro handles OpenMPI flag detection, local/S3 data-dir selection, the `sync_data` ctest fixture, and per-case test registration.
+- Added `esma_sync_aws_s3_data.cmake`, a generic `-P` script invoked by the `sync_data` fixture that downloads regression data from S3 using temporary AWS credentials (via `esma_sync_data_script.cmake`). Replaces the per-component `sync_data.cmake` files.
+- Added `esma_regression_run_helpers.cmake` with shared helper functions (`copy_directory`, `link_directory`, `copy_file`, `run_geos`, `compare_results`) for use in per-component `run_case.cmake` scripts.
+
 ### Changed
 
 ### Deprecated
