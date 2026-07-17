@@ -2,7 +2,7 @@ macro (esma_add_f2py_module name)
 
   add_f2py_module (${name} ${ARGN})
 
-  set(options USE_MPI)
+  set(options USE_MPI USE_NETCDF)
   cmake_parse_arguments (esma_add_f2py_module "${options}" "" "" ${ARGN})
 
   # If one of the arguments is USE_MPI we need to
@@ -48,6 +48,13 @@ macro (esma_add_f2py_module name)
   else()
     message(DEBUG "[F2PY]: No special handling for Fortran runtime needed on this platform/compiler.")
     set(_base_paths "${CMAKE_BINARY_DIR}/lib")
+  endif()
+
+  # Spack does not put dependency library directories in the dynamic-loader
+  # search path.  Make NetCDF-Fortran available to the post-build import test.
+  if (esma_add_f2py_module_USE_NETCDF AND NetCDF_Fortran_LIBRARY)
+    get_filename_component(_netcdf_fortran_lib_dir "${NetCDF_Fortran_LIBRARY}" DIRECTORY)
+    set(_base_paths "${_base_paths}:${_netcdf_fortran_lib_dir}")
   endif()
 
   # Construct environment list safely
