@@ -31,6 +31,10 @@ macro (new_esma_generate_automatic_code
 endmacro ()
 
 macro (esma_generate_gocart_code target flags)
+  cmake_policy(PUSH)
+  if (POLICY CMP0219)
+    cmake_policy(SET CMP0219 NEW)
+  endif ()
   string (REPLACE "_GridComp" "" name ${target})
 
   set (automatic_headers
@@ -49,7 +53,8 @@ macro (esma_generate_gocart_code target flags)
     ${esma_include}/GEOSchem_GridComp ${esma_etc}
     ${flags}
   )
-  
+  cmake_policy(POP)
+
 endmacro ()
 
 macro (esma_generate_gmi_code target type)
