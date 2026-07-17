@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix CMake 4.0 `CMP0219` policy warning in `esma_generate_gocart_code` macro by wrapping the macro body with `cmake_policy(PUSH/POP)` and setting `CMP0219` to `NEW`
+
 ### Removed
 
 ### Added
