@@ -246,11 +246,20 @@ macro (add_f2py3_module _name)
 
     else()
 
-      foreach(_dir ${NetCDF_Fortran_INCLUDE_DIRS})
+      # FindNetCDF provides the non-Baselibs Fortran include path in the
+      # singular variable.  The Baselibs plural variable is not populated
+      # when dependencies are supplied by Spack.
+      foreach(_dir ${NetCDF_Fortran_INCLUDE_DIR})
         list(APPEND _inc_opts "-I${_dir}")
       endforeach()
 
-      list(APPEND _lib_opts "${NetCDF_Fortran_LIBRARY}")
+      # Use -L/-l so the library follows f2py's generated objects.  Passing
+      # an absolute path can let GNU ld --as-needed discard libnetcdff before
+      # the Fortran symbols are referenced.
+      get_filename_component(_netcdf_fortran_lib_dir "${NetCDF_Fortran_LIBRARY}" DIRECTORY)
+      get_filename_component(_netcdf_fortran_lib_name "${NetCDF_Fortran_LIBRARY}" NAME_WE)
+      string(REGEX REPLACE "^lib" "" _netcdf_fortran_lib_name "${_netcdf_fortran_lib_name}")
+      list(APPEND _lib_opts "-L${_netcdf_fortran_lib_dir}" "-l${_netcdf_fortran_lib_name}")
 
     endif()
   endif ()
