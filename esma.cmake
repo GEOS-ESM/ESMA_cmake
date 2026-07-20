@@ -4,6 +4,13 @@ list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/esma_support")
 include (esma_check_install_prefix)
 esma_check_install_prefix()
 
+# Suppress CMake 4.0 policy warnings for policies introduced after our
+# minimum required version. These are set here (project scope) so they
+# are active in all subdirectories and at all macro call sites.
+if (POLICY CMP0219)
+  cmake_policy (SET CMP0219 NEW)
+endif ()
+
 ### ecbuild Support ###
 
 # GEOS' scripting currently assumes `install/lib` is where
