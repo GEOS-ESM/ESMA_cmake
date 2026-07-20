@@ -2,6 +2,10 @@
 
 cmake_minimum_required (VERSION 3.18)
 
+if (POLICY CMP0219)
+  cmake_policy (SET CMP0219 NEW)
+endif ()
+
 set (acg_flags -v)
 
 macro (new_esma_generate_automatic_code
@@ -49,7 +53,7 @@ macro (esma_generate_gocart_code target flags)
     ${esma_include}/GEOSchem_GridComp ${esma_etc}
     ${flags}
   )
-  
+
 endmacro ()
 
 macro (esma_generate_gmi_code target type)
