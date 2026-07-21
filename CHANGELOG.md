@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- changed NAG_Fortran so that some applications like GEOSldas can be built on MacOS 
+
 ### Deprecated
 
 ## [5.14.0] - 2026-07-20
