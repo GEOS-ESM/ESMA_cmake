@@ -11,9 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Removed dependency-target creation (NetCDF, HDF5, ESMF, FMS, etc.) from `external_libraries/FindBaselibs.cmake`; it now only locates `BASEDIR` and sets `Baselibs_FOUND`
+
 ### Added
 
+- Added `external_libraries/ConfigureBaselibs.cmake` to create the NetCDF/HDF5/ESMF/FMS dependency targets when building against a Baselibs installation (`Baselibs_FOUND`)
+- Added `external_libraries/ConfigureExternalLibraries.cmake` to create the same dependency targets via `find_package` when dependencies are supplied by Spack or another non-Baselibs package manager
+
 ### Changed
+
+- Split external library configuration out of `FindBaselibs.cmake` into `ConfigureBaselibs.cmake` and `ConfigureExternalLibraries.cmake` so the top-level project can `include()` the appropriate one based on `Baselibs_FOUND`, rather than duplicating the non-Baselibs `find_package` calls in each project's `CMakeLists.txt`
 
 ### Deprecated
 
