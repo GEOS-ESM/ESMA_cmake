@@ -31,8 +31,12 @@ endif()
 find_package(GFTL_SHARED REQUIRED)
 
 find_package(ZLIB REQUIRED)
-# Historical GEOS code uses this target spelling.
-add_library(ZLIB::zlib ALIAS ZLIB::ZLIB)
+# Historical GEOS code uses this target spelling. Some ZLIB providers
+# (e.g. zlib-ng's CMake config package) already export a target with
+# this exact name, so only create the alias if it doesn't already exist.
+if(NOT TARGET ZLIB::zlib)
+  add_library(ZLIB::zlib ALIAS ZLIB::ZLIB)
+endif()
 
 find_package(FMS REQUIRED COMPONENTS R4 R8)
 
