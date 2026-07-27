@@ -81,6 +81,15 @@ link_directories (${BASEDIR}/lib)
     # ESMF::ESMF as the main target
     find_package(ESMF MODULE REQUIRED)
 
+    # Baselibs' esmf.mk does not carry a CMake-style version string, so
+    # find_package() above cannot enforce a minimum version the way
+    # ConfigureExternalLibraries.cmake does (find_package(ESMF 8.6.1 ...)).
+    # Check ESMF_VERSION explicitly instead so Baselibs and Spack builds
+    # enforce the same minimum.
+    if (ESMF_VERSION VERSION_LESS 8.6.1)
+      message(FATAL_ERROR "ESMF must be at least 8.6.1")
+    endif ()
+
     # Also, we know ESMF from Baselibs requires MPI (note that this isn't always true, but
     # for ESMF built in Baselibs for use in GEOS, it currently is)
     target_link_libraries(ESMF::ESMF INTERFACE MPI::MPI_Fortran)
