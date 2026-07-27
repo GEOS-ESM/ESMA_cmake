@@ -38,24 +38,31 @@ if(NOT TARGET ZLIB::zlib)
   add_library(ZLIB::zlib ALIAS ZLIB::ZLIB)
 endif()
 
-find_package(FMS REQUIRED COMPONENTS R4 R8)
+# We only need to look for FMS if we need it. Projects like MAPL don't
+# use FMS, so we don't need to look for it. Mirror the Baselibs-branch
+# convention (ConfigureBaselibs.cmake) of using FV_PRECISION, which
+# GEOS-model top-level projects set but library projects like MAPL do
+# not, as the signal that FMS is required.
+if(DEFINED FV_PRECISION)
+  find_package(FMS REQUIRED COMPONENTS R4 R8)
 
-# FMS versions before 2026.01 do not export libyaml as a dependency in
-# fms-config.cmake. Probe for the YAML module so that we add libyaml only
-# when the external FMS was built with YAML support.
-include(check_fms_yaml_support)
-check_fms_yaml_support(FMS_BUILT_WITH_YAML)
-if(FMS_BUILT_WITH_YAML)
-  find_package(libyaml REQUIRED)
-  message(STATUS "LIBYAML_INCLUDE_DIR: ${LIBYAML_INCLUDE_DIR}")
-  message(STATUS "LIBYAML_LIBRARIES: ${LIBYAML_LIBRARIES}")
-  if(TARGET FMS::fms_r4)
-    target_link_libraries(FMS::fms_r4 INTERFACE ${LIBYAML_LIBRARIES})
-    message(STATUS "Linking libyaml into FMS::fms_r4")
-  endif()
-  if(TARGET FMS::fms_r8)
-    target_link_libraries(FMS::fms_r8 INTERFACE ${LIBYAML_LIBRARIES})
-    message(STATUS "Linking libyaml into FMS::fms_r8")
+  # FMS versions before 2026.01 do not export libyaml as a dependency in
+  # fms-config.cmake. Probe for the YAML module so that we add libyaml only
+  # when the external FMS was built with YAML support.
+  include(check_fms_yaml_support)
+  check_fms_yaml_support(FMS_BUILT_WITH_YAML)
+  if(FMS_BUILT_WITH_YAML)
+    find_package(libyaml REQUIRED)
+    message(STATUS "LIBYAML_INCLUDE_DIR: ${LIBYAML_INCLUDE_DIR}")
+    message(STATUS "LIBYAML_LIBRARIES: ${LIBYAML_LIBRARIES}")
+    if(TARGET FMS::fms_r4)
+      target_link_libraries(FMS::fms_r4 INTERFACE ${LIBYAML_LIBRARIES})
+      message(STATUS "Linking libyaml into FMS::fms_r4")
+    endif()
+    if(TARGET FMS::fms_r8)
+      target_link_libraries(FMS::fms_r8 INTERFACE ${LIBYAML_LIBRARIES})
+      message(STATUS "Linking libyaml into FMS::fms_r8")
+    endif()
   endif()
 endif()
 
