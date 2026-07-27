@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- In `ConfigureExternalLibraries.cmake`, guard the historical `ZLIB::zlib` alias creation with `if(NOT TARGET ZLIB::zlib)`; some ZLIB providers (e.g. zlib-ng's CMake config package) already export a target with that exact name
+- In `ConfigureExternalLibraries.cmake`, only look for FMS via `find_package` when `FV_PRECISION` is defined. Library projects like MAPL don't use FMS and don't set `FV_PRECISION`, so they no longer require it; this mirrors the existing `FV_PRECISION` convention already used in `ConfigureBaselibs.cmake` for the Baselibs case
+
 ### Removed
 
 - Removed dependency-target creation (NetCDF, HDF5, ESMF, FMS, etc.) from `external_libraries/FindBaselibs.cmake`; it now only locates `BASEDIR` and sets `Baselibs_FOUND`
@@ -27,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [5.14.0] - 2026-07-20
 
 ### Fixed
+
 
 - Fix CMake 4.0 `CMP0219` policy warning in `esma_generate_gocart_code` macro by setting `CMP0219` to `NEW` at file scope in `esma_generate_automatic_code.cmake` (the warning fires at the call site before the macro body is entered, so a per-macro `PUSH/POP` is insufficient)
 - Fix `f2py` and `f2py3` NetCDF-Fortran builds and post-build Python import tests when dependencies are supplied by Spack
