@@ -16,7 +16,7 @@ if(HDF5_IS_PARALLEL OR HDF5_PROVIDES_PARALLEL)
 endif()
 
 if(NOT TARGET ESMF::ESMF)
-  find_package(ESMF 8.6.1 MODULE REQUIRED)
+  find_package(ESMF ${ESMA_ESMF_MIN_VERSION} MODULE REQUIRED)
   target_link_libraries(ESMF::ESMF INTERFACE MPI::MPI_Fortran)
 
   # GEOS uses these historical target names; FindESMF provides ESMF::ESMF.

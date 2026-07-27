@@ -87,6 +87,14 @@ list (PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external_libraries")
 include(math_libraries)
 include(FindBaselibs)
 
+# Downstream projects can set ESMA_ESMF_MIN_VERSION before include(esma) to
+# require a newer minimum ESMF version than our default. For example, a
+# project that needs newer ESMF features than most GEOS components can set
+# this to override the default.
+if(NOT DEFINED ESMA_ESMF_MIN_VERSION)
+  set(ESMA_ESMF_MIN_VERSION 8.6.1)
+endif()
+
 # Configure dependencies for the selected library provider. FindBaselibs,
 # included just above, determines the provider and sets Baselibs_FOUND.
 if(Baselibs_FOUND)
