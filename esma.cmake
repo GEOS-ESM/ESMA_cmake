@@ -86,6 +86,15 @@ find_package(Threads REQUIRED)
 list (PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external_libraries")
 include(math_libraries)
 include(FindBaselibs)
+
+# Configure dependencies for the selected library provider. FindBaselibs,
+# included just above, determines the provider and sets Baselibs_FOUND.
+if(Baselibs_FOUND)
+  include(ConfigureBaselibs)
+else()
+  include(ConfigureExternalLibraries)
+endif()
+
 include(DetermineSite)
 find_package(GitInfo)
 if (MPI_FOUND)

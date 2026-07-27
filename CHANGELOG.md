@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Split external library configuration out of `FindBaselibs.cmake` into `ConfigureBaselibs.cmake` and `ConfigureExternalLibraries.cmake` so the top-level project can `include()` the appropriate one based on `Baselibs_FOUND`, rather than duplicating the non-Baselibs `find_package` calls in each project's `CMakeLists.txt`
+- Split external library configuration out of `FindBaselibs.cmake` into `ConfigureBaselibs.cmake` and `ConfigureExternalLibraries.cmake`. `esma.cmake` now `include()`s the appropriate one automatically based on `Baselibs_FOUND` right after including `FindBaselibs`, so top-level projects no longer need to duplicate the non-Baselibs `find_package` calls in their own `CMakeLists.txt`
 
 ### Deprecated
 
