@@ -11,13 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - In `ConfigureExternalLibraries.cmake`, guard the historical `ZLIB::zlib` alias creation with `if(NOT TARGET ZLIB::zlib)`; some ZLIB providers (e.g. zlib-ng's CMake config package) already export a target with that exact name
 - In `ConfigureExternalLibraries.cmake`, only look for FMS via `find_package` when `FV_PRECISION` is defined. Library projects like MAPL don't use FMS and don't set `FV_PRECISION`, so they no longer require it; this mirrors the existing `FV_PRECISION` convention already used in `ConfigureBaselibs.cmake` for the Baselibs case
-- In `ConfigureBaselibs.cmake`, enforce a minimum ESMF version of 8.6.1 (matching `ConfigureExternalLibraries.cmake`) by checking `ESMF_VERSION` explicitly, since Baselibs' `esmf.mk` has no CMake-style version string for `find_package()` to check
+- In `ConfigureBaselibs.cmake`, enforce a minimum ESMF version (matching `ConfigureExternalLibraries.cmake`) by checking `ESMF_VERSION` explicitly, since Baselibs' `esmf.mk` has no CMake-style version string for `find_package()` to check
 
 ### Removed
 
 - Removed dependency-target creation (NetCDF, HDF5, ESMF, FMS, etc.) from `external_libraries/FindBaselibs.cmake`; it now only locates `BASEDIR` and sets `Baselibs_FOUND`
 
 ### Added
+
+- Added `ESMA_ESMF_MIN_VERSION` variable, settable by a downstream project before `include(esma)`, to control the minimum ESMF version required by `ConfigureBaselibs.cmake`/`ConfigureExternalLibraries.cmake` (defaults to `8.6.1` if unset). This lets projects with newer ESMF requirements (e.g. MAPL3 requiring 9.0.0) avoid needing their own version-guard boilerplate
 
 - Added `external_libraries/ConfigureBaselibs.cmake` to create the NetCDF/HDF5/ESMF/FMS dependency targets when building against a Baselibs installation (`Baselibs_FOUND`)
 - Added `external_libraries/ConfigureExternalLibraries.cmake` to create the same dependency targets via `find_package` when dependencies are supplied by Spack or another non-Baselibs package manager

@@ -83,11 +83,11 @@ link_directories (${BASEDIR}/lib)
 
     # Baselibs' esmf.mk does not carry a CMake-style version string, so
     # find_package() above cannot enforce a minimum version the way
-    # ConfigureExternalLibraries.cmake does (find_package(ESMF 8.6.1 ...)).
+    # ConfigureExternalLibraries.cmake does (find_package(ESMF ${ESMA_ESMF_MIN_VERSION} ...)).
     # Check ESMF_VERSION explicitly instead so Baselibs and Spack builds
     # enforce the same minimum.
-    if (ESMF_VERSION VERSION_LESS 8.6.1)
-      message(FATAL_ERROR "ESMF must be at least 8.6.1")
+    if (ESMF_VERSION VERSION_LESS ${ESMA_ESMF_MIN_VERSION})
+      message(FATAL_ERROR "ESMF must be at least ${ESMA_ESMF_MIN_VERSION}")
     endif ()
 
     # Also, we know ESMF from Baselibs requires MPI (note that this isn't always true, but
