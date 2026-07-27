@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - In `ConfigureExternalLibraries.cmake`, guard the historical `ZLIB::zlib` alias creation with `if(NOT TARGET ZLIB::zlib)`; some ZLIB providers (e.g. zlib-ng's CMake config package) already export a target with that exact name
 - In `ConfigureExternalLibraries.cmake`, only look for FMS via `find_package` when `FV_PRECISION` is defined. Library projects like MAPL don't use FMS and don't set `FV_PRECISION`, so they no longer require it; this mirrors the existing `FV_PRECISION` convention already used in `ConfigureBaselibs.cmake` for the Baselibs case
+- In `ConfigureBaselibs.cmake`, enforce a minimum ESMF version of 8.6.1 (matching `ConfigureExternalLibraries.cmake`) by checking `ESMF_VERSION` explicitly, since Baselibs' `esmf.mk` has no CMake-style version string for `find_package()` to check
 
 ### Removed
 
