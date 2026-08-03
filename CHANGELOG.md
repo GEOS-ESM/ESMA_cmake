@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Suppress compiler `-save-temps` in Debug builds generated with Ninja, because Intel and GNU Fortran compilers write these intermediates in the shared build working directory using the source basename, allowing parallel compile rules for files such as `API.F90` to overwrite one another
+- In `external_libraries/FindESMF.cmake`, keep ESMF wrapper link options in `INTERFACE_LINK_OPTIONS` rather than treating them as libraries, allowing CMake to de-duplicate shared linker flags while preserving ESMF's link setup
 - In `ConfigureExternalLibraries.cmake`, guard the historical `ZLIB::zlib` alias creation with `if(NOT TARGET ZLIB::zlib)`; some ZLIB providers (e.g. zlib-ng's CMake config package) already export a target with that exact name
 - In `ConfigureExternalLibraries.cmake`, only look for FMS via `find_package` when `FV_PRECISION` is defined. Library projects like MAPL don't use FMS and don't set `FV_PRECISION`, so they no longer require it; this mirrors the existing `FV_PRECISION` convention already used in `ConfigureBaselibs.cmake` for the Baselibs case
 - In `ConfigureBaselibs.cmake`, enforce a minimum ESMF version (matching `ConfigureExternalLibraries.cmake`) by checking `ESMF_VERSION` explicitly, since Baselibs' `esmf.mk` has no CMake-style version string for `find_package()` to check
