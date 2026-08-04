@@ -47,6 +47,11 @@ set(NO_FMA "-ffp-contract=off")
 # NOTE 2: I found a bug with this and flang: https://github.com/llvm/llvm-project/issues/184802
 # Turning off for now.
 #set(SAVE_TEMPS "-fno-integrated-as -save-temps=obj")
+#if (CMAKE_GENERATOR MATCHES "^Ninja")
+#  # Keep saved intermediates disabled for parallel Ninja builds.  Common
+#  # source basenames, such as API.F90, can otherwise collide.
+#  set(SAVE_TEMPS "")
+#endif ()
 
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
