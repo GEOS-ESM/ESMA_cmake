@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `copy_restarts()` function to `esma_regression_run_helpers.cmake` to copy per-checkpoint restart subdirectories (excluding `last`) from a run's `checkpoints` directory into the experiment directory, for use in regression test comparisons.
+
 ### Changed
 
 ### Deprecated
