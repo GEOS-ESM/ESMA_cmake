@@ -22,9 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `ESMA_ESMF_MIN_VERSION` variable, settable by a downstream project before `include(esma)`, to control the minimum ESMF version required by `ConfigureBaselibs.cmake`/`ConfigureExternalLibraries.cmake` (defaults to `8.6.1` if unset). This lets projects with newer ESMF requirements (e.g. MAPL3 requiring 9.0.0) avoid needing their own version-guard boilerplate
-
 - Added `external_libraries/ConfigureBaselibs.cmake` to create the NetCDF/HDF5/ESMF/FMS dependency targets when building against a Baselibs installation (`Baselibs_FOUND`)
 - Added `external_libraries/ConfigureExternalLibraries.cmake` to create the same dependency targets via `find_package` when dependencies are supplied by Spack or another non-Baselibs package manager
+- Added `copy_restarts()` function to `esma_regression_run_helpers.cmake` to copy per-checkpoint restart subdirectories (excluding `last`) from a run's `checkpoints` directory into the experiment directory, for use in regression test comparisons.
 
 ### Changed
 
