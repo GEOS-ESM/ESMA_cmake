@@ -71,9 +71,6 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 message(STATUS "Setting ENABLE_RELATIVE_RPATHS to TRUE. This keeps LC_RPATH in installed executables relocatable: path @loader_path/../lib")
 set(ENABLE_RELATIVE_RPATHS TRUE)
 
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-headerpad_max_install_names")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-headerpad_max_install_names")
-
 # 5) Flang compiler workarounds for macOS shared libraries
 # CMake natively uses Apple's '-dynamiclib' and '-install_name' for shared libraries,
 # but the LLVM flang frontend strictly rejects them.

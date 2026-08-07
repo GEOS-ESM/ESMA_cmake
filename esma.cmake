@@ -111,7 +111,6 @@ endif ()
 
 ### ESMA Support ###
 
-#list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/esma_support")
 include (esma_support)
 
 #### Capture mepo status ####
