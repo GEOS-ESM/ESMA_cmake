@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+### Removed
+
+### Added
+
+### Changed
+
+### Deprecated
+
+## [4.43.0] - 2026-08-10
+
+### Fixed
+
 - Suppress compiler `-save-temps` in Debug builds generated with Ninja, because Intel and GNU Fortran compilers write these intermediates in the shared build working directory using the source basename, allowing parallel compile rules for files such as `API.F90` to overwrite one another
 - In `external_libraries/FindESMF.cmake`, keep ESMF wrapper link options in `INTERFACE_LINK_OPTIONS` rather than treating them as libraries, allowing CMake to de-duplicate shared linker flags while preserving ESMF's link setup
 - In `ConfigureExternalLibraries.cmake`, guard the historical `ZLIB::zlib` alias creation with `if(NOT TARGET ZLIB::zlib)`; some ZLIB providers (e.g. zlib-ng's CMake config package) already export a target with that exact name
@@ -31,7 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update GitHub Actions workflow dependencies to use the current major versions of `actions/checkout` and `actions/upload-artifact`
 - Split external library configuration out of `FindBaselibs.cmake` into `ConfigureBaselibs.cmake` and `ConfigureExternalLibraries.cmake`. `esma.cmake` now `include()`s the appropriate one automatically based on `Baselibs_FOUND` right after including `FindBaselibs`, so top-level projects no longer need to duplicate the non-Baselibs `find_package` calls in their own `CMakeLists.txt`
 
-### Deprecated
 
 ## [4.42.0] - 2026-07-20
 
