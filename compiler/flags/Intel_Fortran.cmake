@@ -166,7 +166,14 @@ set (common_Fortran_fpe_flags "${NOOLD_MAXMINLOC} ${DISABLE_10121} ${DISABLE_104
 # Build type specific bundles
 # ----------------------------------------------------------------------
 # Debug
-set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -init=snan,arrays -save-temps")
+# Intel Fortran saves -save-temps intermediates in the build working directory
+# using only the source basename. Parallel Ninja builds can collide on common
+# names such as API.F90.
+set (SAVE_TEMPS "-save-temps")
+if (CMAKE_GENERATOR MATCHES "^Ninja")
+  set (SAVE_TEMPS "")
+endif ()
+set (GEOS_Fortran_Debug_Flags "${DEBINFO} ${FOPT0} -debug -nolib-inline -fno-inline-functions -assume protect_parens,minus0 -prec-div -prec-sqrt -check all,noarg_temp_created -fp-stack-check ${WARN_UNUSED} -init=snan,arrays ${SAVE_TEMPS}")
 set (GEOS_Fortran_Debug_FPE_Flags "${FPE0} ${FP_MODEL_STRICT} ${FP_SPECULATION_STRICT} ${common_Fortran_fpe_flags} ${SUPPRESS_COMMON_WARNINGS}")
 
 # Strict (bitwise reproducible, IEEE-compliant)
