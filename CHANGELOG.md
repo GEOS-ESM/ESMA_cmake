@@ -17,6 +17,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+## [5.15.0] - 2026-08-10
+
+### Fixed
+
+- Suppress compiler `-save-temps` in GNU, Intel, and IntelLLVM Debug builds generated with Ninja, because these compilers write intermediates in the shared build working directory using the source basename, allowing parallel compile rules for files such as `API.F90` to overwrite one another; LLVMFlang save-temporaries support remains disabled pending upstream fixes
+- In `external_libraries/FindESMF.cmake`, expose ESMC through `ESMF::ESMC` and the `ESMF::ESMF_C` alias, add the `ESMF::ESMF_Fortran` alias, parse C include/link metadata, and keep ESMF wrapper link options in `INTERFACE_LINK_OPTIONS` rather than treating them as libraries so CMake can de-duplicate shared linker flags while preserving ESMF's link setup
+- In `ConfigureExternalLibraries.cmake`, guard the historical `ZLIB::zlib` alias creation with `if(NOT TARGET ZLIB::zlib)`; some ZLIB providers (e.g. zlib-ng's CMake config package) already export a target with that exact name
+- In `ConfigureExternalLibraries.cmake`, only look for FMS via `find_package` when `FV_PRECISION` is defined. Library projects like MAPL don't use FMS and don't set `FV_PRECISION`, so they no longer require it; this mirrors the existing `FV_PRECISION` convention already used in `ConfigureBaselibs.cmake` for the Baselibs case
+- In `ConfigureBaselibs.cmake`, enforce a minimum ESMF version (matching `ConfigureExternalLibraries.cmake`) by checking `ESMF_VERSION` explicitly, since Baselibs' `esmf.mk` has no CMake-style version string for `find_package()` to check
+
+### Removed
+
+- Removed dependency-target creation (NetCDF, HDF5, ESMF, FMS, etc.) from `external_libraries/FindBaselibs.cmake`; it now only locates `BASEDIR` and sets `Baselibs_FOUND`
+
+### Added
+
+- Added `ESMA_ESMF_MIN_VERSION` variable, settable by a downstream project before `include(esma)`, to control the minimum ESMF version required by `ConfigureBaselibs.cmake`/`ConfigureExternalLibraries.cmake` (defaults to `8.6.1` if unset). This lets projects with newer ESMF requirements (e.g. MAPL3 requiring 9.0.0) avoid needing their own version-guard boilerplate
+- Added `external_libraries/ConfigureBaselibs.cmake` to create the NetCDF/HDF5/ESMF/FMS dependency targets when building against a Baselibs installation (`Baselibs_FOUND`)
+- Added `external_libraries/ConfigureExternalLibraries.cmake` to create the same dependency targets via `find_package` when dependencies are supplied by Spack or another non-Baselibs package manager
+- Added `copy_restarts()` function to `esma_regression_run_helpers.cmake` to copy per-checkpoint restart subdirectories (excluding `last`) from a run's `checkpoints` directory into the experiment directory, for use in regression test comparisons.
+
+### Changed
+
+- Update GitHub Actions workflow dependencies to use the current major versions of `actions/checkout` and `actions/upload-artifact`
+- Split external library configuration out of `FindBaselibs.cmake` into `ConfigureBaselibs.cmake` and `ConfigureExternalLibraries.cmake`. `esma.cmake` now `include()`s the appropriate one automatically based on `Baselibs_FOUND` right after including `FindBaselibs`, so top-level projects no longer need to duplicate the non-Baselibs `find_package` calls in their own `CMakeLists.txt`
+
 ## [5.14.0] - 2026-07-20
 
 ### Fixed
@@ -1350,4 +1376,3 @@ NOTE This release of ESMA Cmake is not backwardly compatible to the 1.x series.
 ### Fixed
 
 - Fix cmake autodetect when embedded.
-
