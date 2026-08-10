@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+### Removed
+
+### Added
+
+### Changed
+
+### Deprecated
+
+## [5.15.0] - 2026-10-10
+
+### Fixed
+
 - Suppress compiler `-save-temps` in GNU, Intel, and IntelLLVM Debug builds generated with Ninja, because these compilers write intermediates in the shared build working directory using the source basename, allowing parallel compile rules for files such as `API.F90` to overwrite one another; LLVMFlang save-temporaries support remains disabled pending upstream fixes
 - In `external_libraries/FindESMF.cmake`, expose ESMC through `ESMF::ESMC` and the `ESMF::ESMF_C` alias, add the `ESMF::ESMF_Fortran` alias, parse C include/link metadata, and keep ESMF wrapper link options in `INTERFACE_LINK_OPTIONS` rather than treating them as libraries so CMake can de-duplicate shared linker flags while preserving ESMF's link setup
 - In `ConfigureExternalLibraries.cmake`, guard the historical `ZLIB::zlib` alias creation with `if(NOT TARGET ZLIB::zlib)`; some ZLIB providers (e.g. zlib-ng's CMake config package) already export a target with that exact name
@@ -31,12 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update GitHub Actions workflow dependencies to use the current major versions of `actions/checkout` and `actions/upload-artifact`
 - Split external library configuration out of `FindBaselibs.cmake` into `ConfigureBaselibs.cmake` and `ConfigureExternalLibraries.cmake`. `esma.cmake` now `include()`s the appropriate one automatically based on `Baselibs_FOUND` right after including `FindBaselibs`, so top-level projects no longer need to duplicate the non-Baselibs `find_package` calls in their own `CMakeLists.txt`
 
-### Deprecated
-
 ## [5.14.0] - 2026-07-20
 
 ### Fixed
-
 
 - Fix CMake 4.0 `CMP0219` policy warning in `esma_generate_gocart_code` macro by setting `CMP0219` to `NEW` at file scope in `esma_generate_automatic_code.cmake` (the warning fires at the call site before the macro body is entered, so a per-macro `PUSH/POP` is insufficient)
 - Fix `f2py` and `f2py3` NetCDF-Fortran builds and post-build Python import tests when dependencies are supplied by Spack

@@ -19,7 +19,6 @@ foreach(lang Fortran C CXX)
 #  set (CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS}  -Wl,-no_compact_unwind")
 endforeach()
 
-
 # 3) Rpath handling
 #
 # GEOS uses an install-tree layout like:
