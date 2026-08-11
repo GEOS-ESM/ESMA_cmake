@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Prefer the ESMF-generated `ESMFConfig.cmake` package for external ESMF installations, using `CMAKE_PREFIX_PATH` (including the prefix derived from `ESMFMKFILE`) for discovery while retaining the `esmf.mk` module fallback for older ESMF releases
+- Prefer the ESMF-generated `ESMFConfig.cmake` package for external ESMF installations and Baselibs, using `CMAKE_PREFIX_PATH` (including the prefix derived from `ESMFMKFILE`) for external discovery and `BASEDIR` for Baselibs, while retaining the `esmf.mk` module fallback for older ESMF releases
 
 ### Deprecated
 

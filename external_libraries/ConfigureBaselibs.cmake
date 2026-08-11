@@ -67,18 +67,24 @@ link_directories (${BASEDIR}/lib)
   # ESMF Library
   # ------------
 
-  # First we look for esmf.mk which is required for use by FindESMF.cmake
-  if (NOT EXISTS ${BASEDIR}/lib/esmf.mk)
-    # If we don't find it, die.
-    message (FATAL_ERROR "Cannot find ${ESMFMKFILE}")
-  else ()
-    # If we do find ESMF, then we set the ESMFMKFILE variable
+  # Prefer the ESMF config package installed below BASEDIR, but retain the
+  # esmf.mk module fallback for older Baselibs installations.
+  set(_esma_esmf_config_found FALSE)
+  if (EXISTS "${BASEDIR}/lib/esmf.mk")
     set (ESMFMKFILE "${BASEDIR}/lib/esmf.mk" CACHE PATH "Path to esmf.mk file" FORCE)
     message(STATUS "ESMFMKFILE: ${ESMFMKFILE}")
+  endif ()
 
-    # Now we can use FindESMF.cmake to find ESMF. This uses the one in the current
-    # directory, not the one in the ESMF installation. The one here uses
-    # ESMF::ESMF as the main target
+  find_package(ESMF ${ESMA_ESMF_MIN_VERSION} CONFIG QUIET
+               PATHS "${BASEDIR}" NO_DEFAULT_PATH)
+  if (ESMF_FOUND)
+    set(_esma_esmf_config_found TRUE)
+  else ()
+    if (NOT EXISTS "${BASEDIR}/lib/esmf.mk")
+      message (FATAL_ERROR "Cannot find ESMFConfig.cmake or ${BASEDIR}/lib/esmf.mk")
+    endif ()
+
+    # Use the FindESMF.cmake module in this project for legacy installations.
     find_package(ESMF MODULE REQUIRED)
 
     # Baselibs' esmf.mk does not carry a CMake-style version string, so
@@ -89,21 +95,23 @@ link_directories (${BASEDIR}/lib)
     if (ESMF_VERSION VERSION_LESS ${ESMA_ESMF_MIN_VERSION})
       message(FATAL_ERROR "ESMF must be at least ${ESMA_ESMF_MIN_VERSION}")
     endif ()
+  endif ()
 
-    # Also, we know ESMF from Baselibs requires MPI (note that this isn't always true, but
-    # for ESMF built in Baselibs for use in GEOS, it currently is)
+  # The generated config declares MPI itself. Older module-based ESMF
+  # installations need this dependency supplied by ESMA_cmake.
+  if (NOT _esma_esmf_config_found)
     target_link_libraries(ESMF::ESMF INTERFACE MPI::MPI_Fortran)
+  endif ()
 
-    # Finally, we add aliases since GEOS (at the moment) uses esmf and ESMF for the target
-    # instead of ESMF::ESMF (MAPL uses ESMF::ESMF)
-    if (NOT TARGET ESMF)
-      message(STATUS "ESMF alias not found, creating ESMF alias")
-      add_library(ESMF ALIAS ESMF::ESMF)
-    endif ()
-    if (NOT TARGET esmf)
-      message(STATUS "esmf alias not found, creating esmf alias")
-      add_library(esmf ALIAS ESMF::ESMF)
-    endif ()
+  # Finally, we add aliases since GEOS (at the moment) uses esmf and ESMF for
+  # the target instead of ESMF::ESMF (MAPL uses ESMF::ESMF).
+  if (NOT TARGET ESMF)
+    message(STATUS "ESMF alias not found, creating ESMF alias")
+    add_library(ESMF ALIAS ESMF::ESMF)
+  endif ()
+  if (NOT TARGET esmf)
+    message(STATUS "esmf alias not found, creating esmf alias")
+    add_library(esmf ALIAS ESMF::ESMF)
   endif ()
 
   # ------
