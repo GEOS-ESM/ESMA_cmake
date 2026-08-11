@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Prefer the ESMF-generated `ESMFConfig.cmake` package for external ESMF installations, using `CMAKE_PREFIX_PATH` (including the prefix derived from `ESMFMKFILE`) for discovery while retaining the `esmf.mk` module fallback for older ESMF releases
+
 ### Deprecated
 
 ## [5.15.0] - 2026-08-10
