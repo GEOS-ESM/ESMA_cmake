@@ -15,9 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Prefer ESMF's generated `ESMFConfig.cmake` package when available for Spack and Baselibs, with the existing `esmf.mk` discovery retained as a fallback.
-
 ### Deprecated
+
+## [4.44.0] - 2026-08-17
+
+### Changed
+
+- Prefer ESMF's generated `ESMFConfig.cmake` package when available for Spack and Baselibs, with the existing `esmf.mk` discovery retained as a fallback.
 
 ## [4.43.0] - 2026-08-10
 
