@@ -16,10 +16,34 @@ if(HDF5_IS_PARALLEL OR HDF5_PROVIDES_PARALLEL)
 endif()
 
 if(NOT TARGET ESMF::ESMF)
-  find_package(ESMF ${ESMA_ESMF_MIN_VERSION} MODULE REQUIRED)
-  target_link_libraries(ESMF::ESMF INTERFACE MPI::MPI_Fortran)
+  # Prefer the config package installed by ESMF 9.  In particular, this lets
+  # a loaded Spack environment provide ESMF through CMAKE_PREFIX_PATH without
+  # requiring users to set ESMF_DIR themselves.
+  set(_esma_esmf_config_hints)
+  foreach(_esma_esmf_mkfile IN ITEMS "${ESMFMKFILE}" "$ENV{ESMFMKFILE}")
+    if(_esma_esmf_mkfile AND EXISTS "${_esma_esmf_mkfile}")
+      get_filename_component(_esma_esmf_libdir "${_esma_esmf_mkfile}" DIRECTORY)
+      get_filename_component(_esma_esmf_prefix "${_esma_esmf_libdir}" DIRECTORY)
+      list(APPEND _esma_esmf_config_hints "${_esma_esmf_prefix}")
+      break()
+    endif()
+  endforeach()
 
-  # GEOS uses these historical target names; FindESMF provides ESMF::ESMF.
+  find_package(ESMF ${ESMA_ESMF_MIN_VERSION} CONFIG QUIET
+               HINTS ${_esma_esmf_config_hints})
+
+  if(NOT ESMF_FOUND)
+    # ESMF 8 and older ESMF 9 installations may provide only esmf.mk.
+    if(NOT DEFINED ESMFMKFILE AND _esma_esmf_config_hints)
+      list(GET _esma_esmf_config_hints 0 _esma_esmf_prefix)
+      set(ESMFMKFILE "${_esma_esmf_prefix}/lib/esmf.mk")
+    endif()
+    find_package(ESMF ${ESMA_ESMF_MIN_VERSION} MODULE REQUIRED)
+    target_link_libraries(ESMF::ESMF INTERFACE MPI::MPI_Fortran)
+  endif()
+
+  # GEOS uses these historical target names.  The generated config provides
+  # ESMF::ESMF but not the lowercase esmf alias.
   if(NOT TARGET esmf)
     add_library(esmf ALIAS ESMF::ESMF)
   endif()
