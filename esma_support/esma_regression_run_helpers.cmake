@@ -53,12 +53,49 @@ function(copy_restarts root_dir expdir)
 endfunction()
 
 function(compare_results baseline_dir current_dir)
+  cmake_parse_arguments(COMPARE "NANS_ARE_EQUAL;NAN_ARE_EQUAL" "TOLERANCE" "" ${ARGN})
+  if(COMPARE_NAN_ARE_EQUAL)
+    set(COMPARE_NANS_ARE_EQUAL TRUE)
+  endif()
+  if(NOT COMPARE_TOLERANCE AND COMPARE_UNPARSED_ARGUMENTS)
+    list(LENGTH COMPARE_UNPARSED_ARGUMENTS _unparsed_len)
+    if(_unparsed_len EQUAL 1)
+      set(COMPARE_TOLERANCE "${COMPARE_UNPARSED_ARGUMENTS}")
+    endif()
+  endif()
+  if(NOT COMPARE_TOLERANCE AND DEFINED REGRESSION_TOLERANCE)
+    set(COMPARE_TOLERANCE "${REGRESSION_TOLERANCE}")
+  elseif(NOT COMPARE_TOLERANCE AND DEFINED TOLERANCE)
+    set(COMPARE_TOLERANCE "${TOLERANCE}")
+  endif()
+
+  if(NOT COMPARE_NANS_ARE_EQUAL)
+    if(DEFINED REGRESSION_NANS_ARE_EQUAL AND REGRESSION_NANS_ARE_EQUAL)
+      set(COMPARE_NANS_ARE_EQUAL TRUE)
+    elseif(DEFINED NANS_ARE_EQUAL AND NANS_ARE_EQUAL)
+      set(COMPARE_NANS_ARE_EQUAL TRUE)
+    endif()
+  endif()
+
+  find_program(NCCMP_EXECUTABLE nccmp)
+  if(NCCMP_EXECUTABLE)
+    set(COMPARE_COMMAND ${NCCMP_EXECUTABLE} -dmfgsB)
+    if(COMPARE_NANS_ARE_EQUAL)
+      list(APPEND COMPARE_COMMAND --nans-are-equal)
+    endif()
+    if(COMPARE_TOLERANCE)
+      list(APPEND COMPARE_COMMAND --tolerance ${COMPARE_TOLERANCE})
+    endif()
+  else()
+    set(COMPARE_COMMAND cmp)
+  endif()
+
   file(GLOB baseline_files ${baseline_dir}/*.nc)
   foreach(baseline_file IN LISTS baseline_files)
     get_filename_component(fname ${baseline_file} NAME)
     message(STATUS "Comparing ${fname}")
     execute_process(
-      COMMAND cmp ${baseline_file} ${current_dir}/${fname}
+      COMMAND ${COMPARE_COMMAND} ${baseline_file} ${current_dir}/${fname}
       RESULT_VARIABLE CMP_RESULT
       OUTPUT_VARIABLE CMP_OUTPUT
       ERROR_VARIABLE CMP_OUTPUT
