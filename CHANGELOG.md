@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-- In `esma_regression_run_helpers.cmake`, `compare_results()` now uses `nccmp -dmfgsB` (with optional `--nans-are-equal` and `--tolerance`) if `nccmp` is available, falling back to `cmp`.
+- Extended `esma_regression_run_helpers.cmake` with `compare_netcdf_files()` for individual NetCDF comparisons. `compare_results()` delegates to this helper, recognizes both `.nc` and `.nc4` files, and supports absolute and relative `nccmp` tolerances with optional joined-tolerance semantics; existing `TOLERANCE` behavior remains absolute for compatibility.
+- Added an optional `LABELS` argument to `esma_add_regression_tests()` so components can preserve their own CTest labels alongside `REGRESSION`.
 
 ### Deprecated
 

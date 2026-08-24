@@ -9,6 +9,7 @@
 #     DATA_PATH  <rel-path>     # relative path under regression-data/
 #     TEST_CASES <case> ...     # list of test case names to register
 #     [EXTRA_ENV VAR=val ...]   # additional environment variables for tests
+#     [LABELS label ...]        # additional CTest labels
 #   )
 
 # Capture the directory of this file at include time so the macro can
@@ -16,7 +17,7 @@
 set(_ESMA_REGRESSION_TESTS_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 macro(esma_add_regression_tests)
-  cmake_parse_arguments(_REG "" "NAME;DATA_PATH" "TEST_CASES;EXTRA_ENV" ${ARGN})
+  cmake_parse_arguments(_REG "" "NAME;DATA_PATH" "TEST_CASES;EXTRA_ENV;LABELS" ${ARGN})
 
   if(NOT _REG_NAME)
     message(FATAL_ERROR "esma_add_regression_tests: NAME is required")
@@ -82,7 +83,7 @@ macro(esma_add_regression_tests)
         -P ${CMAKE_CURRENT_SOURCE_DIR}/run_case.cmake
     )
     set_tests_properties("${TEST_CASE}" PROPERTIES
-      LABELS "REGRESSION"
+      LABELS "REGRESSION;${_REG_LABELS}"
       ENVIRONMENT "${_REG_ENV}"
       FIXTURES_REQUIRED ${_REG_NAME}_regression_data
     )
