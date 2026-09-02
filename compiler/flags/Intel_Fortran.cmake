@@ -43,7 +43,6 @@ set (FTZ "-ftz")
 set (NO_PREC_DIV "-no-prec-div")
 set (USE_SVML "-fimf-use-svml=true ")
 
-set (IPO "-ipo")
 set (FMA "-fma")
 set (NO_FMA "-no-fma")
 set (FREAL8 "-r8")
@@ -208,7 +207,7 @@ set (GEOS_Fortran_Aggressive_FPE_Flags
 # Fast is speed-first and is not expected to reproduce layout, start/stop, or
 # OpenMP regressions. Keep FP source/consistent constraints out intentionally.
 set (GEOS_Fortran_Fast_Flags
-     "${FOPT3} ${IPO} ${COREAVX2_FLAG} ${ALIGN_ALL} ${ARRAY_ALIGN_32BYTE} ${HEAPARRAYS}")
+     "${FOPT3} ${COREAVX2_FLAG} ${ALIGN_ALL} ${ARRAY_ALIGN_32BYTE} ${HEAPARRAYS}")
 set (GEOS_Fortran_Fast_FPE_Flags
      "${FP_FAST2} ${FP_SPECULATION_FAST} ${FMA} ${USE_SVML} ${FTZ} ${NO_PREC_DIV} ${FPE3} ${common_Fortran_fpe_flags}")
 
