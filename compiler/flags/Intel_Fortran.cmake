@@ -205,6 +205,13 @@ set (GEOS_Fortran_Aggressive_Flags
 set (GEOS_Fortran_Aggressive_FPE_Flags
      "${FP_FAST2} ${FP_SOURCE} ${FP_CONSISTENT} ${FMA} ${USE_SVML} ${FPE3} ${common_Fortran_fpe_flags}")
 
+# Fast is speed-first and is not expected to reproduce layout, start/stop, or
+# OpenMP regressions. Keep FP source/consistent constraints out intentionally.
+set (GEOS_Fortran_Fast_Flags
+     "${FOPT3} ${IPO} ${COREAVX2_FLAG} ${ALIGN_ALL} ${ARRAY_ALIGN_32BYTE} ${HEAPARRAYS}")
+set (GEOS_Fortran_Fast_FPE_Flags
+     "${FP_FAST2} ${FP_SPECULATION_FAST} ${FMA} ${USE_SVML} ${FTZ} ${NO_PREC_DIV} ${FPE3} ${common_Fortran_fpe_flags}")
+
 # Set Release flags
 # -----------------
 set (GEOS_Fortran_Release_Flags  "${GEOS_Fortran_Vect_Flags}")

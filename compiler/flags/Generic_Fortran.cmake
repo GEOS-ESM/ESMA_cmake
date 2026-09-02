@@ -4,11 +4,18 @@ set (GEOS_Fortran_FLAGS_VECT        "${GEOS_Fortran_Vect_Flags} ${common_Fortran
 set (GEOS_Fortran_FLAGS_NOVECT      "${GEOS_Fortran_NoVect_Flags} ${common_Fortran_flags} ${GEOS_Fortran_NoVect_FPE_Flags} ${ALIGNCOM}")
 set (GEOS_Fortran_FLAGS_VECTTRAP    "${GEOS_Fortran_VectTrap_Flags} ${common_Fortran_flags} ${GEOS_Fortran_VectTrap_FPE_Flags} ${ALIGNCOM}")
 set (GEOS_Fortran_FLAGS_AGGRESSIVE  "${GEOS_Fortran_Aggressive_Flags} ${common_Fortran_flags} ${GEOS_Fortran_Aggressive_FPE_Flags} ${ALIGNCOM}")
+# Compilers without a dedicated speed-first profile retain their Aggressive flags.
+if (NOT DEFINED GEOS_Fortran_Fast_Flags)
+  set (GEOS_Fortran_Fast_Flags "${GEOS_Fortran_Aggressive_Flags}")
+  set (GEOS_Fortran_Fast_FPE_Flags "${GEOS_Fortran_Aggressive_FPE_Flags}")
+endif ()
+set (GEOS_Fortran_FLAGS_FAST "${GEOS_Fortran_Fast_Flags} ${common_Fortran_flags} ${GEOS_Fortran_Fast_FPE_Flags} ${ALIGNCOM}")
 
 set (CMAKE_Fortran_FLAGS_DEBUG      "${GEOS_Fortran_FLAGS_DEBUG}"      CACHE STRING "Debug Fortran flags"      FORCE )
 set (CMAKE_Fortran_FLAGS_RELEASE    "${GEOS_Fortran_FLAGS_RELEASE}"    CACHE STRING "Release Fortran flags"    FORCE )
 set (CMAKE_Fortran_FLAGS_VECTTRAP   "${GEOS_Fortran_FLAGS_VECTTRAP}"   CACHE STRING "VectTrap Fortran flags"   FORCE )
 set (CMAKE_Fortran_FLAGS_AGGRESSIVE "${GEOS_Fortran_FLAGS_AGGRESSIVE}" CACHE STRING "Aggressive Fortran flags" FORCE )
+set (CMAKE_Fortran_FLAGS_FAST       "${GEOS_Fortran_FLAGS_FAST}"       CACHE STRING "Fast Fortran flags"       FORCE )
 
 # Coverage build type: gcov/lcov instrumentation.
 # --coverage is a GCC-specific flag (shorthand for -fprofile-arcs -ftest-coverage).

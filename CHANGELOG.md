@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add the `Fast` `CMAKE_BUILD_TYPE`. For Intel `ifort` and IntelLLVM `ifx`, it is a speed-first profile with IPO, relaxed floating-point semantics, FMA, SVML, flush-to-zero, and relaxed division. It is intentionally not qualified to pass layout, start/stop, or OpenMP regression tests. Other compilers currently map it to their `Aggressive` flags.
+
 ### Changed
 - In `esma_regression_run_helpers.cmake`, `compare_results()` now uses `nccmp -dmfgsB` (with optional `--nans-are-equal` and `--tolerance`) if `nccmp` is available, falling back to `cmp`.
 
