@@ -8,6 +8,13 @@ try_fortran_compile(
   ${CMAKE_CURRENT_LIST_DIR}/findloc.F90
   FORTRAN_COMPILER_SUPPORTS_FINDLOC
   )
+try_fortran_compile(
+  ${CMAKE_CURRENT_LIST_DIR}/quad_precision.F90
+  FORTRAN_COMPILER_SUPPORTS_QUAD_PRECISION
+  )
+if (NOT FORTRAN_COMPILER_SUPPORTS_QUAD_PRECISION)
+  add_definitions(-DNO_R16 -DNO_QUAD_PRECISION)
+endif ()
 
 # We also need to do something if we are using Intel Fortran Classic
 # Namely, we need to know if when we run just plain 'ifort' if
