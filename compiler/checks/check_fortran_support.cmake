@@ -8,11 +8,15 @@ try_fortran_compile(
   ${CMAKE_CURRENT_LIST_DIR}/findloc.F90
   FORTRAN_COMPILER_SUPPORTS_FINDLOC
   )
+# Check if compiler supports 128-bit quad precision (selected_real_kind(33, 4931)).
+# If not supported (e.g. LLVM Flang), define NO_R16 (used by CICE) and
+# NO_QUAD_PRECISION (used by FVdycore) so they fall back to 64-bit precision.
 try_fortran_compile(
   ${CMAKE_CURRENT_LIST_DIR}/quad_precision.F90
   FORTRAN_COMPILER_SUPPORTS_QUAD_PRECISION
   )
 if (NOT FORTRAN_COMPILER_SUPPORTS_QUAD_PRECISION)
+  # NO_R16 is used by CICE/Icepack; NO_QUAD_PRECISION is used by FVdycore
   add_definitions(-DNO_R16 -DNO_QUAD_PRECISION)
 endif ()
 
