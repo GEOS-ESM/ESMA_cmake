@@ -69,21 +69,6 @@ endif()
 # not, as the signal that FMS is required.
 if(DEFINED FV_PRECISION)
   find_package(FMS REQUIRED)
-
-  # FMS versions before 2026.01 do not export libyaml as a dependency in
-  # fms-config.cmake. Probe for the YAML module so that we add libyaml only
-  # when the external FMS was built with YAML support.
-  include(check_fms_yaml_support)
-  check_fms_yaml_support(FMS_BUILT_WITH_YAML)
-  if(FMS_BUILT_WITH_YAML)
-    find_package(libyaml REQUIRED)
-    message(STATUS "LIBYAML_INCLUDE_DIR: ${LIBYAML_INCLUDE_DIR}")
-    message(STATUS "LIBYAML_LIBRARIES: ${LIBYAML_LIBRARIES}")
-    if(TARGET FMS::fms)
-      target_link_libraries(FMS::fms INTERFACE ${LIBYAML_LIBRARIES})
-      message(STATUS "Linking libyaml into FMS::fms")
-    endif()
-  endif()
 endif()
 
 find_package(MAPL 2.70 QUIET)

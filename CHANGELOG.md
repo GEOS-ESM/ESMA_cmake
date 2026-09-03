@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Preserve Baselibs' legacy `NETCDF_LIBRARIES` after finding FMS so f2py and f2py3 modules continue to link NetCDF-Fortran and its static dependencies.
+
 ### Removed
 
+- Removed the FMS YAML compile probe, `Findlibyaml.cmake`, and manual libyaml linkage; FMS 2026.01 and newer export YAML transitively through their CMake package.
 ### Added
 
 ### Changed
+- `ConfigureBaselibs.cmake` now uses FMS's installed CMake config package instead of constructing `FMS::fms` manually, allowing its exported dependencies, including YAML, to propagate to consumers.
 - In `esma_regression_run_helpers.cmake`, `compare_results()` now uses `nccmp -dmfgsB` (with optional `--nans-are-equal` and `--tolerance`) if `nccmp` is available, falling back to `cmp`.
 
 ### Deprecated
