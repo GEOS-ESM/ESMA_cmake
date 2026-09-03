@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Preserve Baselibs' legacy `NETCDF_LIBRARIES` after finding FMS so f2py and f2py3 modules continue to link NetCDF-Fortran and its static dependencies.
 - In `ConfigureBaselibs.cmake`, support Baselibs installations on platforms like macOS (Darwin) that install FMS CMake configuration files into `lib/cmake/fms` in addition to `lib64/cmake/fms`.
 - In `math_libraries.cmake`, default `BLA_VENDOR` to `Generic` on Apple platforms if unset, using the system SDK's `libblas`/`liblapack` to avoid unsupported framework compiler flags with LLVM Flang and prevent CMake from querying NVPL and triggering case-mismatch author warnings on case-insensitive filesystems.
+- In `compiler/flags/LLVMFlang_Fortran.cmake`, use `-mcpu=apple-m1` instead of `-march=apple-m1` for Apple M processors, since LLVM Flang on AArch64 requires CPU names to be passed via `-mcpu=` rather than `-march=`.
 
 ### Removed
 
