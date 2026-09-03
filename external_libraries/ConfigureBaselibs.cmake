@@ -292,11 +292,22 @@ link_directories (${BASEDIR}/lib)
     set(${PROJECT_NAME}_NetCDF_C_FOUND TRUE)
     set(${PROJECT_NAME}_NetCDF_Fortran_FOUND TRUE)
     set(NetCDF_FOUND TRUE)
-    list(PREPEND CMAKE_MODULE_PATH "${BASEDIR}/FMS/lib64/cmake/fms")
+    if (EXISTS "${BASEDIR}/FMS/lib64/cmake/fms")
+      set(_FMS_CMAKE_DIR "${BASEDIR}/FMS/lib64/cmake/fms")
+    elseif (EXISTS "${BASEDIR}/FMS/lib/cmake/fms")
+      set(_FMS_CMAKE_DIR "${BASEDIR}/FMS/lib/cmake/fms")
+    endif ()
+
+    if (_FMS_CMAKE_DIR)
+      list(PREPEND CMAKE_MODULE_PATH "${_FMS_CMAKE_DIR}")
+    endif ()
     find_package(FMS CONFIG REQUIRED
-      PATHS "${BASEDIR}/FMS/lib64/cmake/fms"
+      PATHS "${BASEDIR}/FMS/lib64/cmake/fms" "${BASEDIR}/FMS/lib/cmake/fms"
       NO_DEFAULT_PATH)
-    list(REMOVE_ITEM CMAKE_MODULE_PATH "${BASEDIR}/FMS/lib64/cmake/fms")
+    if (_FMS_CMAKE_DIR)
+      list(REMOVE_ITEM CMAKE_MODULE_PATH "${_FMS_CMAKE_DIR}")
+      unset(_FMS_CMAKE_DIR)
+    endif ()
 
     # FMS's FindNetCDF module clears this legacy variable after it observes
     # the targets above.  f2py still uses it to construct its link line.

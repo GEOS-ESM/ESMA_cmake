@@ -10,6 +10,8 @@ if (MKL_FOUND)
    ecbuild_info("  MKL_LIBRARIES: ${MKL_LIBRARIES}")
 
    set(BLA_VENDOR Intel10_64lp_seq)
+elseif (APPLE AND (NOT DEFINED BLA_VENDOR OR BLA_VENDOR STREQUAL "" OR BLA_VENDOR STREQUAL "Apple"))
+   set(BLA_VENDOR "Generic" CACHE STRING "Selected BLAS/LAPACK vendor" FORCE)
 endif ()
 
 find_package(LAPACK)
