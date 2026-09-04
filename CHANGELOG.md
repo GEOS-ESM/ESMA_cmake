@@ -7,22 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+### Added
 
-- In `math_libraries.cmake`, default `BLA_VENDOR` to `Generic` on Apple platforms if unset, using the system SDK's `libblas`/`liblapack` to avoid unsupported framework compiler flags with LLVM Flang and prevent CMake from querying NVPL and triggering case-mismatch author warnings on case-insensitive filesystems.
-- In `compiler/flags/LLVMFlang_Fortran.cmake`, use `-mcpu=apple-m1` instead of `-march=apple-m1` for Apple M processors, since LLVM Flang on AArch64 requires CPU names to be passed via `-mcpu=` rather than `-march=`.
-- In `compiler/flags/LLVMFlang_Fortran.cmake`, omit `-fstack-arrays` from `GEOS_Fortran_Release_Flags` to allow Flang's default heap allocation for array temporaries, preventing stack overflows in routines with large automatic arrays (especially on platforms like macOS with fixed stack size limits).
+### Changed
+
+### Deprecated
 
 ### Removed
+
+### Fixed
+
+### Security
+
+## [4.45.0] - 2026-09-04
 
 ### Added
 
 - In `compiler/checks/check_fortran_support.cmake`, test for Fortran quad-precision floating point support (`FORTRAN_COMPILER_SUPPORTS_QUAD_PRECISION`). If unsupported (such as with LLVM Flang), globally define `-DNO_R16 -DNO_QUAD_PRECISION` so components like CICE and FVdycore automatically fall back to 64-bit precision.
 
 ### Changed
+
 - In `esma_regression_run_helpers.cmake`, `compare_results()` now uses `nccmp -dmfgsB` (with optional `--nans-are-equal` and `--tolerance`) if `nccmp` is available, falling back to `cmp`.
 
-### Deprecated
+### Fixed
+
+- In `math_libraries.cmake`, default `BLA_VENDOR` to `Generic` on Apple platforms if unset, using the system SDK's `libblas`/`liblapack` to avoid unsupported framework compiler flags with LLVM Flang and prevent CMake from querying NVPL and triggering case-mismatch author warnings on case-insensitive filesystems.
+- In `compiler/flags/LLVMFlang_Fortran.cmake`, use `-mcpu=apple-m1` instead of `-march=apple-m1` for Apple M processors, since LLVM Flang on AArch64 requires CPU names to be passed via `-mcpu=` rather than `-march=`.
+- In `compiler/flags/LLVMFlang_Fortran.cmake`, omit `-fstack-arrays` from `GEOS_Fortran_Release_Flags` to allow Flang's default heap allocation for array temporaries, preventing stack overflows in routines with large automatic arrays (especially on platforms like macOS with fixed stack size limits).
 
 ## [4.44.0] - 2026-08-17
 
