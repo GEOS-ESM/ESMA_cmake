@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [5.17.0] - 2026-09-04
+
+### Added
+
+- In `compiler/checks/check_fortran_support.cmake`, test for Fortran quad-precision floating point support (`FORTRAN_COMPILER_SUPPORTS_QUAD_PRECISION`). If unsupported (such as with LLVM Flang), globally define `-DNO_R16 -DNO_QUAD_PRECISION` so components like CICE and FVdycore automatically fall back to 64-bit precision.
+
+### Changed
+
+- `ConfigureBaselibs.cmake` now uses FMS's installed CMake config package instead of constructing `FMS::fms` manually, allowing its exported dependencies, including YAML, to propagate to consumers.
+- In `esma_regression_run_helpers.cmake`, `compare_results()` now uses `nccmp -dmfgsB` (with optional `--nans-are-equal` and `--tolerance`) if `nccmp` is available, falling back to `cmp`.
+
+### Removed
+
+- Removed the FMS YAML compile probe, `Findlibyaml.cmake`, and manual libyaml linkage; FMS 2026.01 and newer export YAML transitively through their CMake package.
+
 ### Fixed
 
 - Preserve Baselibs' legacy `NETCDF_LIBRARIES` after finding FMS so f2py and f2py3 modules continue to link NetCDF-Fortran and its static dependencies.
@@ -14,19 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In `math_libraries.cmake`, default `BLA_VENDOR` to `Generic` on Apple platforms if unset, using the system SDK's `libblas`/`liblapack` to avoid unsupported framework compiler flags with LLVM Flang and prevent CMake from querying NVPL and triggering case-mismatch author warnings on case-insensitive filesystems.
 - In `compiler/flags/LLVMFlang_Fortran.cmake`, use `-mcpu=apple-m1` instead of `-march=apple-m1` for Apple M processors, since LLVM Flang on AArch64 requires CPU names to be passed via `-mcpu=` rather than `-march=`.
 - In `compiler/flags/LLVMFlang_Fortran.cmake`, omit `-fstack-arrays` from `GEOS_Fortran_Release_Flags` to allow Flang's default heap allocation for array temporaries, preventing stack overflows in routines with large automatic arrays (especially on platforms like macOS with fixed stack size limits).
-
-### Removed
-
-- Removed the FMS YAML compile probe, `Findlibyaml.cmake`, and manual libyaml linkage; FMS 2026.01 and newer export YAML transitively through their CMake package.
-### Added
-
-- In `compiler/checks/check_fortran_support.cmake`, test for Fortran quad-precision floating point support (`FORTRAN_COMPILER_SUPPORTS_QUAD_PRECISION`). If unsupported (such as with LLVM Flang), globally define `-DNO_R16 -DNO_QUAD_PRECISION` so components like CICE and FVdycore automatically fall back to 64-bit precision.
-
-### Changed
-- `ConfigureBaselibs.cmake` now uses FMS's installed CMake config package instead of constructing `FMS::fms` manually, allowing its exported dependencies, including YAML, to propagate to consumers.
-- In `esma_regression_run_helpers.cmake`, `compare_results()` now uses `nccmp -dmfgsB` (with optional `--nans-are-equal` and `--tolerance`) if `nccmp` is available, falling back to `cmp`.
-
-### Deprecated
 
 ## [5.16.0] - 2026-08-17
 
