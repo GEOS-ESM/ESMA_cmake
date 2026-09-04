@@ -283,48 +283,36 @@ link_directories (${BASEDIR}/lib)
   if (DEFINED FV_PRECISION)
     message(STATUS "Looking for FMS")
 
-    # - fms
-    # Use find_path and find_library to find the include and library
-    find_path(FMS_INCLUDE_DIR NAMES fms.mod PATHS ${BASEDIR}/FMS/include)
-    find_library(FMS_LIBRARIES NAMES fms PATHS ${BASEDIR}/FMS/lib ${BASEDIR}/FMS/lib64)
-    # We also need the path of where the library is for the INTERFACE_LINK_DIRECTORIES
-    get_filename_component(FMS_LIBRARIES_DIR ${FMS_LIBRARIES} DIRECTORY)
-    add_library(FMS::fms STATIC IMPORTED)
-    set_target_properties(FMS::fms PROPERTIES
-      IMPORTED_LOCATION ${FMS_LIBRARIES}
-      INCLUDE_DIRECTORIES "${FMS_INCLUDE_DIR}"
-      INTERFACE_INCLUDE_DIRECTORIES "${FMS_INCLUDE_DIR}"
-      INTERFACE_LINK_LIBRARIES  "NetCDF::NetCDF_Fortran;MPI::MPI_Fortran"
-      INTERFACE_LINK_DIRECTORIES "${FMS_LIBRARIES_DIR}"
-    )
-
-    # Probe whether FMS was built with YAML support by attempting to compile
-    # a small Fortran file that uses yaml_parser_mod from FMS.
-    # NOTE: As of FMS 2026.01 (NOAA-GFDL/FMS#1822), FMS exports libyaml as a
-    # proper dependency in fms-config.cmake via find_dependency, so the probe,
-    # find_package(libyaml), and target_link_libraries calls below can all be
-    # removed once we move to FMS 2026.01 or later.
-    include(check_fms_yaml_support)
-    check_fms_yaml_support(FMS_BUILT_WITH_YAML)
-    if (FMS_BUILT_WITH_YAML)
-      find_package(libyaml REQUIRED)
-      message(STATUS "LIBYAML_INCLUDE_DIR: ${LIBYAML_INCLUDE_DIR}")
-      message(STATUS "LIBYAML_LIBRARIES: ${LIBYAML_LIBRARIES}")
-      target_link_libraries(FMS::fms INTERFACE ${LIBYAML_LIBRARIES})
+    # fms-config.cmake supplies a FindNetCDF.cmake compatible with the
+    # Baselibs NetCDF installation. It appends that directory, so prioritize
+    # it over ESMA_cmake's older module while resolving FMS dependencies.
+    # The Baselibs targets above already provide both requested NetCDF
+    # components; record that for FMS's FindNetCDF module to avoid replacing
+    # their static-library link information.
+    set(${PROJECT_NAME}_NetCDF_C_FOUND TRUE)
+    set(${PROJECT_NAME}_NetCDF_Fortran_FOUND TRUE)
+    set(NetCDF_FOUND TRUE)
+    if (EXISTS "${BASEDIR}/FMS/lib64/cmake/fms")
+      set(_FMS_CMAKE_DIR "${BASEDIR}/FMS/lib64/cmake/fms")
+    elseif (EXISTS "${BASEDIR}/FMS/lib/cmake/fms")
+      set(_FMS_CMAKE_DIR "${BASEDIR}/FMS/lib/cmake/fms")
     endif ()
-    # We will set FMS_FOUND if both FMS_LIBRARIES and FMS_INCLUDE_DIR are found
-    # and are valid files and directories respectively
-    if (EXISTS ${FMS_LIBRARIES} AND IS_DIRECTORY ${FMS_INCLUDE_DIR})
-      message(STATUS "Found FMS::fms: ${FMS_LIBRARIES}")
-      message(STATUS "FMS::fms include directory: ${FMS_INCLUDE_DIR}")
-      set(FMS_FOUND TRUE CACHE BOOL "fms Found" FORCE)
-    else ()
-      message(FATAL_ERROR "FMS::fms not found")
-    endif()
 
-    if (FMS_FOUND)
-      set (FMS_DIR ${BASEDIR}/FMS CACHE PATH "Path to FMS" FORCE)
+    if (_FMS_CMAKE_DIR)
+      list(PREPEND CMAKE_MODULE_PATH "${_FMS_CMAKE_DIR}")
     endif ()
+    find_package(FMS CONFIG REQUIRED
+      PATHS "${BASEDIR}/FMS/lib64/cmake/fms" "${BASEDIR}/FMS/lib/cmake/fms"
+      NO_DEFAULT_PATH)
+    if (_FMS_CMAKE_DIR)
+      list(REMOVE_ITEM CMAKE_MODULE_PATH "${_FMS_CMAKE_DIR}")
+      unset(_FMS_CMAKE_DIR)
+    endif ()
+
+    # FMS's FindNetCDF module clears this legacy variable after it observes
+    # the targets above.  f2py still uses it to construct its link line.
+    set(NETCDF_LIBRARIES ${NETCDF_LIBRARIES_OLD})
+    list(APPEND NETCDF_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
   endif()
 
   # BASEDIR.rc file does not have the arch
