@@ -35,6 +35,11 @@ set (ARCH_CONSISTENCY "")
 set (FTZ "")
 set (ALIGN_ALL "")
 set (NO_ALIAS "")
+# -fstack-arrays forces all array temporaries onto the stack regardless of size.
+# In GEOS, large automatic arrays in physics/surface routines can cause stack overflows,
+# especially on platforms like macOS with restricted stack size limits.
+# Flang defaults to -fno-stack-arrays (heap allocation), so we do not include
+# STACK_ARRAYS in Release flags.
 set (STACK_ARRAYS "-fstack-arrays")
 
 set (NO_RANGE_CHECK "")
@@ -84,7 +89,9 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
 # ------------
-set (GEOS_Fortran_Release_Flags "${FOPT3} ${FLANG_ARCH_FLAG} -funroll-loops ${STACK_ARRAYS} ${DEBINFO}")
+# Note: ${STACK_ARRAYS} is intentionally omitted to avoid stack overflows from
+# large array temporaries (Flang defaults to heap allocation via -fno-stack-arrays).
+set (GEOS_Fortran_Release_Flags "${FOPT3} ${FLANG_ARCH_FLAG} -funroll-loops ${DEBINFO}")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # Create a NoVectorize version for consistency. No difference from Release for Flang

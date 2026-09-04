@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - In `math_libraries.cmake`, default `BLA_VENDOR` to `Generic` on Apple platforms if unset, using the system SDK's `libblas`/`liblapack` to avoid unsupported framework compiler flags with LLVM Flang and prevent CMake from querying NVPL and triggering case-mismatch author warnings on case-insensitive filesystems.
 - In `compiler/flags/LLVMFlang_Fortran.cmake`, use `-mcpu=apple-m1` instead of `-march=apple-m1` for Apple M processors, since LLVM Flang on AArch64 requires CPU names to be passed via `-mcpu=` rather than `-march=`.
+- In `compiler/flags/LLVMFlang_Fortran.cmake`, omit `-fstack-arrays` from `GEOS_Fortran_Release_Flags` to allow Flang's default heap allocation for array temporaries, preventing stack overflows in routines with large automatic arrays (especially on platforms like macOS with fixed stack size limits).
 
 ### Removed
 
