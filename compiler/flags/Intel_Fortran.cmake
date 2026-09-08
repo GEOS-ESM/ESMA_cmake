@@ -54,6 +54,22 @@ set (FINT8 "-i8")
 set (OPTREPORT0 "-qopt-report0")
 set (OPTREPORT5 "-qopt-report5")
 
+# Optional IFORT software-prefetch experiments. IFORT disables software
+# prefetching by default. Uncomment exactly one level when benchmarking Fast.
+# Recommended testing order (benchmark Cascade Lake and Milan separately):
+#   1. Baseline: leave QOPT_PREFETCH empty
+#   2. -qopt-prefetch=2
+#   3. -qopt-prefetch=1
+#   4. -qopt-prefetch=3
+# Expected usefulness:
+#   HIGH:   Baseline without -heap-arrays (already applied below)
+#   MEDIUM: -qopt-prefetch=2
+#   LOW:    -qopt-prefetch=1 or =3 (architecture-sensitive exploration)
+set (QOPT_PREFETCH "")
+#set (QOPT_PREFETCH "-qopt-prefetch=1")
+#set (QOPT_PREFETCH "-qopt-prefetch=2")
+#set (QOPT_PREFETCH "-qopt-prefetch=3")
+
 # ----------------------------------------------------------------------
 # Portability / source format
 # ----------------------------------------------------------------------
@@ -206,8 +222,10 @@ set (GEOS_Fortran_Aggressive_FPE_Flags
 
 # Fast is speed-first and is not expected to reproduce layout, start/stop, or
 # OpenMP regressions. Keep FP source/consistent constraints out intentionally.
+# Keep the baseline free of -heap-arrays: moving automatic and temporary arrays
+# to the heap can add allocation overhead in frequently called routines.
 set (GEOS_Fortran_Fast_Flags
-     "${FOPT3} ${COREAVX2_FLAG} ${ALIGN_ALL} ${ARRAY_ALIGN_32BYTE} ${HEAPARRAYS}")
+     "${FOPT3} ${COREAVX2_FLAG} ${ARRAY_ALIGN_32BYTE} ${QOPT_PREFETCH}")
 set (GEOS_Fortran_Fast_FPE_Flags
      "${FP_FAST2} ${FP_SPECULATION_FAST} ${FMA} ${USE_SVML} ${FTZ} ${NO_PREC_DIV} ${FPE3} ${common_Fortran_fpe_flags}")
 
