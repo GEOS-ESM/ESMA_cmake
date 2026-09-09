@@ -35,6 +35,11 @@ set (ARCH_CONSISTENCY "")
 set (FTZ "")
 set (ALIGN_ALL "")
 set (NO_ALIAS "")
+# -fstack-arrays forces all array temporaries onto the stack regardless of size.
+# In GEOS, large automatic arrays in physics/surface routines can cause stack overflows,
+# especially on platforms like macOS with restricted stack size limits.
+# Flang defaults to -fno-stack-arrays (heap allocation), so we do not include
+# STACK_ARRAYS in Release flags.
 set (STACK_ARRAYS "-fstack-arrays")
 
 set (NO_RANGE_CHECK "")
@@ -56,16 +61,16 @@ set(NO_FMA "-ffp-contract=off")
 cmake_host_system_information(RESULT proc_description QUERY PROCESSOR_DESCRIPTION)
 
 if ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL aarch64 )
-  set (FLANG_TARGET_ARCH "armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
+  set (FLANG_ARCH_FLAG "-march=armv8.2-a+crypto+crc+fp16+rcpc+dotprod")
 elseif (${proc_description} MATCHES "Apple M")
-  set (FLANG_TARGET_ARCH "apple-m1")
+  set (FLANG_ARCH_FLAG "-mcpu=apple-m1")
 elseif (${proc_description} MATCHES "EPYC")
-  set (FLANG_TARGET_ARCH "znver2")
+  set (FLANG_ARCH_FLAG "-march=znver2")
 elseif (${proc_description} MATCHES "Intel|INTEL")
-  set (FLANG_TARGET_ARCH "haswell")
+  set (FLANG_ARCH_FLAG "-march=haswell")
 elseif ( ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
   message(WARNING "Unknown processor type. Defaulting to a generic x86_64 processor. Performance may be suboptimal.")
-  set (FLANG_TARGET_ARCH "x86-64")
+  set (FLANG_ARCH_FLAG "-march=x86-64")
 else ()
   message(FATAL_ERROR "Unknown processor. Please file an issue at https://github.com/GEOS-ESM/ESMA_cmake")
 endif ()
@@ -84,7 +89,9 @@ set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
 # ------------
-set (GEOS_Fortran_Release_Flags "${FOPT3} -march=${FLANG_TARGET_ARCH} -funroll-loops ${STACK_ARRAYS} ${DEBINFO}")
+# Note: ${STACK_ARRAYS} is intentionally omitted to avoid stack overflows from
+# large array temporaries (Flang defaults to heap allocation via -fno-stack-arrays).
+set (GEOS_Fortran_Release_Flags "${FOPT3} ${FLANG_ARCH_FLAG} -funroll-loops ${DEBINFO}")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # Create a NoVectorize version for consistency. No difference from Release for Flang
