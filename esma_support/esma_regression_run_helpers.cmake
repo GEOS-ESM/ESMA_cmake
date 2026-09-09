@@ -28,8 +28,14 @@ function(copy_file source destination)
 endfunction()
 
 function(run_geos num_procs case_name expdir)
+  if(EXISTS ${expdir}/mapl.yaml)
+    set(config_file mapl.yaml)
+  else()
+    set(config_file cap.yaml)
+  endif()
+
   execute_process(
-    COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${num_procs} ${MPIEXEC_PREFLAGS} ${MY_BINARY_DIR}/GEOS.x cap.yaml
+    COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${num_procs} ${MPIEXEC_PREFLAGS} ${MY_BINARY_DIR}/GEOS.x ${config_file}
     RESULT_VARIABLE CMD_RESULT
     WORKING_DIRECTORY ${expdir}
     COMMAND_ECHO STDOUT

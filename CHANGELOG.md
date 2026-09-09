@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Changes to use the split CAP.yaml linked to MAPL PR #5371 and Issue #5355
 
 ### Deprecated
 
