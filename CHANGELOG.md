@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Promote the validated IntelLLVM (`ifx`) Aggressive flags to Release, and promote the previous speed-first profile to Aggressive. The `Fast` `CMAKE_BUILD_TYPE` has been removed.
+- Changes to use the split CAP.yaml linked to MAPL PR #5371 and Issue #5355
 
 ### Deprecated
 
