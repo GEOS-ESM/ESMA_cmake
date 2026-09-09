@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [4.46.0] - 2026-09-09
+
+### Changed
+
+- Updated `Release` and `Aggressive` IntelLLVM (`ifx`) flags after testing
+- Changes to use the split CAP.yaml linked to MAPL PR #5371 and Issue #5355
+
 ## [4.45.0] - 2026-09-04
 
 ### Added
@@ -27,8 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Promote the validated IntelLLVM (`ifx`) Aggressive flags to Release, and promote the previous speed-first profile to Aggressive. The `Fast` `CMAKE_BUILD_TYPE` has been removed.
-- Changes to use the split CAP.yaml linked to MAPL PR #5371 and Issue #5355
 - In `esma_regression_run_helpers.cmake`, `compare_results()` now uses `nccmp -dmfgsB` (with optional `--nans-are-equal` and `--tolerance`) if `nccmp` is available, falling back to `cmp`.
 
 ### Fixed
