@@ -58,6 +58,58 @@ set (OPTREPORT0 "-qopt-report0")
 set (OPTREPORT5 "-qopt-report5")
 
 # ----------------------------------------------------------------------
+# Optional Aggressive tuning experiments
+# ----------------------------------------------------------------------
+# These are intentionally disabled by default. Enable one change at a time and
+# benchmark Cascade Lake and Milan separately before combining useful options.
+# Recommended testing order:
+#   1. Baseline: leave all IFX_AGGRESSIVE variables empty
+#   2. IFX_AGGRESSIVE_THROUGHPUT=single-job (for exclusive-node runs)
+#   3. Add IFX_AGGRESSIVE_DYNAMIC_ALIGN to the best result so far
+#   4. Test IFX_AGGRESSIVE_MEM_LAYOUT=1, then =2, one at a time
+#   5. Test IFX_AGGRESSIVE_PREFETCH=1, =3, then no prefetch, one at a time
+#   6. Test IFX_AGGRESSIVE_VEC_THRESHOLD=50, then =0, one at a time
+# Retest any winning combination on both processor families. Use
+# throughput=multi-job instead in step 2 only when independent jobs share nodes.
+# Expected usefulness:
+#   HIGH:   throughput=single-job, dynamic alignment
+#   MEDIUM: memory-layout transformations (level 1 before level 2)
+#   LOW:    nondefault prefetch levels and lower vectorization thresholds
+# The LOW group is still worth measuring, but is more likely to vary between
+# Cascade Lake and Milan or regress code whose default cost model is correct.
+
+# Tune loop tiling, memory use, and prefetching for how jobs occupy a node.
+# Use single-job for an exclusive-node run; use multi-job when jobs share nodes.
+set (IFX_AGGRESSIVE_THROUGHPUT "")
+#set (IFX_AGGRESSIVE_THROUGHPUT "-qopt-for-throughput=single-job")
+#set (IFX_AGGRESSIVE_THROUGHPUT "-qopt-for-throughput=multi-job")
+
+# Generate aligned and unaligned loop versions when alignment is not known at
+# compile time. This can help long vectorized loops, at the cost of code size.
+set (IFX_AGGRESSIVE_DYNAMIC_ALIGN "")
+#set (IFX_AGGRESSIVE_DYNAMIC_ALIGN "-qopt-dynamic-align")
+
+# Try cache-locality transformations. Levels 3 and 4 are deliberately omitted
+# because their more aggressive copy-in/copy-out transformations can use a
+# substantial amount of memory per core.
+set (IFX_AGGRESSIVE_MEM_LAYOUT "")
+#set (IFX_AGGRESSIVE_MEM_LAYOUT "-qopt-mem-layout-trans=1")
+#set (IFX_AGGRESSIVE_MEM_LAYOUT "-qopt-mem-layout-trans=2")
+
+# IFX uses -qopt-prefetch=2 by default at -O2 and above. These alternatives test
+# whether less, more, or no compiler-generated prefetching suits the workload.
+set (IFX_AGGRESSIVE_PREFETCH "")
+#set (IFX_AGGRESSIVE_PREFETCH "-qopt-prefetch=1")
+#set (IFX_AGGRESSIVE_PREFETCH "-qopt-prefetch=3")
+#set (IFX_AGGRESSIVE_PREFETCH "-qno-opt-prefetch")
+
+# IFX defaults to -vec-threshold100. Lower values vectorize loops whose benefit
+# is less certain; try 50 before the fully aggressive setting of zero.
+set (IFX_AGGRESSIVE_VEC_THRESHOLD "")
+#set (IFX_AGGRESSIVE_VEC_THRESHOLD "-vec-threshold50")
+#set (IFX_AGGRESSIVE_VEC_THRESHOLD "-vec-threshold0")
+
+# ----------------------------------------------------------------------
 # Portability / source format
 # ----------------------------------------------------------------------
 set(PP "-fpp") # default for all other versions
@@ -204,32 +256,25 @@ set (GEOS_Fortran_VectTrap_Flags
 set (GEOS_Fortran_VectTrap_FPE_Flags
   "${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE0} -check uninit ${common_Fortran_fpe_flags}")
 
-# Vectorized
-
-# These flags with fp-model strict and no ARCH_CONSISTENCY are the only flags that
-# currently pass layout regression reliably with ifx 2025.2 and 2025.3. Note:
-# this includes using flags much like our ifort ones with the (now working)
-# -fp-speculation=safe and -fp-speculation=strict options.
-#
-# We used to use -fp-speculation=safe here but ifx throws:
-#   warning #5425: Qualifier 'fp-speculation' conflicts with floating-point mode and will be ignored
-#
-# Testing shows it is zero-diff without the flag, so we remove it to keep noise down
+# Vectorized (legacy stable preset)
 set (GEOS_Fortran_Vect_Flags
   "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE} -prec-div -assume protect_parens")
 set (GEOS_Fortran_Vect_FPE_Flags
   "${FP_STRICT} ${NO_FMA} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# Aggressive (fast math, SVML)
-set (GEOS_Fortran_Aggressive_Flags
+# Release (fast math, SVML; validated for layout, start/stop, and OpenMP)
+set (GEOS_Fortran_Release_Flags
   "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
-set (GEOS_Fortran_Aggressive_FPE_Flags
+set (GEOS_Fortran_Release_FPE_Flags
   "${FP_FAST2} ${FP_SOURCE} ${FP_CONSISTENT} ${FMA} ${USE_SVML} ${FPE3} ${common_Fortran_fpe_flags}")
 
-# Set Release flags
-# -----------------
-set (GEOS_Fortran_Release_Flags  "${GEOS_Fortran_Vect_Flags}")
-set (GEOS_Fortran_Release_FPE_Flags "${GEOS_Fortran_Vect_FPE_Flags}")
+# Aggressive is speed-first and is not expected to reproduce layout, start/stop,
+# or OpenMP regressions. Keep FP source/consistent constraints out intentionally.
+set (GEOS_Fortran_Aggressive_Flags
+  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE} ${IFX_AGGRESSIVE_THROUGHPUT} ${IFX_AGGRESSIVE_DYNAMIC_ALIGN} ${IFX_AGGRESSIVE_MEM_LAYOUT} ${IFX_AGGRESSIVE_PREFETCH} ${IFX_AGGRESSIVE_VEC_THRESHOLD}")
+set (GEOS_Fortran_Aggressive_FPE_Flags
+  "${FP_FAST2} ${FP_SPECULATION_FAST} ${FMA} ${USE_SVML} ${FTZ} ${NO_PREC_DIV} ${FPE3} ${common_Fortran_fpe_flags}")
+
 
 # Common variables for every compiler
 include(Generic_Fortran)
