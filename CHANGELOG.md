@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [5.18.0] - 2026-09-09
+
+### Changed
+
+- Updated `Release` and `Aggressive` IntelLLVM (`ifx`) flags after testing
+- Changes to use the split CAP.yaml linked to MAPL PR #5371 and Issue #5355
+
 ## [5.17.0] - 2026-09-04
 
 ### Added
