@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Promote the validated IntelLLVM (`ifx`) Aggressive flags to Release, and promote the previous speed-first profile to Aggressive. The `Fast` `CMAKE_BUILD_TYPE` has been removed.
 
 ### Deprecated
 
