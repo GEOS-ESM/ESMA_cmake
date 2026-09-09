@@ -204,32 +204,25 @@ set (GEOS_Fortran_VectTrap_Flags
 set (GEOS_Fortran_VectTrap_FPE_Flags
   "${FP_PRECISE} ${FP_SOURCE} ${FP_CONSISTENT} ${NO_FMA} ${ARCH_CONSISTENCY} ${FPE0} -check uninit ${common_Fortran_fpe_flags}")
 
-# Vectorized
-
-# These flags with fp-model strict and no ARCH_CONSISTENCY are the only flags that
-# currently pass layout regression reliably with ifx 2025.2 and 2025.3. Note:
-# this includes using flags much like our ifort ones with the (now working)
-# -fp-speculation=safe and -fp-speculation=strict options.
-#
-# We used to use -fp-speculation=safe here but ifx throws:
-#   warning #5425: Qualifier 'fp-speculation' conflicts with floating-point mode and will be ignored
-#
-# Testing shows it is zero-diff without the flag, so we remove it to keep noise down
+# Vectorized (legacy stable preset)
 set (GEOS_Fortran_Vect_Flags
   "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE} -prec-div -assume protect_parens")
 set (GEOS_Fortran_Vect_FPE_Flags
   "${FP_STRICT} ${NO_FMA} ${FPE1} ${common_Fortran_fpe_flags}")
 
-# Aggressive (fast math, SVML)
+# Release (fast math, SVML; validated for layout, start/stop, and OpenMP)
+set (GEOS_Fortran_Release_Flags
+  "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
+set (GEOS_Fortran_Release_FPE_Flags
+  "${FP_FAST2} ${FP_SOURCE} ${FP_CONSISTENT} ${FMA} ${USE_SVML} ${FPE3} ${common_Fortran_fpe_flags}")
+
+# Aggressive is speed-first and is not expected to reproduce layout, start/stop,
+# or OpenMP regressions. Keep FP source/consistent constraints out intentionally.
 set (GEOS_Fortran_Aggressive_Flags
   "${FOPT3} ${MARCH_FLAG} ${ARRAY_ALIGN_32BYTE}")
 set (GEOS_Fortran_Aggressive_FPE_Flags
-  "${FP_FAST2} ${FP_SOURCE} ${FP_CONSISTENT} ${FMA} ${USE_SVML} ${FPE3} ${common_Fortran_fpe_flags}")
+  "${FP_FAST2} ${FP_SPECULATION_FAST} ${FMA} ${USE_SVML} ${FTZ} ${NO_PREC_DIV} ${FPE3} ${common_Fortran_fpe_flags}")
 
-# Set Release flags
-# -----------------
-set (GEOS_Fortran_Release_Flags  "${GEOS_Fortran_Vect_Flags}")
-set (GEOS_Fortran_Release_FPE_Flags "${GEOS_Fortran_Vect_FPE_Flags}")
 
 # Common variables for every compiler
 include(Generic_Fortran)
