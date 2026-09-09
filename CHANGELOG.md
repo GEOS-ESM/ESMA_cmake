@@ -26,8 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In `compiler/checks/check_fortran_support.cmake`, test for Fortran quad-precision floating point support (`FORTRAN_COMPILER_SUPPORTS_QUAD_PRECISION`). If unsupported (such as with LLVM Flang), globally define `-DNO_R16 -DNO_QUAD_PRECISION` so components like CICE and FVdycore automatically fall back to 64-bit precision.
 
 ### Changed
-- Changes to use the split CAP.yaml linked to MAPL PR #5371 and Issue #5355
 
+- Promote the validated IntelLLVM (`ifx`) Aggressive flags to Release, and promote the previous speed-first profile to Aggressive. The `Fast` `CMAKE_BUILD_TYPE` has been removed.
+- Changes to use the split CAP.yaml linked to MAPL PR #5371 and Issue #5355
 - In `esma_regression_run_helpers.cmake`, `compare_results()` now uses `nccmp -dmfgsB` (with optional `--nans-are-equal` and `--tolerance`) if `nccmp` is available, falling back to `cmp`.
 
 ### Fixed
