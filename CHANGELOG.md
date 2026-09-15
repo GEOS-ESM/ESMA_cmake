@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- In `ConfigureBaselibs.cmake`, normalize malformed Apple framework entries
+  exported by affected ESMF CMake packages, avoiding framework names being
+  rewritten as `-l` libraries by newer CMake versions.
+
 ### Security
 
 ## [4.46.0] - 2026-09-09
