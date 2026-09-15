@@ -167,7 +167,13 @@ set (SAVE_TEMPS "-save-temps")
 if (CMAKE_GENERATOR MATCHES "^Ninja")
   set (SAVE_TEMPS "")
 endif ()
-set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} -ffpe-trap=zero,overflow -fcheck=all,no-array-temps -finit-real=snan ${SAVE_TEMPS}")
+set (FPE_TRAP "-ffpe-trap=zero,overflow")
+if (APPLE)
+  # On macOS (especially Apple Silicon ARM64), hardware floating-point trapping
+  # causes C++ libraries like ESMF to abort with SIGILL on IEEE 754 division by zero
+  set (FPE_TRAP "")
+endif ()
+set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} ${FPE_TRAP} -fcheck=all,no-array-temps -finit-real=snan ${SAVE_TEMPS}")
 set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
