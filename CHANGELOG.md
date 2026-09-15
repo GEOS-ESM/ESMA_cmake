@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update GNU Debug flags to omit `-ffpe-trap` on macOS (`APPLE`) to prevent hardware SIGILL crashes in external C++ libraries (such as ESMF) on IEEE 754 division by zero
+- Update NAG Fortran Debug flags to expand `-C=all` and exclude `-C=calls` to prevent runtime interface-check table corruption at certain MAPL call sites
 
 ### Deprecated
 

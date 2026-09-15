@@ -30,7 +30,7 @@ set (common_Fortran_fpe_flags "")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "-O0 -g -C=all") # -C=undefined")
+set (GEOS_Fortran_Debug_Flags "-O0 -g -C=array -C=bits -C=dangling -C=do -C=intovf -C=present -C=pointer -C=recursion") # -C=calls excluded (NAG interface-check tables corrupt at runtime for some MAPL call sites); -C=undefined excluded to match prior -C=all behavior
 set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
