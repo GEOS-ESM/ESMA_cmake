@@ -167,7 +167,7 @@ set (SAVE_TEMPS "-save-temps")
 if (CMAKE_GENERATOR MATCHES "^Ninja")
   set (SAVE_TEMPS "")
 endif ()
-set (FPE_TRAP "-ffpe-trap=zero,overflow")
+set (FPE_TRAP "")
 if (APPLE)
   # On macOS (especially Apple Silicon ARM64), hardware floating-point trapping
   # causes C++ libraries like ESMF to abort with SIGILL on IEEE 754 division by zero
