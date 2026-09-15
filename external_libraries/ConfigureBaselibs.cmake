@@ -103,6 +103,24 @@ link_directories (${BASEDIR}/lib)
     target_link_libraries(ESMF::ESMF INTERFACE MPI::MPI_Fortran)
   endif ()
 
+  # ESMF's generated CMake package splits these framework pairs into raw
+  # list elements.  Newer CMake versions rewrite the framework names as
+  # -l arguments, leaving a bare -framework flag on the final link line.
+  if (APPLE AND _esma_esmf_config_found)
+    get_target_property(_esmf_link_libraries ESMF::ESMF INTERFACE_LINK_LIBRARIES)
+    list(FIND _esmf_link_libraries -framework _esmf_framework_flag)
+    list(FIND _esmf_link_libraries CoreFoundation _esmf_corefoundation)
+    list(FIND _esmf_link_libraries SystemConfiguration _esmf_systemconfiguration)
+    if (_esmf_framework_flag GREATER -1 AND
+        _esmf_corefoundation GREATER -1 AND
+        _esmf_systemconfiguration GREATER -1)
+      list(REMOVE_ITEM _esmf_link_libraries -framework CoreFoundation SystemConfiguration)
+      list(APPEND _esmf_link_libraries ${FWCoreFoundation} ${FWSystemConfiguration})
+      set_target_properties(ESMF::ESMF PROPERTIES
+        INTERFACE_LINK_LIBRARIES "${_esmf_link_libraries}")
+    endif ()
+  endif ()
+
   # Finally, we add aliases since GEOS (at the moment) uses esmf and ESMF for
   # the target instead of ESMF::ESMF (MAPL uses ESMF::ESMF).
   if (NOT TARGET ESMF)
