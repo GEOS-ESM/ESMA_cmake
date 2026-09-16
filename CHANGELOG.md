@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [5.20.0] - 2026-09-16
+
+### Changed
+
+- Disable GNU Fortran Debug divide-by-zero and overflow traps by default, avoiding process-wide floating-point exceptions in mixed-language dependencies such as MPI and ESMF. Add the opt-in `GNU_ENABLE_FPE_TRAPS` CMake option to restore `-ffpe-trap=zero,overflow` when needed for focused debugging.
+
 ## [5.19.0] - 2026-09-15
 
 ### Changed
