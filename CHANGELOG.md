@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Make Baselibs NetCDF, HDF5, and ESMF target setup safe on repeated inclusion, including from subdirectories with FMS enabled.
+- Reuse the `build-tests`, `tests`, and `tests-all` targets when ESMA test setup runs more than once.
+
 ### Security
 
 ## [5.20.0] - 2026-09-16
