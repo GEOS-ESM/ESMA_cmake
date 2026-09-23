@@ -27,7 +27,9 @@ set (common_Fortran_fpe_flags "-Ktrap=fp")
 
 # GEOS Debug
 # ----------
-set (GEOS_Fortran_Debug_Flags "-O0 -g -Kieee -Minfo=all -Mbounds ${TRACEBACK} -Mchkstk -Mdepchk")
+# In the NVHPC ng compiler, some flags are not yet implemented
+#set (GEOS_Fortran_Debug_Flags "-O0 -g -Kieee -Minfo=all -Mbounds ${TRACEBACK} -Mchkstk -Mdepchk")
+set (GEOS_Fortran_Debug_Flags "-O0 -g -Kieee -Minfo=all")
 set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # GEOS Release
