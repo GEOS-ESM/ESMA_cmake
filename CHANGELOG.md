@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Make `ConfigureBaselibs.cmake` safe to include repeatedly, reusing existing NetCDF, HDF5, ESMF, and FMS targets without duplicating link dependencies or modifying targets imported by a parent directory.
+- Make `esma_enable_tests.cmake` safe to include repeatedly by reusing the `build-tests`, `tests`, and `tests-all` targets.
+
 ### Security
 
 ## [4.48.0] - 2026-09-16
