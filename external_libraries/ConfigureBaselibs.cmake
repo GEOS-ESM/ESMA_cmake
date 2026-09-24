@@ -69,55 +69,57 @@ link_directories (${BASEDIR}/lib)
 
   # Prefer the ESMF config package installed below BASEDIR, but retain the
   # esmf.mk module fallback for older Baselibs installations.
-  set(_esma_esmf_config_found FALSE)
-  if (EXISTS "${BASEDIR}/lib/esmf.mk")
-    set (ESMFMKFILE "${BASEDIR}/lib/esmf.mk" CACHE PATH "Path to esmf.mk file" FORCE)
-    message(STATUS "ESMFMKFILE: ${ESMFMKFILE}")
-  endif ()
-
-  find_package(ESMF ${ESMA_ESMF_MIN_VERSION} CONFIG QUIET
-               PATHS "${BASEDIR}" NO_DEFAULT_PATH)
-  if (ESMF_FOUND)
-    set(_esma_esmf_config_found TRUE)
-  else ()
-    if (NOT EXISTS "${BASEDIR}/lib/esmf.mk")
-      message (FATAL_ERROR "Cannot find ESMFConfig.cmake or ${BASEDIR}/lib/esmf.mk")
+  if (NOT TARGET ESMF::ESMF)
+    set(_esma_esmf_config_found FALSE)
+    if (EXISTS "${BASEDIR}/lib/esmf.mk")
+      set (ESMFMKFILE "${BASEDIR}/lib/esmf.mk" CACHE PATH "Path to esmf.mk file" FORCE)
+      message(STATUS "ESMFMKFILE: ${ESMFMKFILE}")
     endif ()
 
-    # Use the FindESMF.cmake module in this project for legacy installations.
-    find_package(ESMF MODULE REQUIRED)
+    find_package(ESMF ${ESMA_ESMF_MIN_VERSION} CONFIG QUIET
+                 PATHS "${BASEDIR}" NO_DEFAULT_PATH)
+    if (ESMF_FOUND)
+      set(_esma_esmf_config_found TRUE)
+    else ()
+      if (NOT EXISTS "${BASEDIR}/lib/esmf.mk")
+        message (FATAL_ERROR "Cannot find ESMFConfig.cmake or ${BASEDIR}/lib/esmf.mk")
+      endif ()
 
-    # Baselibs' esmf.mk does not carry a CMake-style version string, so
-    # find_package() above cannot enforce a minimum version the way
-    # ConfigureExternalLibraries.cmake does (find_package(ESMF ${ESMA_ESMF_MIN_VERSION} ...)).
-    # Check ESMF_VERSION explicitly instead so Baselibs and Spack builds
-    # enforce the same minimum.
-    if (ESMF_VERSION VERSION_LESS ${ESMA_ESMF_MIN_VERSION})
-      message(FATAL_ERROR "ESMF must be at least ${ESMA_ESMF_MIN_VERSION}")
+      # Use the FindESMF.cmake module in this project for legacy installations.
+      find_package(ESMF MODULE REQUIRED)
+
+      # Baselibs' esmf.mk does not carry a CMake-style version string, so
+      # find_package() above cannot enforce a minimum version the way
+      # ConfigureExternalLibraries.cmake does (find_package(ESMF ${ESMA_ESMF_MIN_VERSION} ...)).
+      # Check ESMF_VERSION explicitly instead so Baselibs and Spack builds
+      # enforce the same minimum.
+      if (ESMF_VERSION VERSION_LESS ${ESMA_ESMF_MIN_VERSION})
+        message(FATAL_ERROR "ESMF must be at least ${ESMA_ESMF_MIN_VERSION}")
+      endif ()
     endif ()
-  endif ()
 
-  # The generated config declares MPI itself. Older module-based ESMF
-  # installations need this dependency supplied by ESMA_cmake.
-  if (NOT _esma_esmf_config_found)
-    target_link_libraries(ESMF::ESMF INTERFACE MPI::MPI_Fortran)
-  endif ()
+    # The generated config declares MPI itself. Older module-based ESMF
+    # installations need this dependency supplied by ESMA_cmake.
+    if (NOT _esma_esmf_config_found)
+      target_link_libraries(ESMF::ESMF INTERFACE MPI::MPI_Fortran)
+    endif ()
 
-  # ESMF's generated CMake package splits these framework pairs into raw
-  # list elements. Newer CMake versions rewrite the framework names as
-  # -l arguments, leaving a bare -framework flag on the final link line.
-  if (APPLE AND _esma_esmf_config_found)
-    get_target_property(_esmf_link_libraries ESMF::ESMF INTERFACE_LINK_LIBRARIES)
-    list(FIND _esmf_link_libraries -framework _esmf_framework_flag)
-    list(FIND _esmf_link_libraries CoreFoundation _esmf_corefoundation)
-    list(FIND _esmf_link_libraries SystemConfiguration _esmf_systemconfiguration)
-    if (_esmf_framework_flag GREATER -1 AND
-        _esmf_corefoundation GREATER -1 AND
-        _esmf_systemconfiguration GREATER -1)
-      list(REMOVE_ITEM _esmf_link_libraries -framework CoreFoundation SystemConfiguration)
-      list(APPEND _esmf_link_libraries ${FWCoreFoundation} ${FWSystemConfiguration})
-      set_target_properties(ESMF::ESMF PROPERTIES
-        INTERFACE_LINK_LIBRARIES "${_esmf_link_libraries}")
+    # ESMF's generated CMake package splits these framework pairs into raw
+    # list elements. Newer CMake versions rewrite the framework names as
+    # -l arguments, leaving a bare -framework flag on the final link line.
+    if (APPLE AND _esma_esmf_config_found)
+      get_target_property(_esmf_link_libraries ESMF::ESMF INTERFACE_LINK_LIBRARIES)
+      list(FIND _esmf_link_libraries -framework _esmf_framework_flag)
+      list(FIND _esmf_link_libraries CoreFoundation _esmf_corefoundation)
+      list(FIND _esmf_link_libraries SystemConfiguration _esmf_systemconfiguration)
+      if (_esmf_framework_flag GREATER -1 AND
+          _esmf_corefoundation GREATER -1 AND
+          _esmf_systemconfiguration GREATER -1)
+        list(REMOVE_ITEM _esmf_link_libraries -framework CoreFoundation SystemConfiguration)
+        list(APPEND _esmf_link_libraries ${FWCoreFoundation} ${FWSystemConfiguration})
+        set_target_properties(ESMF::ESMF PROPERTIES
+          INTERFACE_LINK_LIBRARIES "${_esmf_link_libraries}")
+      endif ()
     endif ()
   endif ()
 
@@ -189,23 +191,27 @@ link_directories (${BASEDIR}/lib)
 
   # Create targets
   # - NetCDF C
-  add_library(NetCDF::NetCDF_C STATIC IMPORTED)
-  set_target_properties(NetCDF::NetCDF_C PROPERTIES
-    IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdf.a
-    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIRS}"
-    INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${NETCDF_LINK_DIRECTORIES}"
+  if (NOT TARGET NetCDF::NetCDF_C)
+    add_library(NetCDF::NetCDF_C STATIC IMPORTED)
+    set_target_properties(NetCDF::NetCDF_C PROPERTIES
+      IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdf.a
+      INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIRS}"
+      INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
+      INTERFACE_LINK_DIRECTORIES "${NETCDF_LINK_DIRECTORIES}"
     )
+  endif ()
   set(NetCDF_C_FOUND TRUE CACHE BOOL "NetCDF C Found" FORCE)
 
   # - NetCDF Fortran
-  add_library(NetCDF::NetCDF_Fortran STATIC IMPORTED)
-  set_target_properties(NetCDF::NetCDF_Fortran PROPERTIES
-    IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdff.a
-    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIRS}"
-    INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${NETCDF_LINK_DIRECTORIES}"
+  if (NOT TARGET NetCDF::NetCDF_Fortran)
+    add_library(NetCDF::NetCDF_Fortran STATIC IMPORTED)
+    set_target_properties(NetCDF::NetCDF_Fortran PROPERTIES
+      IMPORTED_LOCATION ${BASEDIR}/lib/libnetcdff.a
+      INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_INCLUDE_DIRS}"
+      INTERFACE_LINK_LIBRARIES  "${NETCDF_LIBRARIES}"
+      INTERFACE_LINK_DIRECTORIES "${NETCDF_LINK_DIRECTORIES}"
     )
+  endif ()
   set(NetCDF_Fortran_FOUND TRUE CACHE BOOL "NetCDF Fortran Found" FORCE)
 
   # ----
@@ -248,48 +254,58 @@ link_directories (${BASEDIR}/lib)
   # Create targets
 
   # - HDF5 C
-  add_library(hdf5::hdf5 STATIC IMPORTED)
-  set_target_properties(hdf5::hdf5 PROPERTIES
-    IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5.a
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
-    INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+  if (NOT TARGET hdf5::hdf5)
+    add_library(hdf5::hdf5 STATIC IMPORTED)
+    set_target_properties(hdf5::hdf5 PROPERTIES
+      IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5.a
+      INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
+      INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
+      INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
+  endif ()
   set(HDF5_C_FOUND TRUE CACHE BOOL "HDF5 C Found" FORCE)
 
   # - HDF5 C HL
-  add_library(hdf5::hdf5_hl STATIC IMPORTED)
-  set_target_properties(hdf5::hdf5_hl PROPERTIES
-    IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_hl.a
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
-    INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+  if (NOT TARGET hdf5::hdf5_hl)
+    add_library(hdf5::hdf5_hl STATIC IMPORTED)
+    set_target_properties(hdf5::hdf5_hl PROPERTIES
+      IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_hl.a
+      INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
+      INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
+      INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
+  endif ()
   set(HDF5_HL_FOUND TRUE CACHE BOOL "HDF5 C HL Found" FORCE)
 
   # - HDF5 Fortran
-  add_library(hdf5::hdf5_fortran STATIC IMPORTED)
-  set_target_properties(hdf5::hdf5_fortran PROPERTIES
-    IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_fortran.a
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
-    INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+  if (NOT TARGET hdf5::hdf5_fortran)
+    add_library(hdf5::hdf5_fortran STATIC IMPORTED)
+    set_target_properties(hdf5::hdf5_fortran PROPERTIES
+      IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_fortran.a
+      INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
+      INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
+      INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
+  endif ()
   set(HDF5_Fortran_FOUND TRUE CACHE BOOL "HDF5 Fortran Found" FORCE)
 
   # - HDF5 Fortran HL
-  add_library(hdf5::hdf5_hl_fortran STATIC IMPORTED)
-  set_target_properties(hdf5::hdf5_hl_fortran PROPERTIES
-    IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_hl_fortran.a
-    INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
-    INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
-    INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
+  if (NOT TARGET hdf5::hdf5_hl_fortran)
+    add_library(hdf5::hdf5_hl_fortran STATIC IMPORTED)
+    set_target_properties(hdf5::hdf5_hl_fortran PROPERTIES
+      IMPORTED_LOCATION ${BASEDIR}/lib/libhdf5_hl_fortran.a
+      INTERFACE_INCLUDE_DIRECTORIES "${INC_HDF5}"
+      INTERFACE_LINK_LIBRARIES  "${HDF5_LIBRARIES}"
+      INTERFACE_LINK_DIRECTORIES "${BASEDIR}/lib"
     )
+  endif ()
   set(HDF5_Fortran_HL_FOUND TRUE CACHE BOOL "HDF5 Fortran HL Found" FORCE)
 
   # Now we make a target that is the "super" HDF5 target
-  add_library(HDF5::HDF5 INTERFACE IMPORTED)
-  target_link_libraries(HDF5::HDF5 INTERFACE hdf5::hdf5 hdf5::hdf5_hl hdf5::hdf5_fortran hdf5::hdf5_hl_fortran)
+  if (NOT TARGET HDF5::HDF5)
+    add_library(HDF5::HDF5 INTERFACE IMPORTED)
+    target_link_libraries(HDF5::HDF5 INTERFACE hdf5::hdf5 hdf5::hdf5_hl hdf5::hdf5_fortran hdf5::hdf5_hl_fortran)
+  endif ()
   set(HDF5_FOUND TRUE CACHE BOOL "HDF5 Found" FORCE)
 
   # We only need to look for FMS if we need it. Projects like MAPL
