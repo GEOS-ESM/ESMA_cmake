@@ -43,4 +43,5 @@ jobs:
       fixture-repo: GEOS-ESM/GEOSgcm
       fixture-ref: feature/v12-remove-mom5
       load-fms: true
+      fms-version: '2026'
 
