@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [5.23.0] - 2026-10-01
+
+### Changed
+
+- Comment out some not-yet-implemented nvhpc ng flags
+- Turn off f2py when building with nvhpc ng (until numpy can get the compiler and fix internal issues)
+
 ## [5.22.0] - 2026-10-01
 
 ### Changed
