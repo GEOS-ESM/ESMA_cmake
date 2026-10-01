@@ -4,13 +4,17 @@
 # The new policy needed for f2py3 and Meson is 3.24
 cmake_minimum_required(VERSION 3.24)
 
-# Note f2py (-> distutils) does seem to support nagfor as an fcompiler, but
-# testing with it did not work. For now, just don't do any f2py if using NAG
-if (CMAKE_Fortran_COMPILER_ID MATCHES "NAG")
+# f2py (-> distutils) does seem to support nagfor as an fcompiler, but
+# testing with it did not work.  NumPy's Meson backend also does not yet
+# reliably support NVHPC.  Do not build f2py modules with either compiler.
+if (CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC")
+  set(USE_F2PY OFF CACHE BOOL "Turn on F2PY builds" FORCE)
+elseif (CMAKE_Fortran_COMPILER_ID MATCHES "NAG")
   option(USE_F2PY "Turn on F2PY builds" OFF)
 else ()
   option(USE_F2PY "Turn on F2PY builds" ON)
 endif ()
+
 
 # Find Python
 set(Python_FIND_STRATEGY LOCATION)
@@ -49,4 +53,3 @@ include (esma_check_python3_module)
 if (USE_F2PY)
   include (esma_add_f2py3_module)
 endif ()
-
