@@ -82,6 +82,16 @@ endif ()
 set (common_Fortran_flags "${NO_RANGE_CHECK} ${TRACEBACK} ${UNUSED_DUMMY}" )
 set (common_Fortran_fpe_flags "${TRACEBACK}")
 
+# Workaround for CMake Fortran dependency scanner with Ninja and LLVMFlang:
+# CMake invokes `flang -cpp -E` before dependency scanning. By default, Flang wraps lines
+# at 72 columns, splitting long identifiers (e.g. submodules) with `&` continuation syntax.
+# CMake's lexer cannot recombine split identifiers, causing submodule dependencies to be missed.
+# -fno-reformat prevents Flang from wrapping lines at 72 columns.
+# See: https://gitlab.kitware.com/cmake/cmake/-/work_items/28138
+if (CMAKE_GENERATOR MATCHES "^Ninja")
+  set (common_Fortran_flags "${common_Fortran_flags} -Xflang -fno-reformat")
+endif ()
+
 # GEOS Debug
 # ----------
 set (GEOS_Fortran_Debug_Flags "${FOPT0} ${DEBINFO} ${SAVE_TEMPS} ${NO_FMA}")
