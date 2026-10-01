@@ -22,6 +22,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [5.22.0] - 2026-10-01
+
+### Changed
+
+- In `compiler/flags/LLVMFlang_Fortran.cmake` and `compiler/flags/NVHPC_Fortran.cmake`, pass `-Xflang -fno-reformat` when using Ninja to prevent Flang's preprocessor from reformatting and wrapping lines at 72 columns, working around a CMake Fortran dependency scanner issue with split identifiers (Kitware issue #28138).
+
+## [5.21.1] - 2026-09-28
+
+### Fixed
+
+- In `compiler/checks/quad_precision.F90`, add missing `end` statement so the test forms a complete Fortran program and CMake does not fail due to a missing main entry point.
+
+## [5.21.0] - 2026-09-24
+
+### Fixed
+
+- Make Baselibs NetCDF, HDF5, and ESMF target setup safe on repeated inclusion, including from subdirectories with FMS enabled.
+- Reuse the `build-tests`, `tests`, and `tests-all` targets when ESMA test setup runs more than once.
+
 ## [5.20.0] - 2026-09-16
 
 ### Changed
