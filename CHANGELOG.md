@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [5.24.0] - 2026-10-26
+
+### Added
+
+- Add `USE_EXTERNAL_MAPL` option (default `OFF`) to use an external MAPL via `find_package`
+
+### Changed
+
+- Only call `find_package(MAPL)` when `USE_EXTERNAL_MAPL` is `ON`. Previously a MAPL found in the install prefix (e.g., from a prior `make install`) would silently replace the in-model MAPL
+
 ## [5.23.0] - 2026-10-01
 
 ### Changed
