@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Only apply the `-Xflang -fno-reformat` Ninja workaround for Flang/NVHPC when CMake is older than 4.5.0, as the Fortran scanner issue (Kitware #28138) is fixed there
+
 ### Deprecated
 
 ### Removed
