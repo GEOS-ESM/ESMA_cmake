@@ -6,7 +6,7 @@ set (FREAL8 "-r8")
 set (FINT8 "-i8")
 set (PP    "-fpp")
 set (DUSTY "-dusty")
-set (MISMATCH "-wmismatch=QSORTL,QSORTS,MPI_Recv,MPI_Send,MPI_Irecv,MPI_BCast,MPI_Allgather,MPI_Allgatherv,MPI_Allreduce,MPI_Scatterv,MPI_Gatherv,MPI_Sendrecv,MPI_File_write,MPI_File_read,MPI_File_Read_at_all,MPI_File_write_at_all,ESMF_UserCompSetInternalState,ESMF_UserCompGetInternalState")
+set (MISMATCH "-wmismatch=QSORTL,QSORTS,MPI_Recv,MPI_Send,MPI_Isend,MPI_Irecv,MPI_BCast,MPI_Allgather,MPI_Allgatherv,MPI_Gather,MPI_Allreduce,MPI_Alltoallv,MPI_Scatterv,MPI_Gatherv,MPI_Sendrecv,MPI_File_write,MPI_File_read,MPI_File_Read_at_all,MPI_File_write_at_all,ESMF_UserCompSetInternalState,ESMF_UserCompGetInternalState")
 set (DISABLE_FIELD_WIDTH_WARNING)
 set (CRAY_POINTER "")
 set (EXTENDED_SOURCE "-132 -w=x95" )
@@ -16,16 +16,21 @@ set (F2018 "-f2018")
 # Add quiet flag
 #        -quiet    Suppress the compiler banner and the summary line, so that only diagnostic messages will appear.
 set (QUIET "-quiet")
+# Allow more than the Standard's 255 continuation lines (other compilers do so as an extension)
+set (MAXCONTIN "-maxcontin=1000")
 
 if (APPLE)
   option (ESMF_HAS_ACHAR_BUG "ESMF Compatibility issue" OFF)
+  # nagfor does not understand -F, which CMake adds to compile lines for
+  # targets that link to macOS frameworks (e.g., CoreFoundation via NetCDF)
+  unset (CMAKE_Fortran_FRAMEWORK_SEARCH_FLAG)
 endif ()
 
 ####################################################
 
 # Common Fortran Flags
 # --------------------
-set (common_Fortran_flags "${F2018} ${MISMATCH} ${QUIET}")
+set (common_Fortran_flags "${F2018} ${MISMATCH} ${QUIET} ${MAXCONTIN}")
 set (common_Fortran_fpe_flags "")
 
 # GEOS Debug
