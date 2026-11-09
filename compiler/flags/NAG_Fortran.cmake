@@ -31,6 +31,13 @@ endif ()
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${F2018} ${MISMATCH} ${QUIET} ${MAXCONTIN}")
+if (APPLE)
+  # nagfor generates C that clang compiles. NAG traps floating-point exceptions at
+  # run time, but by default clang assumes they are masked and may emit instructions
+  # (e.g., packed conversions on unused vector lanes) that raise spurious exceptions,
+  # which then abort the program with "Floating invalid operation".
+  set (common_Fortran_flags "${common_Fortran_flags} -Wc,-ffp-exception-behavior=maytrap")
+endif ()
 set (common_Fortran_fpe_flags "")
 
 # GEOS Debug
