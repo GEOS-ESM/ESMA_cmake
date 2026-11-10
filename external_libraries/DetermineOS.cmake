@@ -22,5 +22,5 @@ message(STATUS "Setting GEOS_OS_ID to ${GEOS_OS_ID}")
 message(STATUS "Setting GEOS_OS_VERSION to ${GEOS_OS_VERSION}")
 message(STATUS "Setting GEOS_OS_NAME to ${GEOS_OS_NAME}")
 
-configure_file(OS.rc.in OS.rc @ONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/OS.rc.in ${CMAKE_CURRENT_BINARY_DIR}/OS.rc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/OS.rc DESTINATION etc)
