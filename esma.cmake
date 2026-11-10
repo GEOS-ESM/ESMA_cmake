@@ -56,6 +56,27 @@ if (OpenMP_Fortran_FOUND AND CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
   message(STATUS "NAG Fortran detected, resetting OpenMP flags to avoid CMake bug")
   set_property(TARGET OpenMP::OpenMP_Fortran PROPERTY INTERFACE_LINK_LIBRARIES "")
   set_property(TARGET OpenMP::OpenMP_Fortran PROPERTY INTERFACE_LINK_OPTIONS "-openmp")
+
+  # The NAG OpenMP runtime on macOS segfaults if an orphaned MASTER (or MASKED)
+  # construct is executed before the runtime has been initialised, e.g. by the
+  # first PARALLEL region (MAPL's profiler does this in MAPL_Initialize). Link
+  # a tiny constructor into every OpenMP target that initialises the runtime
+  # at load time.
+  if (APPLE)
+    set (_nag_omp_init_src ${CMAKE_BINARY_DIR}/CMakeFiles/esma_nag_omp_init.c)
+    set (_nag_omp_init_obj ${CMAKE_BINARY_DIR}/CMakeFiles/esma_nag_omp_init.o)
+    file (WRITE ${_nag_omp_init_src}
+      "extern int omp_get_max_threads_(void);\n"
+      "__attribute__((constructor)) static void esma_nag_omp_init(void) { (void)omp_get_max_threads_(); }\n")
+    execute_process (
+      COMMAND ${CMAKE_C_COMPILER} -fPIC -O2 -c ${_nag_omp_init_src} -o ${_nag_omp_init_obj}
+      RESULT_VARIABLE _nag_omp_init_rc)
+    if (_nag_omp_init_rc EQUAL 0)
+      set_property(TARGET OpenMP::OpenMP_Fortran PROPERTY INTERFACE_LINK_LIBRARIES "${_nag_omp_init_obj}")
+    else ()
+      message(WARNING "Could not compile the NAG OpenMP initialisation workaround")
+    endif ()
+  endif ()
 endif()
 
 ### Position independent code ###
