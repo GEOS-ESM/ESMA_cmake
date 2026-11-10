@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `DetermineOS.cmake` and `OS.rc.in` files to record OS details at build time
-
 ### Changed
 
 ### Deprecated
@@ -20,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Security
+
+## [4.54.0] - 2026-11-10
+
+### Added
+
+- Added `DetermineOS.cmake` and `OS.rc.in` files to record OS details at build time
 
 ## [4.53.0] - 2026-11-06
 
