@@ -19,6 +19,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [5.26.0] - 2026-11-10
+
+### Added
+
+- Added `DetermineOS.cmake` and `OS.rc.in` files to record OS details at build time
+
+## [5.25.0] - 2026-11-06
+
+### Changed
+
+- Use explicit `-O3 -Kieee -g` flags instead of `-fast -Kieee -g` for NVHPC Release builds and the build types that inherit its optimization flags.
+- Enable NVHPC floating-point trapping (`-Ktrap=fp`) only in Debug and VectTrap builds, avoiding the observed initialization SIGFPE in optimized GEOSgcm runs with the NVHPC 26.9 next-generation compiler. Release, NoVect, Vect, and Aggressive builds no longer enable trapping by default. The `PGI` compiler alias uses the same flags.
+
 ## [5.24.0] - 2026-10-26
 
 ### Added

@@ -125,6 +125,7 @@ else()
 endif()
 
 include(DetermineSite)
+include(DetermineOS)
 find_package(GitInfo)
 if (MPI_FOUND)
   include(DetermineMPIStack)

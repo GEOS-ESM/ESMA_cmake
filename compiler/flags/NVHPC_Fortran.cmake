@@ -23,7 +23,8 @@ set (TRACEBACK "-traceback")
 # Common Fortran Flags
 # --------------------
 set (common_Fortran_flags "${BACKSLASH_STRING}")
-set (common_Fortran_fpe_flags "-Ktrap=fp")
+# Enable floating-point trapping only in Debug and VectTrap builds.
+set (common_Fortran_fpe_flags "")
 
 # Workaround for CMake Fortran dependency scanner with Ninja and NVHPC:
 # CMake invokes the compiler with `-E` before dependency scanning. By default, Flang wraps lines
@@ -40,11 +41,11 @@ endif ()
 # In the NVHPC ng compiler, some flags are not yet implemented
 #set (GEOS_Fortran_Debug_Flags "-O0 -g -Kieee -Minfo=all -Mbounds ${TRACEBACK} -Mchkstk -Mdepchk")
 set (GEOS_Fortran_Debug_Flags "-O0 -g -Kieee -Minfo=all")
-set (GEOS_Fortran_Debug_FPE_Flags "${common_Fortran_fpe_flags}")
+set (GEOS_Fortran_Debug_FPE_Flags "-Ktrap=fp")
 
 # GEOS Release
 # ------------
-set (GEOS_Fortran_Release_Flags "-fast -Kieee -g")
+set (GEOS_Fortran_Release_Flags "-O3 -Kieee -g")
 set (GEOS_Fortran_Release_FPE_Flags "${common_Fortran_fpe_flags}")
 
 # NOTE: No idea how to handle GPU with CMake
@@ -64,9 +65,9 @@ set (GEOS_Fortran_Vect_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
 
 # GEOS VectTrap
 # --------------
-# Until good options can be found, make vecttrap equal common flags
+# Use Release optimization with floating-point trapping enabled.
 set (GEOS_Fortran_VectTrap_Flags ${GEOS_Fortran_Release_Flags})
-set (GEOS_Fortran_VectTrap_FPE_Flags ${GEOS_Fortran_Release_FPE_Flags})
+set (GEOS_Fortran_VectTrap_FPE_Flags "-Ktrap=fp")
 
 # GEOS Aggressive
 # ---------------
